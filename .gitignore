@@ -1,0 +1,4 @@
+#exclude the following file extensions, directories, etc.
+
+#temporary save files
+*~

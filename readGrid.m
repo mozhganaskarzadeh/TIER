@@ -28,6 +28,8 @@ function grid = readGrid(gridName)
     grid.mask = ncread(gridName,'mask');
     %read DEM
     grid.dem = ncread(gridName,'elev');
+    %read smoothed DEM
+    grid.smoothDem = ncread(gridName,'smooth_elev');
     %read distance to coast
     grid.distToCoast = ncread(gridName,'dist_to_coast');
     %read inversion layer

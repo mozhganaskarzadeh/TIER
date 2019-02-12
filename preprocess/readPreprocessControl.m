@@ -35,8 +35,14 @@ function controlVars = readPreprocessControl(controlName)
                 controlVars.outputName = strtrim(char(data{2}(i)));
             case 'preprocessParameterFile'
                 controlVars.parameterFile = strtrim(char(data{2}(i)));
-            case 'stationPath'
-                controlVars.stationPath = strtrim(char(data{2}(i)));
+            case 'stationPrecipPath'
+                controlVars.stationPrecipPath = strtrim(char(data{2}(i)));
+            case 'stationTempPath'
+                controlVars.stationTempPath = strtrim(char(data{2}(i)));
+            case 'stationPrecipListName'
+                controlVars.stationPrecipListName = strtrim(char(data{2}(i)));
+            case 'stationTempListName'
+                controlVars.stationTempListName = strtrim(char(data{2}(i)));
             otherwise
                 %throw error if unknown string
                 error('Unknown control file option: %s',char(data{1}(i)));

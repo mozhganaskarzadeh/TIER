@@ -1,9 +1,25 @@
 function createPrecipitationStationList(controlVars,grid)
 %
-%%
+%% createPrecipitationStationList creates the precipitation station list 
+% used in STIR processing
+% STIR - Simple Topographically Informed Regression
 %
 %
+% Author:  Andrew Newman
+% Email :  anewman@ucar.edu
 %
+% Arguments:
+%
+% Input:
+%
+%  controlVars, structure, structure containing preprocessing control variables
+%  grid,        structure, structure containing DEM variables
+%
+% Output:
+%
+%  none, function writes to a file
+%
+ 
 
     %define local variables
     nr = grid.nr;
@@ -47,13 +63,14 @@ function createPrecipitationStationList(controlVars,grid)
 
         %if nearest grid point is valid
         if(~isnan(aspect1d(ix(1))))
-            %output geophysical attributes to file
+            %output geophysical attributes to station file
             fprintf(sidOut,'%s, %9.5f, %11.5f, %7.2f, %d, %8.3f, %d, %8.3f, %s\n',char(fileList(i).name),station.lat(i),station.lon(i),...
                              dem1d(ix(1)),aspect1d(ix(1)),distToCoast1d(ix(1)),layerMask1d(ix(1)),topoPosition1d(ix(1)),char(fileList(i).name));
         else %if not valid
             %find the nearest valid point for all attributes
             nearestValid = find(~isnan(aspect1d(ix)) == 1);
 
+            %output geophysical attributes to station file
             fprintf(sidOut,'%s, %9.5f, %11.5f, %7.2f, %d, %8.3f, %d, %8.3f, %s\n',char(fileList(i).name),station.lat(i),station.lon(i),...
                             dem1d(ix(nearestValid(1))),aspect1d(ix(nearestValid(1))),distToCoast1d(ix(nearestValid(1))),...
                             layerMask1d(ix(nearestValid(1))),topoPosition1d(ix(nearestValid(1))),char(fileList(i).name));     

@@ -41,9 +41,12 @@ metGrid = allocateMetVars(grid.nr,grid.nc);
 inputStations = readInputStations(controlVars);
 
 %if temperature and a gridded default slope file is specified
-%read it in
-%if(strcmpi(controlVars.varEstimated,'tmax') || strcmpi(controlVars.varEstimated,'tmin'))
-%end
+%read it
+if(strcmpi(controlVars.varEstimated,'tmax') && ~isempty(controlVars.defaultTempLapse))
+    tempDefaultLapse = ncread(controlVars.defaultTempLapse,'tmaxLapse');
+elseif(strcmpi(controlVars.varEstimated,'tmin') && ~isempty(controlVars.defaultTempLapse))
+    tempDefaultLapse = ncread(controlVars.defaultTempLapse,'tminLapse');
+end
 
 %loop through all grid points and perform regression
 for y = 1:nr

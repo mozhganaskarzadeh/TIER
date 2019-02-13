@@ -23,7 +23,7 @@
 
 % 3) If the user desires a spatailly variable default lapse rate (right now
 %    for temperature only) that needs to be provided as well in a netcdf 
-%    file. The user can again follow provided the example data set.
+%    file. The user can again follow the provided example data set.
 %
 % Author: Andrew Newman NCAR/RAL
 % Email : anewman@ucar.edu
@@ -61,11 +61,19 @@ outGrid.positions = calcPositions(grid,parameters.layerSearchLength,parameters.i
 %output to processed grid file
 outputGrid(controlVars,outGrid);
 
-
 %create station list files for input to main STIR program
 %precipitation
-
+createPrecipitationStationList(controlVars,grid);
 
 %temperature
+createTemperatureStationList(controlVars,grid);
+
+%required preprocessing steps complete
+
+%Optional
+%  Users could add preprocessing for spatially distributed lapse rates. The
+%  STIR release contains an example temperature lapse rate grid, but leaves
+%  the generation as an excercise for the user.
+
 
 

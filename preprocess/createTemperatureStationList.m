@@ -1,9 +1,25 @@
 function createTemperatureStationList(controlVars,grid)
 %
-%%
+%% createTemperatureStationList creates the temperature station list 
+% used in STIR processing
+% STIR - Simple Topographically Informed Regression
 %
 %
+% Author:  Andrew Newman
+% Email :  anewman@ucar.edu
 %
+% Arguments:
+%
+% Input:
+%
+%  controlVars, structure, structure containing preprocessing control variables
+%  grid,        structure, structure containing DEM variables
+%
+% Output:
+%
+%  none, function writes to a file
+%
+ 
 
     %define local variables
     nr = grid.nr;
@@ -23,7 +39,7 @@ function createTemperatureStationList(controlVars,grid)
     fileList = ls(listString);
     %number of stations
     nSta = length(fileList);
-    %read lat,lon from station timeseries file
+    %read lat,lon,elevation from station timeseries file
     for f = 1:nSta
         stationName = sprintf('%s/%s.nc',controlVars.stationTempPath,fileList(f).name);
         station.lat(f) = ncread(stationName,'latitude');
@@ -47,13 +63,14 @@ function createTemperatureStationList(controlVars,grid)
 
         %if nearest grid point is valid
         if(~isnan(aspect1d(ix(1))))
-            %output geophysical attributes to file
+            %output geophysical attributes to station file
             fprintf(sidOut,'%s, %9.5f, %11.5f, %7.2f, %d, %8.3f, %d, %8.3f, %s\n',char(fileList(i).name),station.lat(i),station.lon(i),...
                              station.elev(i),aspect1d(ix(1)),distToCoast1d(ix(1)),layerMask1d(ix(1)),topoPosition1d(ix(1)),char(fileList(i).name));
         else %if not valid
             %find the nearest valid point for all attributes
             nearestValid = find(~isnan(aspect1d(ix)) == 1);
 
+            %output geophysical attributes to station file
             fprintf(sidOut,'%s, %9.5f, %11.5f, %7.2f, %d, %8.3f, %d, %8.3f, %s\n',char(fileList(i).name),station.lat(i),station.lon(i),...
                             station.elev(i),aspect1d(ix(nearestValid(1))),distToCoast1d(ix(nearestValid(1))),...
                             layerMask1d(ix(nearestValid(1))),topoPosition1d(ix(nearestValid(1))),char(fileList(i).name));     

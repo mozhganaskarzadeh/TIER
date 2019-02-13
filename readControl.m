@@ -48,6 +48,8 @@ function controlVars = readControl(controlName)
                 controlVars.climoPeriodStart = strtrim(char(data{2}(i)));
             case 'climoPeriodEnd'
                 controlVars.climoPeriodEnd = strtrim(char(data{2}(i)));
+            case 'defaultTempLapse'
+                controlVars.defaultTempLapse = strtrim(char(data{2}(i)));
             otherwise
                 %throw error if unknown string
                 error('Unknown control file option: %s',char(data{1}(i)));

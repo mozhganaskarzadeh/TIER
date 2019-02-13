@@ -102,26 +102,38 @@ tminLapseRegrid(gridLayers==2) = layer2TminLapseRegrid(gridLayers==2);
 tminLapseRegrid(isnan(gridLayers)) = -999;
 
 %% example figures
-figure(11);imagesc(layer1TmaxLapseRegrid');colorbar;set(gca,'ydir','normal');title('Tmax Layer 1');
-figure(12);imagesc(layer2TmaxLapseRegrid');colorbar;set(gca,'ydir','normal');title('Tmax Layer 2');
-figure(13);imagesc(layer1TminLapseRegrid');colorbar;set(gca,'ydir','normal');title('Tmin Layer 1');
-figure(14);imagesc(layer2TminLapseRegrid');colorbar;set(gca,'ydir','normal');title('Tmin Layer 2');
+%Tmax
+figure(1);
+imagesc(tmaxLapseRegrid');
+colorbar;
+set(gca,'ydir','normal');
+title('Tmax');
+
+%Tmin
+figure(2);
+imagesc(tminLapseRegrid');
+colorbar;
+set(gca,'ydir','normal');
+title('Tmin');
 
 %% output to netcdf file
 
+%output file name
 outName = sprintf('%s/NARRTempLapseRates.nc',dpath);
 
-%create file and tmaxLapse
+%create file and write tmaxLapse
 nccreate(outName,'tmaxLapse','Dimensions',{'latitude',nr,'longitude',nc},'Format','classic');
 ncwrite(outName,'tmaxLapse',tmaxLapseRegrid);
+%attributes
 ncwriteatt(outName,'tmaxLapse','name','Lapse rate Tmax');
 ncwriteatt(outName,'tmaxLapse','long_name','Tmax lapse rate for idealized estimate of two layer atmosphere (Daly et al. 2002)');
 ncwriteatt(outName,'tmaxLapse','_FillValue',-999.0);
 ncwriteatt(outName,'tmaxLapse','units','K/km');
 
-%tminLapse
+%create and write tminLapse
 nccreate(outName,'tminLapse','Dimensions',{'latitude',nr,'longitude',nc},'Format','classic');
 ncwrite(outName,'tminLapse',tminLapseRegrid);
+%attributes
 ncwriteatt(outName,'tminLapse','name','Lapse rate of Tmin');
 ncwriteatt(outName,'tminLapse','long_name','Tmin lapse rate for idealized estimate of two layer atmosphere (Daly et al. 2002)');
 ncwriteatt(outName,'tminLapse','_FillValue',-999.0);

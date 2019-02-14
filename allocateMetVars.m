@@ -32,7 +32,6 @@ function metGrid = allocateMetVars(nr,nc)
     metGrid.normSlopeUncert = zeros(nr,nc)*NaN;
     metGrid.defaultSlope    = zeros(nr,nc)*NaN;
     metGrid.finalSlope      = zeros(nr,nc)*NaN;
-    metGrid.intercept       = zeros(nr,nc)*NaN;
     metGrid.finalField      = zeros(nr,nc)*NaN;
     metGrid.totalUncert     = zeros(nr,nc)*NaN;
     metGrid.relUncert       = zeros(nr,nc)*NaN;

@@ -21,6 +21,9 @@ function createTemperatureStationList(controlVars,grid)
 %
  
 
+    %print status
+    fprintf(1,'Compiling temperature station list\n');
+    
     %define local variables
     nr = grid.nr;
     nc = grid.nc;
@@ -29,19 +32,19 @@ function createTemperatureStationList(controlVars,grid)
     %transform grid to 1-d arrays for computational convenience
     lon1d = reshape(grid.lon,[nr*nc 1]);
     lat1d = reshape(grid.lat,[nr*nc 1]);
-    aspect1d = reshape(grid.aspects,[nr*nc 1]);
+    aspect1d = reshape(grid.aspects.aspects,[nr*nc 1]);
     distToCoast1d = reshape(grid.distToCoast,[nr*nc 1]);
-    layerMask1d = reshape(grid.layerMask,[nr*nc 1]);
-    topoPosition1d = reshape(grid.topoPosition,[nr*nc 1]);
+    layerMask1d = reshape(grid.positions.layerMask,[nr*nc 1]);
+    topoPosition1d = reshape(grid.positions.topoPosition,[nr*nc 1]);
 
     %create list of stations in directory
-    listString = sprintf('%s.nc',controlVars.stationTempPath);
-    fileList = ls(listString);
+    listString = sprintf('%s/*.nc',controlVars.stationTempPath);
+    fileList = dir(listString);
     %number of stations
     nSta = length(fileList);
     %read lat,lon,elevation from station timeseries file
     for f = 1:nSta
-        stationName = sprintf('%s/%s.nc',controlVars.stationTempPath,fileList(f).name);
+        stationName = sprintf('%s/%s',controlVars.stationTempPath,fileList(f).name);
         station.lat(f) = ncread(stationName,'latitude');
         station.lon(f) = ncread(stationName,'longitude');
         station.elev(f) = ncread(stationName,'elevation');

@@ -1,11 +1,24 @@
 function outputGrid(controlVars,outGrid)
 %
-%%
+%% outputGrid saves the domain grid structure into a netcdf file
+% Author: Andrew Newman NCAR/RAL
+% Email : anewman@ucar.edu
 %
+% Arguments:
 %
+%  Input:
+% 
+%   controlVars, structure   , structure containing control variables
+%   outGrid   , structure, structure containing processed domain grid and
+%   geophysical attributes
 %
-%
-%
+%  Output:
+% 
+%    None
+
+
+%print status
+fprintf(1,'Outputting processed grid to netcdf file\n');
 
 %first copy raw grid to output grid
 %create command string

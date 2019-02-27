@@ -40,8 +40,7 @@ metGrid = allocateMetVars(grid.nr,grid.nc);
 %read input station data
 inputStations = readInputStations(controlVars);
 
-%if temperature and a gridded default slope file is specified
-%read it
+%if temperature and a gridded default slope file is specified, read it
 if(strcmpi(controlVars.varEstimated,'tmax') && ~isempty(controlVars.defaultTempLapse))
     tempDefaultLapse = ncread(controlVars.defaultTempLapse,'tmaxLapse');
 elseif(strcmpi(controlVars.varEstimated,'tmin') && ~isempty(controlVars.defaultTempLapse))

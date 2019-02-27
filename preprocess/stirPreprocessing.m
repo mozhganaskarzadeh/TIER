@@ -37,7 +37,7 @@ controlName = input('Enter the name of your control file: ', 's');
 controlVars = readPreprocessControl(controlName);
 
 %initialize parameter structure to default values
-parameters = initParameters(controlVars.parameterFile);
+parameters = initPreprocessParameters();
 
 %read preprocessing parameters file
 parameters = readPreprocessParameters(controlVars.parameterFile,parameters);
@@ -63,10 +63,10 @@ outputGrid(controlVars,outGrid);
 
 %create station list files for input to main STIR program
 %precipitation
-createPrecipitationStationList(controlVars,grid);
+createPrecipitationStationList(controlVars,outGrid);
 
 %temperature
-createTemperatureStationList(controlVars,grid);
+createTemperatureStationList(controlVars,outGrid);
 
 %required preprocessing steps complete
 

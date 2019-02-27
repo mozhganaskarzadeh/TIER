@@ -20,7 +20,9 @@ function createPrecipitationStationList(controlVars,grid)
 %  none, function writes to a file
 %
  
-
+    %print status
+    fprintf(1,'Compiling precipitation station list\n');
+    
     %define local variables
     nr = grid.nr;
     nc = grid.nc;
@@ -29,20 +31,20 @@ function createPrecipitationStationList(controlVars,grid)
     %transform grid to 1-d arrays for computational convenience
     lon1d = reshape(grid.lon,[nr*nc 1]);
     lat1d = reshape(grid.lat,[nr*nc 1]);
-    dem1d = reshape(grid.smoothDEM,[nr*nc 1]);
-    aspect1d = reshape(grid.aspects,[nr*nc 1]);
+    dem1d = reshape(grid.aspects.smoothDEM,[nr*nc 1]);
+    aspect1d = reshape(grid.aspects.aspects,[nr*nc 1]);
     distToCoast1d = reshape(grid.distToCoast,[nr*nc 1]);
-    layerMask1d = reshape(grid.layerMask,[nr*nc 1]);
-    topoPosition1d = reshape(grid.topoPosition,[nr*nc 1]);
+    layerMask1d = reshape(grid.positions.layerMask,[nr*nc 1]);
+    topoPosition1d = reshape(grid.positions.topoPosition,[nr*nc 1]);
 
     %create list of stations in directory
-    listString = sprintf('%s.nc',controlVars.stationPrecipPath);
-    fileList = ls(listString);
+    listString = sprintf('%s/*.nc',controlVars.stationPrecipPath);
+    fileList = dir(listString);
     %number of stations
     nSta = length(fileList);
     %read lat,lon from station timeseries file
     for f = 1:nSta
-        stationName = sprintf('%s/%s.nc',controlVars.stationPrecipPath,fileList(f).name);
+        stationName = sprintf('%s/%s',controlVars.stationPrecipPath,fileList(f).name);
         station.lat(f) = ncread(stationName,'latitude');
         station.lon(f) = ncread(stationName,'longitude');
     end

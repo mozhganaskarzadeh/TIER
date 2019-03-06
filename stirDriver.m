@@ -41,37 +41,37 @@ metGrid = allocateMetVars(grid.nr,grid.nc);
 inputStations = readInputStations(controlVars);
 
 %if temperature and a gridded default slope file is specified, read it
-if(strcmpi(controlVars.varEstimated,'tmax') && ~isempty(controlVars.defaultTempLapse))
+if(strcmpi(controlVars.variableEstimated,'tmax') && ~isempty(controlVars.defaultTempLapse))
     tempDefaultLapse = ncread(controlVars.defaultTempLapse,'tmaxLapse');
-elseif(strcmpi(controlVars.varEstimated,'tmin') && ~isempty(controlVars.defaultTempLapse))
+elseif(strcmpi(controlVars.variableEstimated,'tmin') && ~isempty(controlVars.defaultTempLapse))
     tempDefaultLapse = ncread(controlVars.defaultTempLapse,'tminLapse');
 end
 
 %loop through all grid points and perform regression
-for y = 1:nr
-    fprintf(1,'Row: %d of %d\n',y,nr);
-    for x = 1:nc
+for y = 1:grid.nr
+    fprintf(1,'Row: %d of %d\n',y,grid.nr);
+    for x = 1:grid.nc
 %for y = 35
 %    for x = 348
         if(grid.mask(y,x) > 0)
             %find nearby stations to current grid point
-            nearStations = getNearStations(inputStations.meta{2},inputStations.meta{3},inputStations.meta{7},grid.lat(y,x),...
+            nearStations = getNearStations(inputStations.meta{2},inputStations.meta{3},inputStations.meta{5},grid.lat(y,x),...
                                            grid.lon(y,x),grid.aspect(y,x),parameters.nMaxNear,parameters.maxDist);
 
             %compute coastal distance weights
-            coastWeights.near = calcCoastWeights(grid.distToCoast(y,x),inputStations.meta{8}(nearStations.nearStationInds));
-            coastWeights.aspect = calcCoastWeights(grid.distToCoast(y,x),inputStations.meta{8}(nearStations.aspectStationInds));
+            coastWeights.near = calcCoastWeights(grid.distToCoast(y,x),inputStations.meta{6}(nearStations.nearStationInds));
+            coastWeights.aspect = calcCoastWeights(grid.distToCoast(y,x),inputStations.meta{6}(nearStations.aspectStationInds));
 
             %compute topographic position weights
             topoPositionWeights.near = calcTopoPositionWeights(grid.topoPosition(y,x),parameters.topoPosMinDiff,parameters.topoPosMaxDiff,...
-                                                          parameters.topoPosExp,inputStations.meta{10}(nearStations.nearStationInds));
+                                                          parameters.topoPosExp,inputStations.meta{8}(nearStations.nearStationInds));
             topoPositionWeights.aspect = calcTopoPositionWeights(grid.topoPosition(y,x),parameters.topoPosMinDiff,parameters.topoPosMaxDiff,...
-                                                          parameters.topoPosExp,inputStations.meta{10}(nearStations.aspectStationInds));
+                                                          parameters.topoPosExp,inputStations.meta{8}(nearStations.aspectStationInds));
 
             %compute layer weights
-            layerWeights.near = calcLayerWeights(grid.layerMask(y,x),grid.dem(y,x),inputStations.meta{9}(nearStations.nearStationInds),...
+            layerWeights.near = calcLayerWeights(grid.layerMask(y,x),grid.dem(y,x),inputStations.meta{7}(nearStations.nearStationInds),...
                                             inputStations.meta{3}(nearStations.nearStationInds),parameters.layerExp);
-            layerWeights.aspect = calcLayerWeights(grid.layerMask(y,x),grid.dem(y,x),inputStations.meta{9}(nearStations.aspectStationInds),...
+            layerWeights.aspect = calcLayerWeights(grid.layerMask(y,x),grid.dem(y,x),inputStations.meta{7}(nearStations.aspectStationInds),...
                                             inputStations.meta{3}(nearStations.aspectStationInds),parameters.layerExp);
 
             %compute SYMAP weights
@@ -128,8 +128,11 @@ if(strcmpi(controlVars.variableEstimated,'precip'))
     finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,metGrid.symapUncert,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread);
     
     %set metGrid variables
-%    metGrid.totalUncert = finalUncert.
-%    
+    metGrid.totalUncert = finalUncert.totalUncert;
+    metGrid.relUncert = finalUncert.relativeUncert;
+    metGrid.finalSlope = finalNormSlope.*metGrid.finalField;
+    
+
 elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.variableEstimated,'tmin'))
     %re-compute slope estimate
     metGrid.finalSlope = updateTempSlope(grid.nr,grid.nc,grid.mask,grid.layerMask,metGrid.slope,metGrid.defaultSlope,metGrid.validRegress,parameters.minSlope,...
@@ -145,4 +148,4 @@ end
 
 
 %output
-
+saveOutput(controlVars.outputName,controlVars.variableEstimated,metGrid);

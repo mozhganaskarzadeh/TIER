@@ -50,17 +50,11 @@ function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,fi
     %filter uncertainty estimates
     finalSymapUncert = imfilter(interpSymap,gFilter);
     finalSlopeUncert = imfilter(interpSlope,gFilter);
-    %set nonvalid grid points to missing
-    finalSymapUncert(mask==0) = -999;
-    finalSlopeUncert(mask==0) = -999;
-    
-    %define values in output structure
-    finalUncert.finalSymapUncert = finalSymapUncert;
-    finalUncert.finalSlopeUncert = finalSlopeUncert;
     
     %estimate the total and relative uncertainty in physical units 
-    baseSlopeUncert = finalSlopeUncert;
-    baseSlopeUncert(mask==0) = NaN;
+    finalSymapUncert(mask==0) = NaN;
+    finalSlopeUncert(mask==0) = NaN;
+
     %convert arrays to 1d for convenience
     symapUncert1d = reshape(finalSymapUncert,[nr*nc 1]);
     slopeUncert1d = reshape(baseSlopeUncert,[nr*nc 1]);
@@ -86,5 +80,16 @@ function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,fi
     %compute the total estimates 
     finalUncert.totalUncert = baseSlopeUncert+finalSymapUncert+2*sqrt(abs(localCov2d));
     finalUncert.relativeUncert = zeros(size(finalUncert.totalUncert))*NaN;
-    
+
+    %set novalid gridpoints to missing
+    finalSymapUncert(mask==0) = -999;
+    finalSlopeUncert(mask==0) = -999;
+    finalUncert.totalUncert(mask==0) = -999;
+    finalUncert.relativeUncert(mask==0) = -999;    
+
+    %define components in output structure
+    finalUncert.finalSymapUncert = finalSymapUncert;
+    finalUncert.finalSlopeUncert = finalSlopeUncert;
+
+
 end

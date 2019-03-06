@@ -1,9 +1,9 @@
 function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,finalVar,filterSize,filterSpread)
 %
-%% featherPrecip updates the estimated precipitation field to remove sharp,
-%                potentially unrealistic gradients due primarily do to
-%                slope aspect processing. Generally follows Daly et al.
-%                (1994).  This is the final precipitation processing step.
+%% calcFinalPrecipUncert produces the final component uncertainty estimates
+%             as well as the final total and relative uncertainty accounting
+%             for covariance between the components of the total
+%
 %
 % Author: Andrew Newman NCAR/RAL
 % Email : anewman@ucar.edu
@@ -65,24 +65,16 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
     %filter uncertainty estimates
     finalSymapUncert = imfilter(interpSymap,gFilter);
     finalSlopeUncert = imfilter(interpSlope,gFilter);
-    %set nonvalid grid points to missing
-    finalSymapUncert(mask==0) = -999;
-    finalUncert.finalSlopeUncert(mask==0) = -999;
-    
-    %define values in output structure
-    finalUncert.finalSymapUncert = finalSymapUncert;
-    finalUncert.finalSlopeUncert = finalSlopeUncert;
-    
+    finalSlopeUncert(mask==0) = NaN;
+
     %estimate the total and relative uncertainty in physical units 
     %(mm timestep-1)
     %compute slope in physical space
-    size(finalSlopeUncert)
-    size(finalVar)
     baseSlopeUncert = (finalSlopeUncert.*finalVar);
     baseSlopeUncert(mask==0) = NaN;
-    
+     
     %convert arrays to 1d for convenience
-    symapUncert1d = reshape(filterSymapUncert,[nr*nc 1]);
+    symapUncert1d = reshape(finalSymapUncert,[nr*nc 1]);
     slopeUncert1d = reshape(baseSlopeUncert,[nr*nc 1]);
     
     %define a local covariance vector
@@ -104,8 +96,19 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
     %reshape back to 2-dimensional array
     localCov2d = reshape(localCov,[nr,nc]);
     
+
     %compute the total estimates 
-    finalUncert.totalUncert = baseSlopeUncert+filter_symap_uncert+2*sqrt(abs(localCov2d));
+    finalUncert.totalUncert = baseSlopeUncert+finalSymapUncert+2*sqrt(abs(localCov2d));
     finalUncert.relativeUncert = finalUncert.totalUncert./finalVar;
-    
+
+    %set novalid gridpoints to missing 
+    finalSymapUncert(mask==0) = -999;
+    finalUncert.finalSlopeUncert(mask==0) = -999;
+    finalUncert.totalUncert(mask==0) = -999;
+    finalUncert.relativeUncert(mask==0) = -999;
+
+    %define components in output structure
+    finalUncert.finalSymapUncert = finalSymapUncert;
+    finalUncert.finalSlopeUncert = finalSlopeUncert;
+   
 end

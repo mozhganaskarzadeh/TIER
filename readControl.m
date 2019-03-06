@@ -44,10 +44,6 @@ function controlVars = readControl(controlName)
                 controlVars.variableEstimated = strtrim(char(data{2}(i)));
             case 'climoMonth'
                 controlVars.climoMonth = str2double(strtrim(char(data{2}(i))));
-            case 'climoPeriodStart'
-                controlVars.climoPeriodStart = strtrim(char(data{2}(i)));
-            case 'climoPeriodEnd'
-                controlVars.climoPeriodEnd = strtrim(char(data{2}(i)));
             case 'defaultTempLapse'
                 controlVars.defaultTempLapse = strtrim(char(data{2}(i)));
             otherwise

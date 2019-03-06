@@ -203,13 +203,19 @@ function aspects = calcTopoAspects(grid,parameters)
             westPoints =  [floor(flats(i).BoundingBox(1)) floor(flats(i).BoundingBox(1)+flats(i).BoundingBox(3))];
             southPoints = [floor(flats(i).BoundingBox(2)) floor(flats(i).BoundingBox(2)+flats(i).BoundingBox(4))];
 
-    %        round(flats(i).BoundingBox(1))
-    %        size(intAspect)
-    %        flats(i).BoundingBox
+            westPoints(westPoints==0)=1;
+            southPoints(southPoints==0)=1;
+            flats(i).BoundingBox(flats(i).BoundingBox<1)=1;
+            
+%            round(flats(i).BoundingBox(1))
+%            size(intAspect)
+%            flats(i).BoundingBox
+            
 
             %find what facets the bounding line grid cells belong to
-            westPixels = intAspect(round(flats(i).BoundingBox(2)),westPoints(1):westPoints(2) );
-            southPixels = intAspect(southPoints(1):southPoints(2),round(flats(i).BoundingBox(1)));
+            
+            westPixels = intAspect(floor(flats(i).BoundingBox(2)),westPoints(1):westPoints(2) );
+            southPixels = intAspect(southPoints(1):southPoints(2),floor(flats(i).BoundingBox(1)));
 
             %find the mode of the facets on the west and south sides
             modeWest = mode(westPixels);

@@ -1,10 +1,22 @@
 %% create narr temp lapse rates
+% This script is hardcoded for this specific example using uniquely post-processed NARR GRIB files
+%
+% Users may use this for their applications
+% Author:  Andrew Newman, NCAR/RAL
+% Email :  anewman@ucar.edu
+%
+% Arguments:
+%
+%    None
+%
+%
 
 clear all;
 
 %% paths
 
-dpath = '/d2/anewman/oconus/stir';
+%modify this path for input/output data
+dpath = '/path/to/input/data';
 
 
 layerThick=3000; %Pa layer thickness

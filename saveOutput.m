@@ -37,7 +37,9 @@ function saveOutput(outputName,outputVar,metGrid)
     %check to see if output file name exists
     %if it does remove it and rewrite
     if(exist(outputName,'file') > 0)
+        %create string for system call
         cmd = sprintf('rm %s',outputName);
+        %execute command
         system(cmd);
     end
     

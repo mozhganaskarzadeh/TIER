@@ -41,11 +41,8 @@ function finalNormSlope = updatePrecipSlope(nr,nc,mask,normSlope,validSlope,filt
 
     %find valid grid points
     [i,j] = find(baseSlope > 0);
-    %scattered interpolation 
-    F = scatteredInterpolant(i,j,baseSlope(baseSlope>0),'linear','nearest');
-     
-    %use scattered interpolant to compute interpolated estimate
-    interpBaseSlope = F(x2d,y2d);
+    %scattered interpolation using griddata
+    interpBaseSlope = griddata(i,j,baseSlope(baseSlope>0),x2d,y2d,'linear');
 
     %define gaussian low-pass filter
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);

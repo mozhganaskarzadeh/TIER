@@ -47,18 +47,14 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
 
     %find valid symapUncert points
     [i,j] = find(~isnan(symapUncert));
-    %scattered interpolation 
-    fSymap = scatteredInterpolant(i,j,symapUncert(~isnan(symapUncert)),'linear','nearest');
+    %scattered interpolation using griddata
+    interpSymap = griddata(i,j,symapUncert(~isnan(symapUncert)),x2d,y2d,'linear');
+
     %find valid slopeUncert points
     [i,j] = find(slopeUncert > 0);
-    %scattered interpolation
-    fSlope = scatteredInterpolant(i,j,slopeUncert(slopeUncert>0),'linear','nearest');
-    
-    %use scattered interpolants to compute interpolated uncertainty
-    %estimates
-    interpSymap = fSymap(x2d,y2d);
-    interpSlope = fSlope(x2d,y2d);
-    
+    %scattered interpolation using griddata
+    interpSlope = griddata(i,j,slopeUncert(slopeUncert>0),x2d,y2d,'linear');
+
     %generate gaussian low-pass filter
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);
     

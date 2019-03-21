@@ -31,18 +31,15 @@ function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,fi
     x = 1:nc;
     [y2d,x2d] = meshgrid(x,y);
 
-    %find valid points
+    %find valid points for symap uncertainty
     [i,j] = find(~isnan(symap_uncert));
-    %generate scattered interpolant for scattered interpolation
-    FSymap = scatteredInterpolant(i,j,symapUncert(~isnan(symapUncert)),'linear','nearest');
-    %find valid points
+    %scattered interpolation using griddata
+    interpSymap = griddata(i,j,symapUncert(~isnan(symapUncert)),x2d,y2d,'linear');
+
+    %find valid points for slope uncertaintty
     [i,j] = find(slope_uncert > 0);
-     %generate scattered interpolant for scattered interpolation
-    FSlope = scatteredInterpolant(i,j,slopeUncert(slopeUncert>0),'linear','nearest');
-    
-    %scattered interpolation to structured grid
-    interpSymap = FSymap(x2d,y2d);
-    interpSlope = FSlope(x2d,y2d);
+    %scattered interpolation using griddata
+    interpSlope = griddata(i,j,slopeUncert(slopeUncert>0),x2d,y2d,'linear');
     
     %gaussian low-pass filter
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);

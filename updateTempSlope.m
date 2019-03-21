@@ -48,17 +48,13 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,defaultSlope,va
     
     %find valid points for layer 1
     [i,j] = find(baseSlope >= minSlope & gridLayer == 1);
-    %scattered interpolation 
-    F = scatteredInterpolant(i,j,baseSlope(baseSlope>= minSlope & gridLayer == 1),'linear','linear');
-    %use scattered interpolant to compute interpolated estimate
-    interpSlopeLayer1 = F(x2d,y2d);
+    %scattered interpolation using griddata
+    interpSlopeLayer1 = griddata(i,j,baseSlope(baseSlope>= minSlope & gridLayer == 1),x2d,y2d,'linear');
     
     %find valid points for layer 2
     [i,j] = find(baseSlope >= minSlope & gridLayer == 2);
-    %scattered interpolation 
-    F = scatteredInterpolant(i,j,baseSlope(baseSlope>= minSlope & gridLayer == 2),'linear','linear');
-    %use scattered interpolant to compute interpolated estimate
-    interpSlopeLayer2 = F(x2d,y2d);
+    %scattered interpolation using griddata
+    interpSlopeLayer2 = griddata(i,j,baseSlope(baseSlope>= minSlope & gridLayer == 2),x2d,y2d,'linear');
     
     %define gaussian low-pass filter
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);

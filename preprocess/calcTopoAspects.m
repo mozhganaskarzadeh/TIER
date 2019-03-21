@@ -54,13 +54,21 @@ function aspects = calcTopoAspects(grid,parameters)
     end
 
     %compute the gradients, slope, aspect from the DEM
-    [aspect,~,gradNorth,gradEast] = gradientm(grid.lat',grid.lon',smoothElev');
+    %if you are using Matlab and have the mapping toolbox, this will work
+%    [aspect,~,gradNorth,gradEast] = gradientm(grid.lat',grid.lon',smoothElev');
+    
+    %workaround for Octave compatibility
+    %this gives slightly different aspect and facet results from the
+    %gradientm function in Matlab, but overall is very similar
+    [gradEast,gradNorth] = gradient(smoothElev',grid.dx*1000); %convert km to m
+    aspect = 270-(360/(2*pi))*atan2(gradNorth,gradEast);
+    aspect(aspect>360) = aspect(aspect>360)-360;
 
     %transpose aspect, gradients
     aspect = aspect';
     gradNorth = gradNorth';
     gradEast = gradEast';
-
+    
     %define flat aspects
     flat = abs(gradNorth)<minGradient & abs(gradEast)<minGradient;
 

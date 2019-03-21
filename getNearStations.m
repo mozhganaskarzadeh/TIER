@@ -28,8 +28,9 @@ function nearStations = getNearStations(staLat,staLon,staAspect,gridLat,gridLon,
 %
 
     %comput distance to current grid point for all stations
-    [staDist, staAngles] = distance(staLat,staLon,gridLat,gridLon,wgs84Ellipsoid);
-    staDist = staDist/1000.0; %convert to km
+    [staDist, staAngles] = distance(staLat,staLon,gridLat,gridLon);
+    %convert distance to km
+    staDist = rad2km(deg2rad(staDist));
 
     %get station indices from sorted distance (nearMatch)
     [~,distSort] = sort(staDist);

@@ -23,6 +23,9 @@ function layerWeights = calcLayerWeights(gridLayer,gridElev,stationLayer,station
 %   layerWeights, float, vector holding layer weights for nearby stations
 %
 
+    %define a tiny float
+    tiny = 1e-6;
+
     %find nearby stations that match the grid layer
     layerMatch = stationLayer==gridLayer;
 
@@ -33,7 +36,7 @@ function layerWeights = calcLayerWeights(gridLayer,gridElev,stationLayer,station
     layerWeights(layerMatch) = 1.0;
     %compute weights for stations in other layer, based on vertical
     %distance difference
-    layerWeights(~layerMatch) = 1./(abs(gridElev-stationElev(~layerMatch)+1.0).^layerExp);
+    layerWeights(~layerMatch) = 1./((abs(gridElev-stationElev(~layerMatch)+1.0)+tiny).^layerExp);
     %no station in other layer can have a weight >= 1.0
     layerWeights(layerWeights>=1) = 0.99;
     %normalize weights

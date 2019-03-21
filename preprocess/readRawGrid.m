@@ -18,7 +18,8 @@ function grid = readRawGrid(gridName)
 %  grid, structure, structure holding DEM and related variables
 %
  
-
+    %define ellipsoid
+    wgs84 = defineEllipsoid('WGS84');
     
     
     %read latitude and longitude
@@ -36,7 +37,7 @@ function grid = readRawGrid(gridName)
         startLon = ncread(gridName,'startx'); 
         startLat = ncread(gridName,'starty');
         %distance between two points in m
-        gridDist = distance(startLat,startLon,startLat+inc,startLon+inc,referenceEllipsoid('wgs84'));
+        gridDist = distance(startLat,startLon,startLat+inc,startLon+inc,wgs84);
         kmPerLat = gridDist/sqrt(inc*inc*2)/1000;
         
         %grid distance in km roughly

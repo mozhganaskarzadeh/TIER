@@ -50,11 +50,15 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,defaultSlope,va
     [i,j] = find(baseSlope >= minSlope & gridLayer == 1);
     %scattered interpolation using griddata
     interpSlopeLayer1 = griddata(i,j,baseSlope(baseSlope>= minSlope & gridLayer == 1),x2d,y2d,'linear');
+    %fill missing values with nearest neighbor
+    interpSlopeLayer1 = fillNaN(interpSlopeLayer1,x2d,y2d);
     
     %find valid points for layer 2
     [i,j] = find(baseSlope >= minSlope & gridLayer == 2);
     %scattered interpolation using griddata
     interpSlopeLayer2 = griddata(i,j,baseSlope(baseSlope>= minSlope & gridLayer == 2),x2d,y2d,'linear');
+    %fill missing values with nearest neighbor
+    interpSlopeLayer2 = fillNaN(interpSlopeLayer2,x2d,y2d);
     
     %define gaussian low-pass filter
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);
@@ -62,7 +66,7 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,defaultSlope,va
     %filter layer 1
     filterSlopeLayer1 = imfilter(interpSlopeLayer1,gFilter);
     %set unused points to missing
-    filterSlopeLayer1(mask==0) = -999;
+    filterSlopeLayer1(mask<0) = -999;
     %for valid points
     %check to see if new estimate is 
     filterSlopeLayer1(filterSlopeLayer1 < -6 & mask > 0) = defaultSlope(filterSlopeLayer1 < -6 & mask > 0) + 1.5; %why was this done?
@@ -74,7 +78,7 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,defaultSlope,va
     %filter layer 2
     filterSlopeLayer2 = imfilter(interpSlopeLayer2,gFilter);
     %set unused points to missing
-    filterSlopeLayer2(mask==0) = -999;
+    filterSlopeLayer2(mask<0) = -999;
     %for valid points
     %check to see if new estimate is 
     filterSlopeLayer2(filterSlopeLayer2 < -6 & mask > 0) = defaultSlope(filterSlopeLayer2 <-6 & mask > 0) + 1.5;

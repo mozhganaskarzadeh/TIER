@@ -26,6 +26,6 @@ function finalTemp = calcFinalTemp(dem,mask,symapElev,symapTemp,finalSlope)
     %compute final temp using all finalized estimates
     finalTemp = finalSlope.*(dem-symapElev) + symapTemp;
     %set unused grid points to missing
-    finalTemp(mask==0) = -999;
+    finalTemp(mask<0) = -999;
 
 end

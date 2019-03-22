@@ -30,7 +30,7 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
 %
 
     %define local variable for spatial covariance calculation
-    covWindow = 5;
+    covWindow = 10;
 
     %use only points that had valid uncertainty estimates from the base
     %SYMAP interpolation or the weighted regression, then
@@ -48,60 +48,66 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
     %find valid symapUncert points
     [i,j] = find(~isnan(symapUncert));
     %scattered interpolation using griddata
-    interpSymap = griddata(i,j,symapUncert(~isnan(symapUncert)),x2d,y2d,'linear');
+    interpSymap = griddata(i,j,symapUncert(~isnan(symapUncert)),x2d,y2d,'linear');       
+    %fill missing values with nearest neighbor
+    interpSymap = fillNaN(interpSymap,x2d,y2d);
 
     %find valid slopeUncert points
     [i,j] = find(slopeUncert > 0);
     %scattered interpolation using griddata
     interpSlope = griddata(i,j,slopeUncert(slopeUncert>0),x2d,y2d,'linear');
-
+    %fill missing values with nearest neighbor
+    interpSlope = fillNaN(interpSlope,x2d,y2d);
+        
     %generate gaussian low-pass filter
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);
     
     %filter uncertainty estimates
     finalSymapUncert = imfilter(interpSymap,gFilter);
     finalSlopeUncert = imfilter(interpSlope,gFilter);
-    finalSlopeUncert(mask==0) = NaN;
 
     %estimate the total and relative uncertainty in physical units 
     %(mm timestep-1)
     %compute slope in physical space
     baseSlopeUncert = (finalSlopeUncert.*finalVar);
-    baseSlopeUncert(mask==0) = NaN;
-     
-    %convert arrays to 1d for convenience
-    symapUncert1d = reshape(finalSymapUncert,[nr*nc 1]);
-    slopeUncert1d = reshape(baseSlopeUncert,[nr*nc 1]);
+    baseSlopeUncert = fillNaN(baseSlopeUncert,x2d,y2d);
+
+    %replace nonvalid mask points with NaN
+    baseSlopeUncert(mask<0) = NaN;
+    finalSymapUncert(mask<0) = NaN;
     
     %define a local covariance vector
-    localCov = zeros(length(symapUncert1d),1)*NaN;
+    localCov = zeros(size(finalSymapUncert))*NaN;
 
     %step through each grid point and estimate the local covariance between
     %the two uncertainty components
     %covariance influences the total combined estimate
-    for i = (covWindow+1):length(symapUncert1d)-covWindow
-        if(~isnan(symapUncert1d(i)))
-            %covariance computation
-            c = cov(symapUncert1d(i-covWindow:i+covWindow),slopeUncert1d(i-covWindow:i+covWindow),'partialrows');
-            localCov(i) = c(2,1);
+    for i = 1:nr
+        for j = 1:nc
+            %define indicies aware of array bounds
+            iInds = [max([1 i-covWindow]),min([nr i+covWindow])];
+            jInds = [max([1 j-covWindow]),min([nc j+covWindow])];
+
+            %compute local covariance using selection of valid points
+            %get windowed area
+            subSymap = finalSymapUncert(iInds(1):iInds(2),jInds(1):jInds(2));
+            subSlope = baseSlopeUncert(iInds(1):iInds(2),jInds(1):jInds(2));
+            %compute covariance for only valid points in window
+            c = cov(subSymap(~isnan(subSymap)),subSlope(~isnan(subSlope)));
+            %pull relevant value from covariance matrix
+            localCov(i,j) = c(2,1);
         end
     end
-    %fill border grid points with nearby values
-    localCov(1:covWindow) = localCov(covWindow+1);
-    localCov(length(localCov)-(covWindow-1):length(localCov)) = localCov(length(localCov)-covWindow);
-    %reshape back to 2-dimensional array
-    localCov2d = reshape(localCov,[nr,nc]);
-    
 
     %compute the total estimates 
-    finalUncert.totalUncert = baseSlopeUncert+finalSymapUncert+2*sqrt(abs(localCov2d));
+    finalUncert.totalUncert = baseSlopeUncert+finalSymapUncert+2*sqrt(abs(localCov));
     finalUncert.relativeUncert = finalUncert.totalUncert./finalVar;
 
     %set novalid gridpoints to missing 
-    finalSymapUncert(mask==0) = -999;
-    finalUncert.finalSlopeUncert(mask==0) = -999;
-    finalUncert.totalUncert(mask==0) = -999;
-    finalUncert.relativeUncert(mask==0) = -999;
+    finalSymapUncert(mask<0) = -999;
+    finalUncert.finalSlopeUncert(mask<0) = -999;
+    finalUncert.totalUncert(mask<0) = -999;
+    finalUncert.relativeUncert(mask<0) = -999;
 
     %define components in output structure
     finalUncert.finalSymapUncert = finalSymapUncert;

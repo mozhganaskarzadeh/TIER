@@ -70,7 +70,7 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
     tmpNormSlope = finalSlope./symapPrecip;
     %temporary precipitation variable
     tmpPrecip = finalPrecip;
-    tmpNormSlope(mask==0)=NaN;
+    tmpNormSlope(mask<0)=NaN;
 
     %keep track of passes and number of grid points modified
     pass = 1;
@@ -215,6 +215,6 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
     %set final precipitation
     finalPrecip = tmpPrecip;
     %invalid grid points set to missing
-    finalPrecip(mask==0) = -999;
+    finalPrecip(mask<0) = -999;
     
 end

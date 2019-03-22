@@ -93,9 +93,9 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
             subSymap = finalSymapUncert(iInds(1):iInds(2),jInds(1):jInds(2));
             subSlope = baseSlopeUncert(iInds(1):iInds(2),jInds(1):jInds(2));
             %compute covariance for only valid points in window
-            c = cov(subSymap(~isnan(subSymap)),subSlope(~isnan(subSlope)));
+            c = cov(subSymap(~isnan(subSymap)),subSlope(~isnan(subSlope)),0);
             %pull relevant value from covariance matrix
-            localCov(i,j) = c(2,1);
+            localCov(i,j) = c(1,length(c(1,:)));
         end
     end
 

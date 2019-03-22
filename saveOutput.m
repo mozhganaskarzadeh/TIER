@@ -18,12 +18,6 @@ function saveOutput(outputName,outputVar,metGrid)
     %size of grid
     [nr,nc] = size(metGrid.rawField);
     
-    %First save to Matlab .mat binary file
-    %remove outputName extension
-    outSubName = strtok(outputName,'.');
-    %save to mat file
-    save(outSubName,'metGrid','-v7.3');
-    
     %units check
     if(strcmpi(outputVar,'precip'))
         physicalUnits = 'mm/day';

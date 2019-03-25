@@ -26,10 +26,10 @@ An example case has been developed with example parameter perturbations and outp
 
 ## References:
 
-Daly, C., R. P. Neilson, and D. L. Phillips, 1994: A Statistical-Topographic Model for Mapping Climatological Precipitation over Mountainous Terrain, J. Appl. Meteor., 33, 140-158.
-Daly, C., W. P. Gibson, G. H. Taylor, G. L. Johnson, and P. Pasteris, 2002: A knowledge-based approach to the statistical mapping of climate. Clim. Res. 22: 99–113, doi: 10.3354/cr022099.
-Daly, C., E. H. Helmer, and M. Quinones, 2003: Mapping the climate of Puerto Rico, Vieques, and Culebra. Int. J. Climatol. 23: 1359–1381, doi:10.1002/joc.937.
-Daly, C., J. W. Smith, J. I. Smith, and R. B. McKane, 2007: High-resolution spatial modeling of daily weather elements for a catchment in the Oregon Cascade Mountains, United States. J. Appl. Meteorol. Climatol., 46, 1565-1586.
-Daly, C., M. Halbleib, J. I. Smith, W. P. Gibson, M. K. Doggett, G. H. Taylor, J. Curtis, and P. A. Pasteris, 2008: Physiographically-sensitive mapping of temperature and precipitation across the conterminous United States. Int. J. Climatol. 28: 2031–2064, doi: 10.1002/joc.1688.
+* Daly, C., R. P. Neilson, and D. L. Phillips, 1994: A Statistical-Topographic Model for Mapping Climatological Precipitation over Mountainous Terrain, J. Appl. Meteor., 33, 140-158.
+* Daly, C., W. P. Gibson, G. H. Taylor, G. L. Johnson, and P. Pasteris, 2002: A knowledge-based approach to the statistical mapping of climate. Clim. Res. 22: 99–113, doi: 10.3354/cr022099.
+* Daly, C., E. H. Helmer, and M. Quinones, 2003: Mapping the climate of Puerto Rico, Vieques, and Culebra. Int. J. Climatol. 23: 1359–1381, doi:10.1002/joc.937.
+* Daly, C., J. W. Smith, J. I. Smith, and R. B. McKane, 2007: High-resolution spatial modeling of daily weather elements for a catchment in the Oregon Cascade Mountains, United States. J. Appl. Meteorol. Climatol., 46, 1565-1586.
+* Daly, C., M. Halbleib, J. I. Smith, W. P. Gibson, M. K. Doggett, G. H. Taylor, J. Curtis, and P. A. Pasteris, 2008: Physiographically-sensitive mapping of temperature and precipitation across the conterminous United States. Int. J. Climatol. 28: 2031–2064, doi: 10.1002/joc.1688.
 
 

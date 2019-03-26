@@ -2,7 +2,7 @@
 nMaxNear,               7     ,       maximum number of nearby stations to consider
 nMinNear,               3     ,       minimum number of nearby stations needed for slope regression
 maxDist,                250   ,       maximum distance to consider stations (km)
-minSlope,              0.5    ,       minimum valid slope value (normalized for precipitation; physical units for temperature)
+minSlope,               0.25  ,       minimum valid slope value (normalized for precipitation; physical units for temperature)
 maxInitialSlope,        4.25  ,       maximum valid initial pass normalized slope for precipitation
 maxFinalSlope,          3.0   ,       maximum valid final adjusted normalized slope for precipitation
 maxSlopeLower,          20    ,       maximum valid slope for temperature in lower atmospheric layer (inversion layer; allows for strong inversions)

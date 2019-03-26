@@ -1,4 +1,4 @@
-function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,filterSize,filterSpread)
+function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,filterSize,filterSpread,covWindow)
 %
 %% calcFinalTempUncert computes the final uncertainty for temperature variables
 %
@@ -16,15 +16,13 @@ function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,fi
 %   slopeUncert, float, initial estimate of slope uncertainty across grid
 %   filterSize, integer, size of low-pass filter in grid points
 %   filterSpread, float, variance of low-pass filter
+%   covWindow, float, size (grid points) of covariance window
 %
 %  Outputs:
 %
 %   finalUncert, structure, structure containing total and relative
 %                           uncertainty for met var
 
-    %define local variable for spatial covariance calculation
-    covWindow = 10;
-    
     %define a mesh of indicies for scattered interpolation of valid points
     %back to a grid
     y = 1:nr;
@@ -62,7 +60,7 @@ function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,fi
     localCov = zeros(size(finalSymapUncert))*NaN;
 
     %step through each grid point and estimate the local covariance between
-    %the two uncertainty components
+    %the two uncertainty components using covWindow to define the size of the local covariance estimate
     %covariance influences the total combined estimate
     for i = 1:nr
         for j = 1:nc

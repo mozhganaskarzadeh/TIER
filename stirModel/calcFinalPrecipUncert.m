@@ -1,4 +1,4 @@
-function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,finalVar,filterSize,filterSpread)
+function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,finalVar,filterSize,filterSpread,covWindow)
 %
 %% calcFinalPrecipUncert produces the final component uncertainty estimates
 %             as well as the final total and relative uncertainty accounting
@@ -21,6 +21,7 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
 %   finalVar, float,      final variable estimate (precip here)
 %   filterSize, integer, size of low-pass filter in grid points
 %   filterSpread, float, variance of low-pass filter
+%   covWindow, float, size (grid points) of covariance window
 %
 %  Outputs:
 %
@@ -29,8 +30,6 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
 %                           uncertainty estimates
 %
 
-    %define local variable for spatial covariance calculation
-    covWindow = 10;
 
     %use only points that had valid uncertainty estimates from the base
     %SYMAP interpolation or the weighted regression, then
@@ -80,7 +79,7 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
     localCov = zeros(size(finalSymapUncert))*NaN;
 
     %step through each grid point and estimate the local covariance between
-    %the two uncertainty components
+    %the two uncertainty components using covWindow to define the size of the local covariance estimate
     %covariance influences the total combined estimate
     for i = 1:nr
         for j = 1:nc

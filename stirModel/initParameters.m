@@ -37,6 +37,7 @@ function parameters = initParameters(varEstimated)
     parameters.minElevDiff = 500;             % m
     parameters.filterSize = 60;               % grid cells
     parameters.filterSpread = 40;             % -
+    parameters.covWindow = 10;                % grid cells
 
     %initialize variables based on meteorological variable being regressed
     if(strcmpi(varEstimated,'precip'))

@@ -79,6 +79,5 @@ minElev,                100   ,       minimum elevation considered when featheri
 minElevDiff,            500   ,       minimum elevation difference across grid cells considered for feathering precipitation (m): Again added here specifically to only feather precipitation in complex terrain.
 filterSize,             15    ,       size of low pass filter (grid points) used in computing updated slopes and uncertainty estimates: Filter parameters for low pass filtering of initial noisy slope and uncertainty estimates.  This controls the Gaussian filter width in grid points.  Larger values increase the smoothing.
 filterSpread,           11    ,       spread of low-pass filter power used in computing updated slopes and uncertainty estimates: The spread of the Gaussian filter.  Larger values increase the smoothing.
-
-
+covWindow,              10    ,       window for local covariance calculation for the SYMAP and slope uncertainty components.  Used in the final uncertainty estimation routine
 

@@ -100,6 +100,9 @@ function parameters = readParameters(parameterFile,parameters)
             case('filterSpread')
                 %spread of low-pass filter power used in computing updated slopes and uncertainty estimates
                 parameters.filterSpread = str2double(strtrim(data{2}(i)));
+            case('covarianceWindow')
+                %window for local covariance calculation for the SYMAP and slope uncertainty components.  Used in the final uncertainty estimation routine
+                parameters.covWindow = str2double(strtrim(data{2}(i)));
             otherwise
                 %throw error if unknown string
                 error('Unknown parameter name : %s',char(data{1}(i)));

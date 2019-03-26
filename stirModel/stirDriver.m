@@ -125,7 +125,7 @@ if(strcmpi(controlVars.variableEstimated,'precip'))
     metGrid.finalField = featherPrecip(parameters,grid.nr,grid.nc,grid.dx,grid.dem,grid.mask,finalNormSlope,metGrid.symapField,metGrid.symapElev);
     
     %compute final uncertainty estimate
-    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,metGrid.symapUncert,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread);
+    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,metGrid.symapUncert,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
     
     %set metGrid variables
     metGrid.totalUncert = finalUncert.totalUncert;
@@ -142,7 +142,7 @@ elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.vari
     metGrid.finalField = calcFinalTemp(grid.dem,grid.mask,metGrid.symapElev,metGrid.symapField,metGrid.finalSlope);
     
     %compute final uncertainty estimate
-    finalUncert = calcFinalTempUncert(grid.nr,grid.nc,grid.mask,metGrid.symapUncert,metGrid.slopeUncert,parameters.filterSize,parameters.filterSpread);
+    finalUncert = calcFinalTempUncert(grid.nr,grid.nc,grid.mask,metGrid.symapUncert,metGrid.slopeUncert,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
 
 end
 

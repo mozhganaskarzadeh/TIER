@@ -1,6 +1,6 @@
 # To run STIR with Octave
 
-## Install Octave on your local machine.  
+## Install Octave on your local machine
 
  * Mac: Prepackaged disk images can be found at: https://octave-app.org/Download.html or Octave can be installed using homebrew (https://brew.sh/).
 

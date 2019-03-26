@@ -1,4 +1,4 @@
-!inputName      Value           Comments
+!inputName      Value           Comments (No commas ',' allowed in the comments)
 gridName,          /path/to/grid/file                           , domain file name
 stationFileList,   /path/to/station/list/file                   , name of variable specific (e.g. precip or tmax/tmin)  file with list of input station files
 stationDataPath,   /path/to/station/data/directory              , path to station data

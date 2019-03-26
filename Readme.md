@@ -5,6 +5,7 @@ The STIR tool was motivated by the desire to explore methodological choices in '
 
 The user is encouraged to modify model parameters using the input parameter files for the DEM preprocessing and the statistical mapping algorithm.  The modular design also allows for additional functionality to be added, hopefully with minimal effort.  It is hoped this code base allows for a fuller understanding of the impacts sometimes seemingly small methodological choices have on our final gridded estimates.
 
+It is *highly* recommended to read the STIR description paper in GMD (citation to follow).  Also the example tarball at () contains an example input grid, example station data, configuration and parameter files used in the example cases.  These can also then be used as example formats for your own data.
 
 ## Installing the code:
 
@@ -22,7 +23,7 @@ STIR uses Git as its version control tool. Further description of git (https://g
 
 ## Examples:
 
-An example case has been developed with example parameter perturbations and output and can be found at (ral.ucar.edu/projects/STIR) including a tutorial guide in readme.md.
+An example case has been developed with example parameter perturbations and output and can be found at (ral.ucar.edu/projects/STIR) including a tutorial guide in docs/exampleReadme.md.
 
 ## References:
 

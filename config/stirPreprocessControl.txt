@@ -1,4 +1,4 @@
-!inputName,      Value,           Comments
+!inputName,      Value,           Comments (No commas ',' allowed in the comments)
 rawGridName,             /path/to/input/raw/grid/file                  , raw domain DEM
 outputGridName,          /path/to/output/processed/grid/file           , name of output processed grid
 stationPrecipPath,       /path/to/precipitation/station/data/directory , path to precipitation station data

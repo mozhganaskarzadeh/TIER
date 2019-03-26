@@ -20,8 +20,10 @@ Once the preprocessing is finished a brief comparison between your and the refer
 ### STIR Model
 
 Once the preprocessing is finished, set the configuration variables in `stirControl.txt` to the appropriate paths and files.  See the [Config readme](configReadme.md) for details.
-The STIR model can now be run with stirDriver.m in Matlab or Octave.  All three variables can be interpolated, precip, tmax, and tmin.
+
+The STIR model can now be run with stirDriver.m in Matlab or Octave.  All three variables can be interpolated: `precip, tmax, or tmin`.
 The `stirParameter.txt` file will be used to define the STIR model parameter values.  Again, if any parameters do not exist in this parameter file, default values are used (`stirModel/initParameters.m`).
+
 Again, various diagnostics will print while the model is running.  The output file will be generated at the user specified location and name.  It is suggested to make sure the output name is different from the provided reference output files.
 It is also suggested to note which variable is interpolated (e.g. have precip, tmax, tmin) in the output file name.
 
@@ -30,7 +32,7 @@ Once the STIR model is complete, the user is encouraged to compare their output 
 
 ## STIR Parameter Variations
 
-There are many methodological decisions made when developing a spatial map of precipitation.  Here we explore a few parameters in the STIR model only to identify changes in the final estimated values and the corresponding uncertainty.
+There are many methodological decisions made when developing a spatial map of a meteorological variable from sparse observations.  Here we explore a few parameters in the STIR model only to identify changes in the final estimated values and the corresponding uncertainty.
 
 Note that the preprocessing parameters will also impact the final result through changes in the definition of facets, and changes in the other knowledge-based geophysical attributes.  The user is encouraged to explore those parameters as well.
 

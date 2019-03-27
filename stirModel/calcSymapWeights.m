@@ -1,4 +1,4 @@
-function symapWeights = calcSymapWeights(staDist,staAngles,distanceWeightScale,maxDist)
+function symapWeights = calcSymapWeights(staDist,staAngles,distanceWeightScale,distanceWeightExp,maxDist)
 %
 %% calcSymapWeights computes weights for nearby stations following the
 %  concept of the SYMAP algorithm (Shepard 1984).  Uses Barnes (1964) type
@@ -34,7 +34,7 @@ function symapWeights = calcSymapWeights(staDist,staAngles,distanceWeightScale,m
     scale = distanceWeightScale*(meanDist/(maxDist));
 
     %compute initial distance weights
-    distanceWeights = exp(-(staDist.^2/scale));
+    distanceWeights = exp(-(staDist.^distanceWeightExp/scale));
 
     %directional isolation (Shepard 1984)
     %set angular isolation weight variable

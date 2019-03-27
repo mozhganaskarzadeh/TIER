@@ -87,9 +87,9 @@ for y = 1:grid.nr
 
             %compute SYMAP weights
             symapWeights.near = calcSymapWeights(nearStations.staDist(nearStations.nearStationInds),nearStations.staAngles(nearStations.nearStationInds),...
-                                            parameters.distanceWeightScale,parameters.maxDist);
+                                            parameters.distanceWeightScale,parameters.distanceWeightExp,parameters.maxDist);
             symapWeights.aspect = calcSymapWeights(nearStations.staDist(nearStations.aspectStationInds),nearStations.staAngles(nearStations.aspectStationInds),...
-                                            parameters.distanceWeightScale,parameters.maxDist);
+                                            parameters.distanceWeightScale,parameters.distanceWeightExp,parameters.maxDist);
 
             %compute final weights
             finalWeights.near = calcFinalWeights(controlVars.variableEstimated,symapWeights.near,coastWeights.near,...

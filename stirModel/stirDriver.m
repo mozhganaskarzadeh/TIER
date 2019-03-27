@@ -134,7 +134,8 @@ end     %end y-loop
 %update and compute final fields conditioned on met variable
 if(strcmpi(controlVars.variableEstimated,'precip'))
     %re-compute slope estimate
-    finalNormSlope = updatePrecipSlope(grid.nr,grid.nc,grid.mask,metGrid.normSlope,metGrid.validRegress,parameters.filterSize,parameters.filterSpread);
+    finalNormSlope = updatePrecipSlope(grid.nr,grid.nc,grid.mask,metGrid.normSlope,metGrid.validRegress,parameters.defaultSlope,...
+                                       parameters.recomputeDefaultSlope,parameters.filterSize,parameters.filterSpread);
     
     %compute final field value
     %feather precipitation generally following Daly et al. (1994)
@@ -149,6 +150,7 @@ if(strcmpi(controlVars.variableEstimated,'precip'))
     metGrid.relUncert = finalUncert.relativeUncert;
     metGrid.symapUncert = finalUncert.finalSymapUncert;
     metGrid.slopeUncert = finalUncert.finalSlopeUncert;
+    metGrid.defaultSlope = parameters.defaultSlope;
 
 elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.variableEstimated,'tmin'))
     %re-compute slope estimate
@@ -166,6 +168,7 @@ elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.vari
     metGrid.relUncert = finalUncert.relativeUncert;
     metGrid.symapUncert = finalUncert.finalSymapUncert;
     metGrid.slopeUncert = finalUncert.finalSlopeUncert;
+    metGrid.defaultSlope = tempDefaultLapse;
 end
 
 

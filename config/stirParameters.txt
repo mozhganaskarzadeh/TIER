@@ -19,6 +19,7 @@ maxGrad,                2.5   ,       maximum allowable normalized precipitation
 bufferSlope,            0.02  ,       a buffer parameter when computing precipitaiton slope feathering
 minElev,                100   ,       minimum elevation considered when feathering precipitation (m)
 minElevDiff,            500   ,       minimum elevation difference across precipitation considered for feathering precipitation (m)
+recomputeDefaultPrecipSlope, true,    logical string to indicate re-estimation of the default slope using domain specific information
 filterSize,             15    ,       size of low pass filter (grid points) used in computing updated slopes and uncertainty estimates
 filterSpread,           11    ,       spread of low-pass filter power used in computing updated slopes and uncertainty estimates
 covWindow,              10    ,       window for local covariance calculation for the SYMAP and slope uncertainty components.  Used in the final uncertainty estimation routine

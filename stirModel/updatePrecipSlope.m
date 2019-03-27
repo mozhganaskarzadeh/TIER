@@ -1,4 +1,4 @@
-function finalNormSlope = updatePrecipSlope(nr,nc,mask,normSlope,validSlope,filterSize,filterSpread)
+function finalNormSlope = updatePrecipSlope(nr,nc,mask,normSlope,validSlope,defaultSlope,recomputeDefault,filterSize,filterSpread)
 %
 %% updatePrecipSlope updates the estimated slope (elevation lapse rate)
 %                  of precipitation across the grid from the
@@ -16,6 +16,10 @@ function finalNormSlope = updatePrecipSlope(nr,nc,mask,normSlope,validSlope,filt
 %   mask, integer, mask of valid grid points
 %   normslope, float, intial normalized slope estimate across grid
 %   validSlope, integer, mask of valid regression estimated slopes
+%   defaultSlope, float, value of the default normalized precipitation
+%                        slope 
+%   recomputeDefault,string, string indicating true/false to recompute the
+%                        default normalized precipitation slope
 %   filterSize, integer, size of low-pass filter in grid points
 %   filterSpread, float, variance of low-pass filter
 %
@@ -25,14 +29,25 @@ function finalNormSlope = updatePrecipSlope(nr,nc,mask,normSlope,validSlope,filt
 %                              slope for all grid points for precip variables
 %
 
+    %if user specifies to recompute the default slope then do it
     %use only points that had valid regression based slopes
-    %filter and interpolate to entire domain 
-    %ideally this is an improvement over a spatially constant default slope
-    baseSlope = normSlope;
-    baseSlope(validSlope~=1) = -999;
-    domainMeanSlope = mean(mean(baseSlope(baseSlope ~= -999)));
-    baseSlope(baseSlope == -999) = domainMeanSlope;
-
+    %ideally this is an improvement over a specified default slope
+    if(strcmpi(recomputeDefault,'true'))
+        baseSlope = normSlope;
+        baseSlope(validSlope~=1) = -999;
+        domainMeanSlope = mean(mean(baseSlope(baseSlope ~= -999)));
+        baseSlope(baseSlope == -999) = domainMeanSlope;
+    else
+        baseSlope = normSlope;
+        baseSlope(validSlope~=1) = defaultSlope;
+    end
+    
+    %filter and interpolate slopes to entire domain 
+    %this is a similar step to the Daly et al. (1994) feathering except it
+    %is applied to the precipitation slopes.
+    %This is done before feathering, where feathering is a final check for precipitation
+    %gradients
+    
     %define a mesh of indicies for scattered interpolation of valid points
     %back to a grid
     y = 1:nr;

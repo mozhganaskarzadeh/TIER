@@ -72,6 +72,7 @@ Here is an overview of the varibles in the STIR model parameter file:
 * **bufferSlope**, a buffer parameter when computing precipitaiton slope feathering
 * **minElev**, minimum elevation considered when feathering precipitation (m): Feathering generally follows Daly et al. (1994) but that specific implementation is unknown.  This is included here to prevent excessive feathering in low (typically flat) areas
 * **minElevDiff**, minimum elevation difference across grid cells considered for feathering precipitation (m): Again added here specifically to only feather precipitation in complex terrain.
+* **recomputeDefaultPrecipSlope**, logical string to indicate re-estimation of the default slope using domain specific information
 * **filterSize**, size of low pass filter (grid points) used in computing updated slopes and uncertainty estimates: Filter parameters for low pass filtering of initial noisy slope and uncertainty estimates.  This controls the Gaussian filter width in grid points.  Larger values increase the smoothing.
 * **filterSpread**, spread of low-pass filter power used in computing updated slopes and uncertainty estimates: The spread of the Gaussian filter.  Larger values increase the smoothing.
 * **covWindow**, window (grid cells) for local covariance calculation for the SYMAP and slope uncertainty components.  Used in the final uncertainty estimation routine

@@ -94,6 +94,10 @@ function parameters = readParameters(parameterFile,parameters)
             case('minElevDiff')
                 %minimum elevation difference across precipitation considered for feathering precipitation
                 parameters.minElevDiff = str2double(strtrim(data{2}(i)))/1000; %convert m to km
+            case('recomputeDefaultPrecipSlope')
+                %logical to indicate if the default slope should be
+                %recomputed using the domain valid regression points
+                parameters.recomputeDefaultPrecipSlope = strtrim(data{2}(i));
             case('filterSize')
                 %size of low pass filter (grid points) used in computing updated slopes and uncertainty estimates
                 parameters.filterSize = str2double(strtrim(data{2}(i)));

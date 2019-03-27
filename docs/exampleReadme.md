@@ -39,9 +39,8 @@ Note that the preprocessing parameters will also impact the final result through
 ### First
 For precipitation, modify the `nMaxNear` parameter from 7 to 10.
 
-This increases the maximum number of stations that can be considered at each grid point by 30%.  In this case the final estimated precipitation is
+This increases the maximum number of stations that can be considered at each grid point by 30%.  In this case the final estimated precipitation is generally changed within +/- 20% of the base case.  There are a few areas with larger relative changes, even in areas of large accumulation.
 However, the uncertainty estimate is significantly changed with the additional data for each grid point.  More stations results in a decreased uncertainty estimate across nearly the entire domain.
-
 
 ### Second
 For precipitation, modify the `recomputeDefaultPrecipSlope` parameter from true to false.

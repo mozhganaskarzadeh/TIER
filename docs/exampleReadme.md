@@ -37,10 +37,19 @@ There are many methodological decisions made when developing a spatial map of a 
 Note that the preprocessing parameters will also impact the final result through changes in the definition of facets, and changes in the other knowledge-based geophysical attributes.  The user is encouraged to explore those parameters as well.
 
 ### First
-For precipitation, modify the `minSlope` parameter from 0.25 to 0.0.
+For precipitation, modify the `nMaxNear` parameter from 7 to 10.
+
+This increases the maximum number of stations that can be considered at each grid point by 30%.  In this case the final estimated precipitation is
+However, the uncertainty estimate is significantly changed with the additional data for each grid point.  More stations results in a decreased uncertainty estimate across nearly the entire domain.
+
 
 ### Second
-For precipitation, modify the `coastalExp` parameter from 0.75 to 0.5.
+For precipitation, modify the `recomputeDefaultPrecipSlope` parameter from true to false.
+
+This turns off the recomputation of the default slope used at grid cells where the regression could not find a valid slope from the available observations.
+For this case
 
 ### Third
-For tmin, modify the `maxSlopeLower` parameter from 20 to 10.
+
+For tmin, modify the `distanceWeightExp` parameter from 2 to 1.75.  This modifies the shape of the Barnes inverse distance weight curve to have a shallower slope, giving more weight to stations further away.
+

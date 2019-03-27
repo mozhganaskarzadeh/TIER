@@ -135,7 +135,7 @@ end     %end y-loop
 if(strcmpi(controlVars.variableEstimated,'precip'))
     %re-compute slope estimate
     finalNormSlope = updatePrecipSlope(grid.nr,grid.nc,grid.mask,metGrid.normSlope,metGrid.validRegress,parameters.defaultSlope,...
-                                       parameters.recomputeDefaultSlope,parameters.filterSize,parameters.filterSpread);
+                                       parameters.recomputeDefaultPrecipSlope,parameters.filterSize,parameters.filterSpread);
     
     %compute final field value
     %feather precipitation generally following Daly et al. (1994)

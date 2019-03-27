@@ -1,4 +1,4 @@
-function saveOutput(outputName,outputVar,metGrid)
+function saveOutput(outputName,outputVar,grid,metGrid,parameters)
 %
 %% saveOutput saves the metGrid structure into a netcdf file
 % Author: Andrew Newman NCAR/RAL
@@ -39,7 +39,34 @@ function saveOutput(outputName,outputVar,metGrid)
     end
     
     %Save to netcdf file
-    %create file, set dimensions and write first variable rawField
+    %add grid fields first
+    %create file, set dimensions and write elevation
+    nccreate(outputName,'elevation','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');
+    ncwrite(outputName,'elevation',grid.dem*1000); %convert back to m
+    ncwriteatt(outputName,'elevation','name','Domain elevation');
+    ncwriteatt(outputName,'elevation','long_name','Domain elevation');
+    ncwriteatt(outputName,'elevation','units','m');
+    
+    nccreate(outputName,'latitude','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');
+    ncwrite(outputName,'latitude',grid.lat);
+    ncwriteatt(outputName,'latitude','name','latitude');
+    ncwriteatt(outputName,'latitude','long_name','latitude');
+    ncwriteatt(outputName,'latitude','units','degrees_north');
+    
+    nccreate(outputName,'longitude','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');
+    ncwrite(outputName,'longitude',grid.lon);
+    ncwriteatt(outputName,'longitude','name','longitude');
+    ncwriteatt(outputName,'longitude','long_name','longitude');
+    ncwriteatt(outputName,'longitude','units','degrees_west');
+    
+    nccreate(outputName,'mask','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');
+    ncwrite(outputName,'mask',grid.mask);
+    ncwriteatt(outputName,'mask','name','Domain mask');
+    ncwriteatt(outputName,'mask','long_name','Mask that sets land (1, valid), ocean (-1, met values not computed), and inland lake (0, met values computed)');
+    ncwriteatt(outputName,'mask','units','-');
+    
+    %now on to output variables from the STIR model
+    %rawField
     nccreate(outputName,'rawField','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');
     ncwrite(outputName,'rawField',metGrid.rawField);
     ncwriteatt(outputName,'rawField','name','raw variable output');
@@ -145,4 +172,31 @@ function saveOutput(outputName,outputVar,metGrid)
     ncwriteatt(outputName,'validRegress','long_name','flag denoting the elevation-variable regression produced a valid slope');
     ncwriteatt(outputName,'validRegress','units','-');
     
+    %save parameters to output file as well
+    %write this out as global attributes
+    ncwriteatt(outputName,'/','nMaxNear',parameters.nMaxNear);
+    ncwriteatt(outputName,'/','nMinNear',parameters.nMinNear);
+    ncwriteatt(outputName,'/','maxDist',parameters.maxDist);
+    ncwriteatt(outputName,'/','minSlope',parameters.minSlope);
+    ncwriteatt(outputName,'/','maxInitialSlope',parameters.maxInitialSlope);
+    ncwriteatt(outputName,'/','maxFinalSlope',parameters.maxFinalSlope);
+    ncwriteatt(outputName,'/','maxSlopeLower',parameters.maxSlopeLower);
+    ncwriteatt(outputName,'/','maxSlopeUpper',parameters.maxSlopeUpper);
+    ncwriteatt(outputName,'/','defaultSlope',parameters.defaultSlope);
+    ncwriteatt(outputName,'/','topoPosMinDiff',parameters.topoPosMinDiff);
+    ncwriteatt(outputName,'/','topoPosMaxDiff',parameters.topoPosMaxDiff);
+    ncwriteatt(outputName,'/','topoPosExp',parameters.topoPosExp);
+    ncwriteatt(outputName,'/','costalExp',parameters.coastalExp);
+    ncwriteatt(outputName,'/','layerExp',parameters.layerExp);
+    ncwriteatt(outputName,'/','distanceWeightScale',parameters.distanceWeightScale);
+    ncwriteatt(outputName,'/','distanceWeightExp',parameters.distanceWeightExp);
+    ncwriteatt(outputName,'/','maxGrad',parameters.maxGrad);
+    ncwriteatt(outputName,'/','bufferSlope',parameters.bufferSlope);
+    ncwriteatt(outputName,'/','minElev',parameters.minElev);
+    ncwriteatt(outputName,'/','minElevDiff',parameters.minElevDiff);
+    ncwriteatt(outputName,'/','recomputeDefaultPrecipSlope',char(parameters.recomputeDefaultPrecipSlope));
+    ncwriteatt(outputName,'/','filterSize',parameters.filterSize);
+    ncwriteatt(outputName,'/','filterSpread',parameters.filterSpread);
+    ncwriteatt(outputName,'/','covWindow',parameters.covWindow);
+        
 end

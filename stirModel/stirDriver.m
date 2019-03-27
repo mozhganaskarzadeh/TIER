@@ -172,6 +172,6 @@ elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.vari
     metGrid.defaultSlope = tempDefaultLapse;
 end
 
-
+%%
 %output
-saveOutput(controlVars.outputName,controlVars.variableEstimated,metGrid);
+saveOutput(controlVars.outputName,controlVars.variableEstimated,grid,metGrid,parameters);

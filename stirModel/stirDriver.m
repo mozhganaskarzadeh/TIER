@@ -146,11 +146,12 @@ if(strcmpi(controlVars.variableEstimated,'precip'))
     
     %set metGrid variables
     metGrid.finalSlope = finalNormSlope.*metGrid.finalField;
+    metGrid.finalSlope(grid.mask<0) = -999; %set final slope value to missing where mask is ocean
     metGrid.totalUncert = finalUncert.totalUncert;
     metGrid.relUncert = finalUncert.relativeUncert;
     metGrid.symapUncert = finalUncert.finalSymapUncert;
     metGrid.slopeUncert = finalUncert.finalSlopeUncert;
-    metGrid.defaultSlope = parameters.defaultSlope;
+    metGrid.defaultSlope = ones(grid.nr,grid.nc)*parameters.defaultSlope;
 
 elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.variableEstimated,'tmin'))
     %re-compute slope estimate

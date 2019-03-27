@@ -45,16 +45,16 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
     [y2d,x2d] = meshgrid(x,y);
 
     %find valid symapUncert points
-    [i,j] = find(~isnan(symapUncert));
+    [i,j] = find(symapUncert >= 0);
     %scattered interpolation using griddata
-    interpSymap = griddata(i,j,symapUncert(~isnan(symapUncert)),x2d,y2d,'linear');       
+    interpSymap = griddata(i,j,symapUncert(symapUncert >= 0),x2d,y2d,'linear');       
     %fill missing values with nearest neighbor
     interpSymap = fillNaN(interpSymap,x2d,y2d);
 
     %find valid slopeUncert points
-    [i,j] = find(slopeUncert > 0);
+    [i,j] = find(slopeUncert >= 0);
     %scattered interpolation using griddata
-    interpSlope = griddata(i,j,slopeUncert(slopeUncert>0),x2d,y2d,'linear');
+    interpSlope = griddata(i,j,slopeUncert(slopeUncert >= 0),x2d,y2d,'linear');
     %fill missing values with nearest neighbor
     interpSlope = fillNaN(interpSlope,x2d,y2d);
         
@@ -104,7 +104,7 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
 
     %set novalid gridpoints to missing 
     finalSymapUncert(mask<0) = -999;
-    finalUncert.finalSlopeUncert(mask<0) = -999;
+    finalSlopeUncert(mask<0) = -999;
     finalUncert.totalUncert(mask<0) = -999;
     finalUncert.relativeUncert(mask<0) = -999;
 

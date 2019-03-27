@@ -2,10 +2,6 @@ function nearStations = getNearStations(staLat,staLon,staAspect,gridLat,gridLon,
 %
 %% getNearStations finds nearby stations for current grid point
 %
-%
-% Author:  Andrew Newman
-%
-%
 % Arguments:
 %
 %  Input:
@@ -26,8 +22,29 @@ function nearStations = getNearStations(staLat,staLon,staAspect,gridLat,gridLon,
 %   area on the same topographic aspect as the current grid point
 %
 %
-
-    %comput distance to current grid point for all stations
+% Author: Andrew Newman, NCAR/RAL
+% Email : anewman@ucar.edu
+% Postal address:
+%     P.O. Box 3000
+%     Boulder,CO 80301
+% 
+% Copyright (C) 2019 Andrew Newman
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <https://www.gnu.org/licenses/>.
+%
+%
+    %compute distance to current grid point for all stations
     [staDist, staAngles] = distance(staLat,staLon,gridLat,gridLon);
     %convert distance to km
     staDist = rad2km(deg2rad(staDist));

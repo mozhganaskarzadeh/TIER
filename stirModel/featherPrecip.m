@@ -5,9 +5,6 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
 %                slope aspect processing. Generally follows Daly et al.
 %                (1994).  This is the final precipitation processing step.
 %
-% Author: Andrew Newman NCAR/RAL
-% Email : anewman@ucar.edu
-%
 % Arguments:
 %
 %  Inputs:
@@ -24,7 +21,28 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
 %  Outputs:
 %
 %   finalPrecip, float, grid containing the final precipitation estimate
-
+%
+% Author: Andrew Newman, NCAR/RAL
+% Email : anewman@ucar.edu
+% Postal address:
+%     P.O. Box 3000
+%     Boulder,CO 80301
+% 
+% Copyright (C) 2019 Andrew Newman
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <https://www.gnu.org/licenses/>.
+%
 
     %compute precipitation again, using spatially interpolated valid slopes,
     %rather than a mishmash of valid and default values from grid point to

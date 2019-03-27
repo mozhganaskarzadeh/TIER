@@ -1,8 +1,6 @@
 function outputGrid(controlVars,outGrid)
 %
 %% outputGrid saves the domain grid structure into a netcdf file
-% Author: Andrew Newman NCAR/RAL
-% Email : anewman@ucar.edu
 %
 % Arguments:
 %
@@ -15,9 +13,29 @@ function outputGrid(controlVars,outGrid)
 %  Output:
 % 
 %    None
+%
+% Author: Andrew Newman, NCAR/RAL
+% Email : anewman@ucar.edu
+% Postal address:
+%     P.O. Box 3000
+%     Boulder,CO 80301
+% 
+% Copyright (C) 2019 Andrew Newman
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <https://www.gnu.org/licenses/>.
+%
 
-
-%print status
 fprintf(1,'Outputting processed grid to netcdf file\n');
 
 %first copy raw grid to output grid

@@ -6,9 +6,6 @@ function distToCoast = calcDistToCoast(grid,searchLength)
 %  search length have the distanceToCoast set to searchLength.  Generally
 %  follows Daly et al. (2003)
 %
-% Author:  Andrew Newman, NCAR/RAL
-% Email :  anewman@ucar.edu
-%
 % Arguments:
 %
 % Input:
@@ -22,7 +19,27 @@ function distToCoast = calcDistToCoast(grid,searchLength)
 %  distToCoast, array, array of coastal distances for domain, computed at
 %                      valid land pixels only
 %                           
-
+% Author: Andrew Newman, NCAR/RAL
+% Email : anewman@ucar.edu
+% Postal address:
+%     P.O. Box 3000
+%     Boulder,CO 80301
+% 
+% Copyright (C) 2019 Andrew Newman
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <https://www.gnu.org/licenses/>.
+%
 
     %Note this is a time consuming routine as written.  There are likely
     %opportunities for speed-up for large domains.

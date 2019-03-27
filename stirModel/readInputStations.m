@@ -24,15 +24,26 @@ function inputStations = readInputStations(controlVars)
     %open station list file
     fid = fopen(controlVars.stationFileList);
     %read station list with meta data
-    inputStations.meta = textscan(fid,'%s %f %f %f %d %f %d %f %s','delimiter',',','headerlines',2); 
+    meta = textscan(fid,'%s %f %f %f %d %f %d %f %s','delimiter',',','headerlines',2); 
+    %define structures
+    inputStations.meta.staId = meta{1};
+    inputStations.meta.lat = meta{2};
+    inputStations.meta.lon = meta{3};
+    inputStations.meta.elev = meta{4};
+    inputStations.meta.aspect = meta{5};
+    inputStations.meta.coastDist = meta{6};
+    inputStations.meta.layer = meta{7};
+    inputStations.meta.topoPosition = meta{8};
+    inputStations.meta.staName = meta{9};
+    
     %close file
     fclose(fid);
 
     %set number of stations
-    nSta = length(inputStations.meta{1});
+    nSta = length(inputStations.meta.staName);
 
     %convert elevation to km
-    inputStations.meta{4} = inputStations.meta{4}/1000.0;
+    inputStations.meta.elev = inputStations.meta.elev/1000.0;
 
     %allocate inputStations structure
     inputStations.avgVar = zeros(nSta,1);
@@ -45,9 +56,9 @@ function inputStations = readInputStations(controlVars)
 
     %read data
     for i = 1:nSta
-        fprintf(1,'Loading: %s\n',char(inputStations.meta{1}(i)));
+        fprintf(1,'Loading: %s\n',char(inputStations.meta.staName(i)));
         %create file name string
-        fname = sprintf('%s/%s.nc',controlVars.stationDataPath,char(inputStations.meta{1}(i)));
+        fname = sprintf('%s/%s.nc',controlVars.stationDataPath,char(inputStations.meta.staName(i)));
 
         %read station data
         inputStations.avgVar(i) = ncread(fname,metVar);

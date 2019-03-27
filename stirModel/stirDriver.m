@@ -66,24 +66,24 @@ for y = 1:grid.nr
 %    for x = 66
         if(grid.mask(y,x) > 0)
             %find nearby stations to current grid point
-            nearStations = getNearStations(inputStations.meta{2},inputStations.meta{3},inputStations.meta{5},grid.lat(y,x),...
+            nearStations = getNearStations(inputStations.meta.lat,inputStations.meta.lon,inputStations.meta.aspect,grid.lat(y,x),...
                                            grid.lon(y,x),grid.aspect(y,x),parameters.nMaxNear,parameters.maxDist);
 
             %compute coastal distance weights
-            coastWeights.near = calcCoastWeights(grid.distToCoast(y,x),inputStations.meta{6}(nearStations.nearStationInds),parameters.coastalExp);
-            coastWeights.aspect = calcCoastWeights(grid.distToCoast(y,x),inputStations.meta{6}(nearStations.aspectStationInds),parameters.coastalExp);
+            coastWeights.near = calcCoastWeights(grid.distToCoast(y,x),inputStations.meta.coastDist(nearStations.nearStationInds),parameters.coastalExp);
+            coastWeights.aspect = calcCoastWeights(grid.distToCoast(y,x),inputStations.meta.coastDist(nearStations.aspectStationInds),parameters.coastalExp);
 
             %compute topographic position weights
             topoPositionWeights.near = calcTopoPositionWeights(grid.topoPosition(y,x),parameters.topoPosMinDiff,parameters.topoPosMaxDiff,...
-                                                          parameters.topoPosExp,inputStations.meta{8}(nearStations.nearStationInds));
+                                                          parameters.topoPosExp,inputStations.meta.topoPosition(nearStations.nearStationInds));
             topoPositionWeights.aspect = calcTopoPositionWeights(grid.topoPosition(y,x),parameters.topoPosMinDiff,parameters.topoPosMaxDiff,...
-                                                          parameters.topoPosExp,inputStations.meta{8}(nearStations.aspectStationInds));
+                                                          parameters.topoPosExp,inputStations.meta.topoPosition(nearStations.aspectStationInds));
 
             %compute layer weights
-            layerWeights.near = calcLayerWeights(grid.layerMask(y,x),grid.dem(y,x),inputStations.meta{7}(nearStations.nearStationInds),...
-                                            inputStations.meta{3}(nearStations.nearStationInds),parameters.layerExp);
-            layerWeights.aspect = calcLayerWeights(grid.layerMask(y,x),grid.dem(y,x),inputStations.meta{7}(nearStations.aspectStationInds),...
-                                            inputStations.meta{3}(nearStations.aspectStationInds),parameters.layerExp);
+            layerWeights.near = calcLayerWeights(grid.layerMask(y,x),grid.dem(y,x),inputStations.meta.layer(nearStations.nearStationInds),...
+                                            inputStations.meta.elev(nearStations.nearStationInds),parameters.layerExp);
+            layerWeights.aspect = calcLayerWeights(grid.layerMask(y,x),grid.dem(y,x),inputStations.meta.layer(nearStations.aspectStationInds),...
+                                            inputStations.meta.elev(nearStations.aspectStationInds),parameters.layerExp);
 
             %compute SYMAP weights
             symapWeights.near = calcSymapWeights(nearStations.staDist(nearStations.nearStationInds),nearStations.staAngles(nearStations.nearStationInds),...
@@ -101,7 +101,7 @@ for y = 1:grid.nr
             if(strcmpi(controlVars.variableEstimated,'precip'))
                 %compute met fields at current grid point for precipitation
                 metPoint = calcPrecip(parameters,grid.dem(y,x),parameters.defaultSlope,finalWeights.near,finalWeights.aspect,...
-                                      symapWeights.near,inputStations.meta{4}(nearStations.nearStationInds),inputStations.meta{4}(nearStations.aspectStationInds),...
+                                      symapWeights.near,inputStations.meta.elev(nearStations.nearStationInds),inputStations.meta.elev(nearStations.aspectStationInds),...
                                       inputStations.avgVar(nearStations.nearStationInds),inputStations.avgVar(nearStations.aspectStationInds));
                                   
                                   
@@ -112,7 +112,7 @@ for y = 1:grid.nr
             elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.variableEstimated,'tmin'))
                 %compute met fields at current grid point for temperature
                 metPoint = calcTemp(parameters,grid.dem(y,x),tempDefaultLapse(y,x),grid.layerMask(y,x),finalWeights.near,finalWeights.aspect,...
-                                      symapWeights.near,inputStations.meta{4}(nearStations.nearStationInds),inputStations.meta{4}(nearStations.aspectStationInds),...
+                                      symapWeights.near,inputStations.meta.elev(nearStations.nearStationInds),inputStations.meta.elev(nearStations.aspectStationInds),...
                                       inputStations.avgVar(nearStations.nearStationInds),inputStations.avgVar(nearStations.aspectStationInds));
             end
             

@@ -30,16 +30,16 @@ function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,fi
     [y2d,x2d] = meshgrid(x,y);
 
     %find valid points for symap uncertainty
-    [i,j] = find(~isnan(symap_uncert));
+    [i,j] = find(~isnan(symapUncert));
     %scattered interpolation using griddata
     interpSymap = griddata(i,j,symapUncert(~isnan(symapUncert)),x2d,y2d,'linear');
     %fill missing values with nearest neighbor
     interpSymap = fillNaN(interpSymap,x2d,y2d);
     
     %find valid points for slope uncertaintty
-    [i,j] = find(slope_uncert > 0);
+    [i,j] = find(slopeUncert >= 0);
     %scattered interpolation using griddata
-    interpSlope = griddata(i,j,slopeUncert(slopeUncert>0),x2d,y2d,'linear');
+    interpSlope = griddata(i,j,slopeUncert(slopeUncert>=0),x2d,y2d,'linear');
     %fill missing values with nearest neighbor
     interpSlope = fillNaN(interpSlope,x2d,y2d);
     
@@ -53,7 +53,17 @@ function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,fi
     %replace nonvalid mask points with NaN
     finalSymapUncert(mask<0) = NaN;
     finalSlopeUncert(mask<0) = NaN;
-    
+%     
+%     figure(33);
+%     imagesc(interpSlope');
+%     set(gca,'ydir','normal');
+%     colorbar;
+%     
+%     figure(34);
+%     imagesc(finalSlopeUncert');
+%     set(gca,'ydir','normal');
+%     colorbar;
+%     
     %estimate the total and relative uncertainty in physical units 
 
     %define a local covariance vector
@@ -80,7 +90,7 @@ function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,fi
     end
 
     %compute the total estimates 
-    finalUncert.totalUncert = baseSlopeUncert+finalSymapUncert+2*sqrt(abs(localCov));
+    finalUncert.totalUncert = finalSlopeUncert+finalSymapUncert+2*sqrt(abs(localCov));
     finalUncert.relativeUncert = zeros(size(finalUncert.totalUncert))*NaN;
 
     %set novalid gridpoints to missing

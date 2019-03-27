@@ -26,6 +26,7 @@ function saveOutput(outputName,outputVar,metGrid)
     elseif(strcmpi(outputVar,'tmax') || strcmpi(outputVar,'tmin'))
         physicalUnits = 'deg_C';
         slopeUnits = 'deg_C/km';
+        normSlopeUnits = 'undefined';
     end
     
     %check to see if output file name exists

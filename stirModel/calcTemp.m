@@ -1,4 +1,4 @@
-function metPoint = calcTemp(parameters,gridElev,gridLayer,finalWeights,finalWeightsAspect,symapWeights,stationElevNear,stationElevAspect,stationVarNear,stationVarAspect)
+function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWeights,finalWeightsAspect,symapWeights,stationElevNear,stationElevAspect,stationVarNear,stationVarAspect)
 %
 %% calcTemp computes the first pass STIR estimate of varEstimated
 %
@@ -53,6 +53,7 @@ function metPoint = calcTemp(parameters,gridElev,gridLayer,finalWeights,finalWei
 %
 %   parameters  , structure, structure holding all STIR parameters
 %   gridElev    , float    , elevation of current grid point
+%   defaultSlope, float    , default slope for current grid point
 %   gridLayer   , float    , grid point layer in conceptual two-layer
 %                            atmosphere (Daly et al. 2002)
 %   defaultSlope, float    , default normalized precipitation slope at
@@ -74,6 +75,12 @@ function metPoint = calcTemp(parameters,gridElev,gridLayer,finalWeights,finalWei
 %                        precipitation for the current grid point
 %
 %
+
+    %define tiny
+    tiny = 1e-15;
+    %define large;
+    large = 1e15;
+    
     %set local min station parameter
     nMinNear = parameters.nMinNear;
     
@@ -179,8 +186,8 @@ function metPoint = calcTemp(parameters,gridElev,gridLayer,finalWeights,finalWei
                 %if two or more valid combination of stations
                 %estimate uncertainty of slope at grid point using standard
                 %deviation of estimates
-                if(cnt > 2)
-                    metPoint.SlopeUncert = std(combSlp);
+                if((cnt-1) >= 2)
+                    metPoint.slopeUncert = std(combSlp);
                 end
             end
             
@@ -211,7 +218,7 @@ function metPoint = calcTemp(parameters,gridElev,gridLayer,finalWeights,finalWei
             end
 
         elseif(isnan(linFit(1)))
-            linFit(1) = defaultSlope*metPoint.symapField;
+            linFit(1) = defaultSlope;
             linFit(2) = metPoint.symapField;
             
             metPoint.rawField  = polyval(linFit,gridElev-metPoint.symapElev);
@@ -251,7 +258,8 @@ function metPoint = calcTemp(parameters,gridElev,gridLayer,finalWeights,finalWei
                     elevSlopeTest = tmpLinFit(1);
                 end
                 
-                if((elevSlopeTest < maxSlopeLower && gridLayer == 1) || (elevSlopeTest < maxSlopeUpper && gridLayer == 2))
+                if((elevSlopeTest < maxSlopeLower && elevSlopeTest > minSlope && gridLayer == 1) ...
+                    || (elevSlopeTest < maxSlopeUpper && elevSlopeTest > minSlope && gridLayer == 2))
                     combSlp(cnt) = elevSlopeTest;
                     cnt = cnt + 1;
                 end
@@ -261,10 +269,10 @@ function metPoint = calcTemp(parameters,gridElev,gridLayer,finalWeights,finalWei
             %if two or more valid combination of stations
             %estimate uncertainty of slope at grid point using standard
             %deviation of estimates
-            if(cnt>2)
-                metPoint.SlopeUncert = std(combSlp);
+            if((cnt-1) >= 2)
+                metPoint.slopeUncert = std(combSlp);
             end
-        end 
+        end
 
     else %not enough stations within range on aspect - revert to nearest with default slope
         

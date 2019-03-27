@@ -29,7 +29,7 @@ function finalNormSlope = updatePrecipSlope(nr,nc,mask,normSlope,validSlope,filt
     %filter and interpolate to entire domain 
     %ideally this is an improvement over a spatially constant default slope
     baseSlope = normSlope;
-    baseSlope(validSlope==1) = -999;
+    baseSlope(validSlope~=1) = -999;
     domainMeanSlope = mean(mean(baseSlope(baseSlope ~= -999)));
     baseSlope(baseSlope == -999) = domainMeanSlope;
 

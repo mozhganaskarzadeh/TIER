@@ -36,6 +36,12 @@ function inputStations = readInputStations(controlVars)
 
     %allocate inputStations structure
     inputStations.avgVar = zeros(nSta,1);
+    
+    if(strcmpi(controlVars.variableEstimated,'precip'))
+        metVar = 'prcp';
+    elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.variableEstimated,'tmin'))
+        metVar = lower(controlVars.variableEstimated);
+    end
 
     %read data
     for i = 1:nSta
@@ -44,7 +50,7 @@ function inputStations = readInputStations(controlVars)
         fname = sprintf('%s/%s.nc',controlVars.stationDataPath,char(inputStations.meta{1}(i)));
 
         %read station data
-        inputStations.avgVar(i) = ncread(fname,'prcp');
+        inputStations.avgVar(i) = ncread(fname,metVar);
     end
 
 end

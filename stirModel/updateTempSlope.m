@@ -33,7 +33,7 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,defaultSlope,va
     %filter and interpolate to entire domain 
     %ideally this is an improvement over initial default slope estimates
     baseSlope = slope;
-    baseSlope(validSlope==1) = -999;
+    baseSlope(validSlope~=1) = -999;
     domainMeanSlope = mean(mean(baseSlope(baseSlope ~= -999)));
     baseSlope(baseSlope == -999) = domainMeanSlope;
 
@@ -65,28 +65,30 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,defaultSlope,va
 
     %filter layer 1
     filterSlopeLayer1 = imfilter(interpSlopeLayer1,gFilter);
-    %set unused points to missing
-    filterSlopeLayer1(mask<0) = -999;
+
     %for valid points
     %check to see if new estimate is 
-    filterSlopeLayer1(filterSlopeLayer1 < -6 & mask > 0) = defaultSlope(filterSlopeLayer1 < -6 & mask > 0) + 1.5; %why was this done?
+%    filterSlopeLayer1(filterSlopeLayer1 < -6 & mask > 0) = defaultSlope(filterSlopeLayer1 < -6 & mask > 0) + 1.5; %why was this done?
 
     %check for invalid slopes
     filterSlopeLayer1(filterSlopeLayer1 > maxSlopeLower) = maxSlopeLower;
     filterSlopeLayer1(filterSlopeLayer1 < minSlope) = minSlope;
-
+    %set unused points to missing
+    filterSlopeLayer1(mask<0) = -999;
+    
     %filter layer 2
     filterSlopeLayer2 = imfilter(interpSlopeLayer2,gFilter);
-    %set unused points to missing
-    filterSlopeLayer2(mask<0) = -999;
+
     %for valid points
     %check to see if new estimate is 
-    filterSlopeLayer2(filterSlopeLayer2 < -6 & mask > 0) = defaultSlope(filterSlopeLayer2 <-6 & mask > 0) + 1.5;
+%    filterSlopeLayer2(filterSlopeLayer2 < -6 & mask > 0) = defaultSlope(filterSlopeLayer2 <-6 & mask > 0) + 1.5;
 
     %check for invalid slopes
     filterSlopeLayer2(filterSlopeLayer2 > maxSlopeUpper) = maxSlopeUpper;
     filterSlopeLayer2(filterSlopeLayer2 < minSlope) = minSlope;
-
+    %set unused points to missing
+    filterSlopeLayer2(mask<0) = -999;
+    
     %combine the two layer estimates into one complete grid
     finalSlope = filterSlopeLayer1;
     finalSlope(gridLayer == 2) = filterSlopeLayer2(gridLayer == 2);

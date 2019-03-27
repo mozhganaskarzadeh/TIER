@@ -192,7 +192,7 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
             %if two or more valid combination of stations
             %estimate uncertainty of slope at grid point using standard
             %deviation of estimates
-            if(cnt > 2)
+            if((cnt-1) >= 2)
                 metPoint.normSlopeUncert = std(combSlp);                
             end
             
@@ -279,7 +279,7 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
             %if two or more valid combination of stations
             %estimate uncertainty of slope at grid point using standard
             %deviation of estimates
-            if(cnt > 2)
+            if((cnt-1) >= 2)
                 metPoint.normSlopeUncert = std(combSlp);
             end
         end

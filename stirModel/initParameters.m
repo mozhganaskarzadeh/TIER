@@ -57,5 +57,5 @@ function parameters = initParameters(varEstimated)
         parameters.coastalExp = 1.0;              % -
         parameters.layerExp = 4.0;                % -
         parameters.distanceWeightScale = 20000;   % - 
-    endif
+    end
 end            

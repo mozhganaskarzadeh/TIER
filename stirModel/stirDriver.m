@@ -48,6 +48,15 @@ elseif(strcmpi(controlVars.variableEstimated,'tmin') && ~isempty(controlVars.def
 else %else set the temp default lapse rate to spatially constant parameter value
     tempDefaultLapse = ones(grid.nr,grid.nc)*parameters.defaultSlope;
 end
+%check to see if there are any invalid slopes in the default temperature
+%slope if used
+if(~isempty(controlVars.defaultTempLapse))
+    tempDefaultLapse(tempDefaultLapse < parameters.minSlope) = parameters.minSlope;
+    tempDefaultLapse(tempDefaultLapse > parameters.maxSlopeLower & grid.layerMask == 1) = parameters.maxSlopeLower;
+    tempDefaultLapse(tempDefaultLapse > parameters.maxSlopeUpper & grid.layerMask == 2) = parameters.maxSlopeUpper;
+end
+
+
 %%
 %loop through all grid points and perform regression
 for y = 1:grid.nr

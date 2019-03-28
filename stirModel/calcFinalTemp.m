@@ -24,7 +24,7 @@ function finalTemp = calcFinalTemp(dem,mask,symapElev,symapTemp,finalSlope)
 % Email : anewman@ucar.edu
 % Postal address:
 %     P.O. Box 3000
-%     Boulder,CO 80301
+%     Boulder,CO 80307
 % 
 % Copyright (C) 2019 Andrew Newman
 %

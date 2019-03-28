@@ -1,11 +1,11 @@
 # STIR
 Repository for the Simple Topographically Informed Regression (STIR)
 
-The STIR tool was motivated by the desire to explore methodological choices in 'knowledge-based' spatial mapping algorithms.  These algorithms incorporate knowledge of atmospheric processes and their interaction with the landscape with geophysical attributes to inform statistical regression models that map meteorology variables to a grid.  STIR follows the knowledge-based concepts put forth in Daly et al. (1994, 2002, 2003, 2007, 2008). The general algorithms of these papers have been coded and known deviations from the published algorithms are noted wherever possible.
+The STIR tool was motivated by the desire to explore methodological choices in 'knowledge-based' spatial mapping algorithms.  These algorithms incorporate knowledge of atmospheric processes and their interaction with the landscape with geophysical attributes to inform statistical regression models that map meteorology variables to a grid.  STIR follows the knowledge-based concepts put forth in Daly et al. (1994, 2002, 2003, 2007, 2008). The general algorithms of these papers have been coded from the published papers. Differences are noted when we are sure a difference exists.
 
 The user is encouraged to modify model parameters using the input parameter files for the DEM preprocessing and the statistical mapping algorithm.  The modular design also allows for additional functionality to be added, hopefully with minimal effort.  It is hoped this code base allows for a fuller understanding of the impacts sometimes seemingly small methodological choices have on our final gridded estimates.
 
-It is **_highly_** recommended to read the STIR description paper in GMD (citation to follow).  Also the example tarball at () contains an example input grid, example station data, configuration and parameter files used in the example cases.  These can also then be used as example formats for your own data.
+It is **_highly_** recommended to read the STIR description paper in GMD (citation to follow).  Also the example tarball at () contains an example input grid, example station data, configuration and parameter files used in the example cases.  These should also then be used as example formats for your own data.
 
 ## Installing the code:
 
@@ -19,7 +19,7 @@ Extensive compatibility testing is not supported by the author(s) currently.
 
 ## Development:
 
-STIR uses Git as its version control tool. Further description of git (https://git-scm.com/book/en/v2) and STIR can be found in STIRandGit.md and STIRGitWorkflow.md.
+STIR uses Git as its version control tool. Further description of git (https://git-scm.com/book/en/v2) and STIR can be found in [STIRandGit][https://github.com/anewman89/STIR/blob/develop/docs/STIRandGit.md] and [STIRGitWorkflow](https://github.com/anewman89/STIR/blob/develop/docs/STIRGitWorkflow.md).
 
 ## Examples:
 

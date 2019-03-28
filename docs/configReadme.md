@@ -13,7 +13,7 @@ Here is an overview of the varibles in the STIR preprocessing control file:
 * **stationPrecipPath**, path to precipitation station data:   This is the path to the directory containing the precipitation data.  Follow the example files in the inputStations/ directory in the example tarball.
 * **stationPrecipListName**, name of precipitation station list file preprocessing script will create: This is the name of the precipitation station metadata file that is created by the preprocessing script using the precipitation data and the processed grid.
 * **stationTempPath**, path to temperature station data:  This is the path to the directory containing the temperature data.  Follow the example files in the inputStations/ directory in the example tarball.
-* **stationTempListName**, name of temperature station list file preprocessing script will create: This is the name of the temperature station metadata file that is created by the preprocessing script using the precipitation data and the processed grid.
+* **stationTempListName**, name of temperature station list file preprocessing script will create: This is the name of the temperature station metadata file that is created by the preprocessing script using the temperature data and the processed grid.
 * **preprocessParameterFile**, name of STIR preprocessing parameter file:  This is the name of the STIR preprocessing parameter file that contains all the STIR preprocessing model parameters.
 
 ### stirPreprocessParameters.txt
@@ -58,11 +58,11 @@ Here is an overview of the varibles in the STIR model parameter file:
 * **minSlope**, minimum valid slope value (normalized for precipitation; physical units for temperature): Threshold for the minimum allowable slope for the elevation-variable relationship (typically around 0-0.5 for precipitation, -10 K/km for temperature - which is the adiabatic lapse rate) 
 * **maxInitialSlope**, maximum valid initial pass normalized slope for precipitation: Maximum normalized slope for precipitation on the first pass.  Precipitation is solved iteratively and larger slopes are allowed on the first pass.
 * **maxFinalSlope**, maximum valid final adjusted normalized slope for precipitation:  Maximum normalized slope for the final precipitation field.  After the initial precipitation guess, the slope and precipitation fields are smoothed, which will reduce noise and spurious slope values, thus the maximum allowed is typically reduced.
-* **maxSlopeLower**, maximum valid slope for temperature in lower atmospheric layer (inversion layer; allows for strong inversions):  Maximum slope for temperature in the inversion layer.  Typically this is a large positive value to allow for strong inversions.
-* **maxSlopeUpper**, maximum valid slope for temperature in upper layer (free atmosphere; up to isothermal allowed):  Maximum slope in the 'free' atmosphere layer.  Typically there are few if any inversions in the free atmosphere, sometimes it is around isothermal, thus 0 is recommended for the upper layer maximum slope.
+* **maxSlopeLower**, maximum valid slope for temperature (K/km) in lower atmospheric layer (inversion layer; allows for strong inversions):  Maximum slope for temperature in the inversion layer.  Typically this is a large positive value to allow for strong inversions.
+* **maxSlopeUpper**, maximum valid slope for temperature (K/km) in upper layer (free atmosphere; up to isothermal allowed):  Maximum slope in the 'free' atmosphere layer.  Typically there are few if any inversions in the free atmosphere, sometimes it is around isothermal, thus 0 is recommended for the upper layer maximum slope.
 * **defaultSlope**, default slope value (normalized for precipitation; physical units for temperature): Default slope value for precipitation or temperature if the regression cannot find a valid value (e.g. Daly et al. 1994).  This is overridden if the user specifies an input temperature lapse rate file.  The updatePrecipSlope function also overrides the spatially constant default slope defined here.
-* **topoPosMinDiff**, minimum elevation difference used to adjust topographic position weights (m) (Daly et al. 2007)
-* **topoPosMaxDiff**, maximum elevation difference for stations to receive topographic position weighting (m) (Daly et al. 2007)
+* **topoPosMinDiff**, minimum elevation (m) difference used to adjust topographic position weights (m) (Daly et al. 2007)
+* **topoPosMaxDiff**, maximum elevation (m) difference for stations to receive topographic position weighting (m) (Daly et al. 2007)
 * **topoPosExp**, exponent to adjust topographic position weighting function (Daly et al. 2007)
 * **coastalExp**, exponent to adjust distance to coast weighting function (Daly et al. 2002)
 * **layerExp**, exponent to adjust atmospheric layer weighting function (Daly et al. 2002)
@@ -70,10 +70,9 @@ Here is an overview of the varibles in the STIR model parameter file:
 * **distanceWeightExp**, exponent in Barnes (1964) distance weighting function used in SYMAP base interpolation
 * **maxGrad**, maximum allowable normalized precipitation slope gradient between grid cells (Daly et al. 1994)
 * **bufferSlope**, a buffer parameter when computing precipitaiton slope feathering
-* **minElev**, minimum elevation considered when feathering precipitation (m): Feathering generally follows Daly et al. (1994) but that specific implementation is unknown.  This is included here to prevent excessive feathering in low (typically flat) areas
-* **minElevDiff**, minimum elevation difference across grid cells considered for feathering precipitation (m): Again added here specifically to only feather precipitation in complex terrain.
+* **minElev**, minimum elevation (m) considered when feathering precipitation (m): Feathering generally follows Daly et al. (1994) but that specific implementation is unknown.  This is included here to prevent excessive feathering in low (typically flat) areas
+* **minElevDiff**, minimum elevation (m) difference across grid cells considered for feathering precipitation (m): Again added here specifically to only feather precipitation in complex terrain.
 * **recomputeDefaultPrecipSlope**, logical string to indicate re-estimation of the default slope using domain specific information
 * **filterSize**, size of low pass filter (grid points) used in computing updated slopes and uncertainty estimates: Filter parameters for low pass filtering of initial noisy slope and uncertainty estimates.  This controls the Gaussian filter width in grid points.  Larger values increase the smoothing.
 * **filterSpread**, spread of low-pass filter power used in computing updated slopes and uncertainty estimates: The spread of the Gaussian filter.  Larger values increase the smoothing.
 * **covWindow**, window (grid cells) for local covariance calculation for the SYMAP and slope uncertainty components.  Used in the final uncertainty estimation routine
-

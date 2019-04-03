@@ -65,7 +65,7 @@ grid = readRawGrid(controlVars.gridName);
 %set output grid
 outGrid = grid;
 
-%create topographic aspects (integer numbers) (e.g. Daly et al. 1994)
+%create topographic gradients and facets(integer numbers) (e.g. Daly et al. 1994)
 outGrid.aspects = calcTopoAspects(grid,parameters);
 
 %calculate distance to coastline (km) (e.g. Daly et al. 2002,2008)

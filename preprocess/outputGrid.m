@@ -66,12 +66,12 @@ ncwriteatt(controlVars.outputName,'gradient_w_e','name','W-E Gradient');
 ncwriteatt(controlVars.outputName,'gradient_w_e','long_name','Smoothed West-East Gradient (West facing positive');
 ncwriteatt(controlVars.outputName,'gradient_w_e','units','km/km');
 
-%output aspects
-nccreate(controlVars.outputName,'aspect','Dimensions',{'x',outGrid.nr,'y',outGrid.nc},'FillValue',-999.0,'Format','netcdf4');
-ncwrite(controlVars.outputName,'aspect',outGrid.aspects.aspects);
-ncwriteatt(controlVars.outputName,'aspect','name','integer aspect');
-ncwriteatt(controlVars.outputName,'aspect','long_name','integer aspect: 1=N,2=E,3=S,4=W,5=Flat generally following Daly et al. 1994');
-ncwriteatt(controlVars.outputName,'aspect','units','-');
+%output facets
+nccreate(controlVars.outputName,'facet','Dimensions',{'x',outGrid.nr,'y',outGrid.nc},'FillValue',-999.0,'Format','netcdf4');
+ncwrite(controlVars.outputName,'facet',outGrid.aspects.facets);
+ncwriteatt(controlVars.outputName,'facet','name','integer facet');
+ncwriteatt(controlVars.outputName,'facet','long_name','integer facet: 1=N,2=E,3=S,4=W,5=Flat generally following Daly et al. 1994');
+ncwriteatt(controlVars.outputName,'facet','units','-');
 
 %output distance to coast
 nccreate(controlVars.outputName,'dist_to_coast','Dimensions',{'x',outGrid.nr,'y',outGrid.nc},'FillValue',-999.0,'Format','netcdf4');

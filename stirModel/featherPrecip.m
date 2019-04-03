@@ -2,7 +2,7 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
 %
 %% featherPrecip updates the estimated precipitation field to remove sharp,
 %                potentially unrealistic gradients due primarily do to
-%                slope aspect processing. Generally follows Daly et al.
+%                slope facet processing. Generally follows Daly et al.
 %                (1994).  This is the final precipitation processing step.
 %
 % Arguments:

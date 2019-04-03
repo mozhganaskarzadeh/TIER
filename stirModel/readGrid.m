@@ -57,10 +57,10 @@ function grid = readGrid(gridName)
     %convert DEM to km
     grid.dem = grid.dem/1000.0;
 
-    %read slope aspect
-    grid.aspect = ncread(gridName,'aspect');
+    %read slope facet
+    grid.facet = ncread(gridName,'facet');
     %double check missing data points, reset very low DEM values to missing
-    grid.aspect(grid.dem < -100) = -999;
+    grid.facet(grid.dem < -100) = -999;
 
     %set grid size variables
     [grid.nr,grid.nc] = size(grid.lat);

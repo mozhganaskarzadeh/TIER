@@ -1,4 +1,4 @@
-function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWeights,finalWeightsAspect,symapWeights,stationElevNear,stationElevAspect,stationVarNear,stationVarAspect)
+function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWeights,finalWeightsFacet,symapWeights,stationElevNear,stationElevFacet,stationVarNear,stationVarFacet)
 %
 %% calcTemp computes the first pass STIR estimate of varEstimated
 %
@@ -56,15 +56,15 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
 %   defaultSlope, float    , default normalized precipitation slope at
 %                            current grid point as current grid point
 %   finalWeights,       float, station weights for nearby stations
-%   finalWeightsAspect, float, station weights for nearby stations on same
-%                              slope aspect
+%   finalWeightsFacet, float, station weights for nearby stations on same
+%                              slope Facet
 %   symapWeights,      float , symap station weights for nearby stations
 %   stationElevNear,   float , station elevations for nearby stations
-%   stationElevAspect, float , station elevations for nearby stations on
-%                              same slope aspect as current grid point
+%   stationElevFacet, float , station elevations for nearby stations on
+%                              same slope Facet as current grid point
 %   stationVarNear   , float , station values for nearby stations
-%   stationVarAspect , float , sataion values for nearby stations on same 
-%                              slope aspect as current grid point
+%   stationVarFacet , float , sataion values for nearby stations on same 
+%                              slope Facet as current grid point
 %
 %  Output:
 %
@@ -145,9 +145,9 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
 
     %if there are more than nMinNear stations, proceed with
     %weighted elevation regression
-    if(length(stationElevAspect) >= nMinNear)
+    if(length(stationElevFacet) >= nMinNear)
         %create weighted linear regression relationship
-        linFit = calcWeightedRegression(stationElevAspect,stationVarAspect,finalWeightsAspect);
+        linFit = calcWeightedRegression(stationElevFacet,stationVarFacet,finalWeightsFacet);
   
 
         %Run through station combinations and find outliers to see if we
@@ -157,7 +157,7 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
         elevSlope = linFit(1);
         if(elevSlope < minSlope || (elevSlope > maxSlopeLower && gridLayer==1) || (elevSlope>maxSlopeUpper && gridLayer==2))
 
-            nSta = length(stationVarAspect);
+            nSta = length(stationVarFacet);
             maxSlopeDelta = 0;
 
             for i = nSta-1
@@ -165,14 +165,14 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
                 cnt = 1;
                 combSlp = zeros(1,1);
                 for c = 1:length(combs(:,1))
-                    X = [ones(size(stationElevAspect(combs(c,:)))) stationElevAspect(combs(c,:))];
+                    X = [ones(size(stationElevFacet(combs(c,:)))) stationElevFacet(combs(c,:))];
 
                     %if X is square
                     if(size(X,1)==size(X,2))
                         %if X is well conditioned
                         if(rcond(X)>tiny)
-                            tmpLinFit = calcWeightedRegression(stationElevAspect(combs(c,:)),stationVarAspect(combs(c,:)),...
-                                                               finalWeightsAspect(combs(c,:)));
+                            tmpLinFit = calcWeightedRegression(stationElevFacet(combs(c,:)),stationVarFacet(combs(c,:)),...
+                                                               finalWeightsFacet(combs(c,:)));
                             elevSlopeTest = tmpLinFit(1);
                             slopeDelta = abs(elevSlope - elevSlopeTest);
                         else %if X not well conditioned, set to unrealistic values
@@ -180,8 +180,8 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
                             slopeDelta = -large;
                         end
                     else
-                        tmpLinFit = calcWeightedRegression(stationElevAspect(combs(c,:)),stationVarAspect(combs(c,:)),...
-                                                               finalWeightsAspect(combs(c,:)));
+                        tmpLinFit = calcWeightedRegression(stationElevFacet(combs(c,:)),stationVarFacet(combs(c,:)),...
+                                                               finalWeightsFacet(combs(c,:)));
                         elevSlopeTest = tmpLinFit(1);
                         slopeDelta = abs(elevSlope - elevSlopeTest);
                     end
@@ -210,8 +210,8 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
             end
             
             if(maxSlopeDelta>0)
-                linFit = calcWeightedRegression(stationElevAspect(removeOutlierInds),stationVarAspect(removeOutlierInds),...
-                                                finalWeightsAspect(removeOutlierInds));
+                linFit = calcWeightedRegression(stationElevFacet(removeOutlierInds),stationVarFacet(removeOutlierInds),...
+                                                finalWeightsFacet(removeOutlierInds));
                                             
                 linFit(2) = metPoint.baseInterpField;
                 
@@ -253,26 +253,26 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
 
             %run through station combinations to estimate uncertainty in
             %slope estimate
-            nSta = length(stationVarAspect);
+            nSta = length(stationVarFacet);
             combs = nchoosek(1:nSta,nSta-1);
             cnt = 1;
             combSlp = zeros(1,1);
             for c = 1:length(combs(:,1))
-                X = [ones(size(stationElevAspect(combs(c,:)))) stationElevAspect(combs(c,:))];
+                X = [ones(size(stationElevFacet(combs(c,:)))) stationElevFacet(combs(c,:))];
                 
                 %if X is square
                 if(size(X,1)==size(X,2))
                     %if X is well conditioned
                     if(rcond(X) > tiny)
-                        tmpLinFit = calcWeightedRegression(stationElevAspect(combs(c,:)),stationVarAspect(combs(c,:)),...
-                                                               finalWeightsAspect(combs(c,:)));
+                        tmpLinFit = calcWeightedRegression(stationElevFacet(combs(c,:)),stationVarFacet(combs(c,:)),...
+                                                               finalWeightsFacet(combs(c,:)));
                         elevSlopeTest = tmpLinFit(1);
                     else
                         elevSlopeTest = large;
                     end
                 else
-                    tmpLinFit = calcWeightedRegression(stationElevAspect(combs(c,:)),stationVarAspect(combs(c,:)),...
-                                                               finalWeightsAspect(combs(c,:)));
+                    tmpLinFit = calcWeightedRegression(stationElevFacet(combs(c,:)),stationVarFacet(combs(c,:)),...
+                                                               finalWeightsFacet(combs(c,:)));
                     elevSlopeTest = tmpLinFit(1);
                 end
                 
@@ -292,7 +292,7 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
             end
         end
 
-    else %not enough stations within range on aspect - revert to nearest with default slope
+    else %not enough stations within range on Facet - revert to nearest with default slope
         
         linFit(1) = defaultSlope;
         linFit(2) = metPoint.baseInterpField;

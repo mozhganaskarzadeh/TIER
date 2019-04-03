@@ -39,16 +39,16 @@ function aspects = calcTopoAspects(grid,parameters)
 %
 %
 
-    fprintf(1,'Computing topographic aspects\n');
+    fprintf(1,'Computing topographic facets\n');
 
-    %define local variable for aspects
-    intAspect = zeros(size(grid.dem))-999.0;
+    %define local variable for facets
+    intFacet = zeros(size(grid.dem))-999.0;
 
     %local variable for minimum gradient
     minGradient = parameters.minGradient;
 
-    %local variable for number of aspects
-    nAspects = 5;
+    %local variable for number of facets
+    nFacets = 5;
 
     %local variable for minimum size of facets
     nSmallFacet = parameters.smallFacet/(grid.dx^2);  %set size of smallest sloped facet to grid cells
@@ -86,50 +86,50 @@ function aspects = calcTopoAspects(grid,parameters)
     gradNorth = gradNorth';
     gradEast = gradEast';
     
-    %define flat aspects
+    %define flat facets
     flat = abs(gradNorth)<minGradient & abs(gradEast)<minGradient;
 
-    %define cardinal direction aspects
+    %define cardinal direction facets
     north = aspect>315 | aspect <=45;
     east = aspect>45 & aspect<=135;
     south = aspect>135 & aspect<=225;
     west = aspect>225 & aspect <= 315;
 
-    intAspect(north) = 1;
-    intAspect(east) = 2;
-    intAspect(south) = 3;
-    intAspect(west) = 4;
-    intAspect(flat) = 5;
+    intFacet(north) = 1;
+    intFacet(east) = 2;
+    intFacet(south) = 3;
+    intFacet(west) = 4;
+    intFacet(flat) = 5;
 
-    %character array of aspects
-    for i = 1:max(intAspect)
+    %character array of facets
+    for i = 1:max(intFacet)
         switch i
             case 1
-                charAspects{i} = 'North';
+                charFacets{i} = 'North';
             case 2
-                charAspects{i} = 'East';
+                charFacets{i} = 'East';
             case 3
-                charAspects{i} = 'South';
+                charFacets{i} = 'South';
             case 4
-                charAspects{i} = 'West';
+                charFacets{i} = 'West';
             case 5
-                charAspects{i} = 'Flat';
+                charFacets{i} = 'Flat';
             otherwise
-                error('Unknown aspect');
+                error('Unknown Facet');
         end
     end
 
     %merge small facets
     %find all objects for each aspect and merge small ones into nearby larger
-    %aspects using 4- (flat) or 8-connectivity (slopes)
-    for i = 1:nAspects
-        fprintf(1,'Merging aspect %s\n',char(charAspects{i}));
-        if(i < nAspects)
+    %Facets using 4- (flat) or 8-connectivity (slopes)
+    for i = 1:nFacets
+        fprintf(1,'Merging Facet %s\n',char(charFacets{i}));
+        if(i < nFacets)
             connectivity = 8;
         else
             connectivity = 4;
         end
-        binary = intAspect;
+        binary = intFacet;
         binary(binary~=i) = 0;
         binary(binary==i) = 1;
 
@@ -140,7 +140,7 @@ function aspects = calcTopoAspects(grid,parameters)
         %need to have at least nSmall grid cells to make an actual facet
         %merge into the first facet that is not flat starting west, then south,
         %then east, then north
-        if(i < nAspects)
+        if(i < nFacets)
             minSize = nSmallFacet;
         else %flats need to be larger as small flats may behave like nearby slopes
             minSize = nSmallFlat;
@@ -170,12 +170,12 @@ function aspects = calcTopoAspects(grid,parameters)
 
 
                 %find the grid cells along the four bounding lines
-                westPixels = intAspect(round(stats{i}(n).BoundingBox(2)),westPoints(1):westPoints(2) );
-                southPixels = intAspect(southPoints(1):southPoints(2),round(stats{i}(n).BoundingBox(1)));
+                westPixels = intFacet(round(stats{i}(n).BoundingBox(2)),westPoints(1):westPoints(2) );
+                southPixels = intFacet(southPoints(1):southPoints(2),round(stats{i}(n).BoundingBox(1)));
                 %north and east bounding points are defined by the opposite of the 
                 %west and south bounding points
-                eastPixels = intAspect(southPoints(2),eastPoints(1):eastPoints(2));
-                northPixels = intAspect(northPoints(1):northPoints(2),westPoints(2));
+                eastPixels = intFacet(southPoints(2),eastPoints(1):eastPoints(2));
+                northPixels = intFacet(northPoints(1):northPoints(2),westPoints(2));
 
                 %find the mode of the facets on the bounding lines
                 modeWest = mode(westPixels);
@@ -189,15 +189,15 @@ function aspects = calcTopoAspects(grid,parameters)
                 %merge current object into appropriate facet based on bounding
                 %line most common facet
                 if(modeWest ~= 5 && modeWest ~= i)
-                    intAspect(inds) = modeWest; %merge into west-facing slope
+                    intFacet(inds) = modeWest; %merge into west-facing slope
                 elseif(modeSouth ~=5 && modeSouth ~= i )
-                    intAspect(inds) = modeSouth; %merge into south-facing slope
+                    intFacet(inds) = modeSouth; %merge into south-facing slope
                 elseif(modeEast ~=5 && modeEast ~= i)
-                    intAspect(inds) = modeEast; %merge into east-facing slope
+                    intFacet(inds) = modeEast; %merge into east-facing slope
                 elseif(modeNorth ~=5 && modeNorth ~= i)
-                    intAspect(inds) = modeNorth; %merge into north-facing slope
+                    intFacet(inds) = modeNorth; %merge into north-facing slope
                 else  %if object cannot merge into slope, default merge into flat
-                    intAspect(inds) = 5; %merge into flat area
+                    intFacet(inds) = 5; %merge into flat area
                 end  
 
             end %end object size if-statement
@@ -212,7 +212,7 @@ function aspects = calcTopoAspects(grid,parameters)
 
     %create a binary image of only flat pixels
     i = 5;
-    binary = intAspect;
+    binary = intFacet;
     binary(binary~=i) = 0;
     binary(binary==i) = 1;
     %identify connected pixels
@@ -232,15 +232,10 @@ function aspects = calcTopoAspects(grid,parameters)
             southPoints(southPoints==0)=1;
             flats(i).BoundingBox(flats(i).BoundingBox<1)=1;
             
-%            round(flats(i).BoundingBox(1))
-%            size(intAspect)
-%            flats(i).BoundingBox
-            
 
-            %find what facets the bounding line grid cells belong to
-            
-            westPixels = intAspect(floor(flats(i).BoundingBox(2)),westPoints(1):westPoints(2) );
-            southPixels = intAspect(southPoints(1):southPoints(2),floor(flats(i).BoundingBox(1)));
+            %find what facets the bounding line grid cells belong to            
+            westPixels = intFacet(floor(flats(i).BoundingBox(2)),westPoints(1):westPoints(2) );
+            southPixels = intFacet(southPoints(1):southPoints(2),floor(flats(i).BoundingBox(1)));
 
             %find the mode of the facets on the west and south sides
             modeWest = mode(westPixels);
@@ -253,10 +248,10 @@ function aspects = calcTopoAspects(grid,parameters)
             %current flat is oriented less than 45 degrees
             if(abs(flats(i).Orientation)<=45 && modeSouth ~= 5)
                 %merge into South slope
-                intAspect(inds) = modeSouth;
+                intFacet(inds) = modeSouth;
             else  %else merge into whatever is along the west bounding box
                 %merge into West slope
-                intAspect(inds) = modeWest;
+                intFacet(inds) = modeWest;
             end
 
         end %end ratio if-statement
@@ -267,13 +262,13 @@ function aspects = calcTopoAspects(grid,parameters)
     gradNorth(grid.mask<=0) = -999;
     gradEast(grid.mask<=0) = -999;
 
-    intAspect(grid.mask<=0) = -999;
+    intFacet(grid.mask<=0) = -999;
 
     %define output varibles
     aspects.smoothDEM = smoothElev;
     aspects.gradNorth = gradNorth;
     aspects.gradEast = gradEast;
-    aspects.aspects = intAspect;
+    aspects.facets = intFacet;
 
 
 end %end function

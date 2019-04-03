@@ -50,7 +50,7 @@ function createTemperatureStationList(controlVars,grid)
     %transform grid to 1-d arrays for computational convenience
     lon1d = reshape(grid.lon,[nr*nc 1]);
     lat1d = reshape(grid.lat,[nr*nc 1]);
-    aspect1d = reshape(grid.aspects.aspects,[nr*nc 1]);
+    facet1d = reshape(grid.aspects.facets,[nr*nc 1]);
     distToCoast1d = reshape(grid.distToCoast,[nr*nc 1]);
     layerMask1d = reshape(grid.positions.layerMask,[nr*nc 1]);
     topoPosition1d = reshape(grid.positions.topoPosition,[nr*nc 1]);
@@ -84,17 +84,17 @@ function createTemperatureStationList(controlVars,grid)
         [~,ix] = sort(sqrt((lat1d-station.lat(i)).^2 + (lon1d-station.lon(i)).^2));
 
         %if nearest grid point is valid
-        if(~isnan(aspect1d(ix(1))))
+        if(~isnan(facet1d(ix(1))))
             %output geophysical attributes to station file
             fprintf(sidOut,'%s, %9.5f, %11.5f, %7.2f, %d, %8.3f, %d, %8.3f, %s\n',char(stationId),station.lat(i),station.lon(i),...
-                             station.elev(i),aspect1d(ix(1)),distToCoast1d(ix(1)),layerMask1d(ix(1)),topoPosition1d(ix(1)),char(stationId));
+                             station.elev(i),facet1d(ix(1)),distToCoast1d(ix(1)),layerMask1d(ix(1)),topoPosition1d(ix(1)),char(stationId));
         else %if not valid
             %find the nearest valid point for all attributes
-            nearestValid = find(~isnan(aspect1d(ix)) == 1);
+            nearestValid = find(~isnan(facet1d(ix)) == 1);
 
             %output geophysical attributes to station file
             fprintf(sidOut,'%s, %9.5f, %11.5f, %7.2f, %d, %8.3f, %d, %8.3f, %s\n',char(stationId),station.lat(i),station.lon(i),...
-                            station.elev(i),aspect1d(ix(nearestValid(1))),distToCoast1d(ix(nearestValid(1))),...
+                            station.elev(i),facet1d(ix(nearestValid(1))),distToCoast1d(ix(nearestValid(1))),...
                             layerMask1d(ix(nearestValid(1))),topoPosition1d(ix(nearestValid(1))),char(stationId));     
         end
     end

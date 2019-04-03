@@ -311,7 +311,7 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
         metPoint.intercept = linFit(2);
         metPoint.normSlope = linFit(1)/metPoint.baseInterpField;
 
-    elseif(length(stationVarAspect) == 2)  %only 2 stations within range - attempt regression anyway
+    elseif(length(stationVarAspect) < nMinNear)  %less than nMinNear stations within range - attempt regression anyway
 
         linFit = calcWeightedRegression(stationElevAspect,stationVarAspect,finalWeightsAspect);
 

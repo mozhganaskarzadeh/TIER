@@ -1,4 +1,4 @@
-function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,filterSize,filterSpread,covWindow)
+function finalUncert = calcFinalTempUncert(nr,nc,mask,elev,symapUncert,symapElev,slopeUncert,filterSize,filterSpread,covWindow)
 %
 %% calcFinalTempUncert computes the final uncertainty for temperature variables
 %
@@ -59,6 +59,7 @@ function finalUncert = calcFinalTempUncert(nr,nc,mask,symapUncert,slopeUncert,fi
     [i,j] = find(slopeUncert >= 0);
     %scattered interpolation using griddata
     interpSlope = griddata(i,j,slopeUncert(slopeUncert>=0),x2d,y2d,'linear');
+    interpSlope = interpSlope.*abs(symapElev-elev);
     %fill missing values with nearest neighbor
     interpSlope = fillNaN(interpSlope,x2d,y2d);
     

@@ -40,15 +40,15 @@ controlName = input('Enter the name of your control file: ', 's');
 %read control file
 controlVars = readControl(controlName);
 
-%read grid file
-grid = readGrid(controlVars.gridName);
-    
 %initalize parameters to default values
 parameters = initParameters(controlVars.variableEstimated);
 
 %read user defined STIR parameter file
 parameters = readParameters(controlVars.parameterFile,parameters);
 
+%read grid file
+grid = readGrid(controlVars.gridName);
+    
 %allocate space for output variables
 metGrid = allocateMetVars(grid.nr,grid.nc);
 
@@ -157,7 +157,8 @@ if(strcmpi(controlVars.variableEstimated,'precip'))
     metGrid.finalField = featherPrecip(parameters,grid.nr,grid.nc,grid.dx,grid.dem,grid.mask,finalNormSlope,metGrid.symapField,metGrid.symapElev);
     
     %compute final uncertainty estimate
-    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,metGrid.symapUncert,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
+%    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,metGrid.symapUncert,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
+    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,grid.dem,metGrid.symapUncert,metGrid.symapElev,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
     
     %set metGrid variables
     metGrid.finalSlope = finalNormSlope.*metGrid.finalField;
@@ -177,7 +178,7 @@ elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.vari
     metGrid.finalField = calcFinalTemp(grid.dem,grid.mask,metGrid.symapElev,metGrid.symapField,metGrid.finalSlope);
     
     %compute final uncertainty estimate
-    finalUncert = calcFinalTempUncert(grid.nr,grid.nc,grid.mask,metGrid.symapUncert,metGrid.slopeUncert,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
+    finalUncert = calcFinalTempUncert(grid.nr,grid.nc,grid.mask,grid.dem,metGrid.symapUncert,metGrid.symapElev,metGrid.slopeUncert,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
 
     %set metGrid variables
     metGrid.totalUncert = finalUncert.totalUncert;

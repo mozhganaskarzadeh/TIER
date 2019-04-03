@@ -1,4 +1,4 @@
-function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,finalVar,filterSize,filterSpread,covWindow)
+function finalUncert = calcFinalPrecipUncert(nr,nc,mask,elev,symapUncert,symapElev,slopeUncert,finalVar,filterSize,filterSpread,covWindow)
 %
 %% calcFinalPrecipUncert produces the final component uncertainty estimates
 %             as well as the final total and relative uncertainty accounting
@@ -84,7 +84,7 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
     %estimate the total and relative uncertainty in physical units 
     %(mm timestep-1)
     %compute slope in physical space
-    baseSlopeUncert = (finalSlopeUncert.*finalVar);
+    baseSlopeUncert = (finalSlopeUncert.*finalVar).*abs(symapElev-elev);
     baseSlopeUncert = fillNaN(baseSlopeUncert,x2d,y2d);
 
     %replace nonvalid mask points with NaN
@@ -126,6 +126,6 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,symapUncert,slopeUncert,
 
     %define components in output structure
     finalUncert.finalSymapUncert = finalSymapUncert;
-    finalUncert.finalSlopeUncert = finalSlopeUncert;
+    finalUncert.finalSlopeUncert = baseSlopeUncert;
    
 end

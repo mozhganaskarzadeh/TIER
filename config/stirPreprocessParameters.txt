@@ -5,6 +5,6 @@ minGradient,          0.003,          minimum gradient for a pixel to be conside
 smallFacet,           500,            area of smallest sloped facet allowed (km^2)
 smallFlat,            1000,           area of smallest flat facet allowed (km^2)
 narrowFlatRatio,      3.1,            ratio of major/minor axes to merge flat regions (i.e. ridges)
-coastSearchLength,    200,            search length (km) to compute distance to coast for a pixel (if pixel is more than coastSearchLen pixels from coast - set distance to coastSearchLength)
+coastSearchLength,    200,            search length (km) to compute distance to coast for a pixel (if pixel is more than coastSearchLength km from coast - set distance to coastSearchLength)
 layerSearchLength,    10,             search length (grid cells) to determine local minima in elevation
 inversionHeight,      250,            depth of layer 1 (inversion layer) in m

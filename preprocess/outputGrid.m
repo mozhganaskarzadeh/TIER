@@ -77,7 +77,7 @@ ncwriteatt(controlVars.outputName,'aspect','units','-');
 nccreate(controlVars.outputName,'dist_to_coast','Dimensions',{'x',outGrid.nr,'y',outGrid.nc},'FillValue',-999.0,'Format','netcdf4');
 ncwrite(controlVars.outputName,'dist_to_coast',outGrid.distToCoast);
 ncwriteatt(controlVars.outputName,'dist_to_coast','name','Distance to coast');
-ncwriteatt(controlVars.outputName,'dist_to_coast','long_name','Distance to closest water point in DEM (e.g. Daly et al. 2003)');
+ncwriteatt(controlVars.outputName,'dist_to_coast','long_name','Distance to closest water point in DEM (e.g. Daly et al. 2002)');
 ncwriteatt(controlVars.outputName,'dist_to_coast','units','km');
 
 %output topographic position

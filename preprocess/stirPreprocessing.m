@@ -68,11 +68,11 @@ outGrid = grid;
 %create topographic aspects (integer numbers) (e.g. Daly et al. 1994)
 outGrid.aspects = calcTopoAspects(grid,parameters);
 
-%calculate distance to coastline (km) (e.g. Daly et al. 2002)
+%calculate distance to coastline (km) (e.g. Daly et al. 2002,2008)
 outGrid.distToCoast = calcDistToCoast(grid,parameters.coastSearchLength);
 
 %calculate two-layer atmospheric position (layer 1 or 2) and the
-% topographic position (m) (e.g. Daly et al. 2002)
+% topographic position (m) (e.g. Daly et al. 2002,2008)
 outGrid.positions = calcPositions(grid,parameters.layerSearchLength,parameters.inversionHeight);
 
 %output to processed grid file

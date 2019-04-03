@@ -4,7 +4,7 @@ function distToCoast = calcDistToCoast(grid,searchLength)
 %  cell using the input grid DEM and mask.  Uses a search length of
 %  searchLength km.  Any grid cells that do not have ocean within that
 %  search length have the distanceToCoast set to searchLength.  Generally
-%  follows Daly et al. (2003)
+%  follows Daly et al. (2002)
 %
 % Arguments:
 %

@@ -115,6 +115,10 @@ function parameters = readParameters(parameterFile,parameters)
                 %logical to indicate if the default slope should be
                 %recomputed using the domain valid regression points
                 parameters.recomputeDefaultPrecipSlope = strtrim(data{2}(i));
+            case('recomputeDefaultTempSlope')
+                %logical to indicate if the default slope should be
+                %recomputed using the domain valid regression points
+                parameters.recomputeDefaultTempSlope = strtrim(data{2}(i));
             case('filterSize')
                 %size of low pass filter (grid points) used in computing updated slopes and uncertainty estimates
                 parameters.filterSize = str2double(strtrim(data{2}(i)));

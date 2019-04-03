@@ -58,11 +58,16 @@ inputStations = readInputStations(controlVars);
 %if temperature and a gridded default slope file is specified, read it
 if(strcmpi(controlVars.variableEstimated,'tmax') && ~isempty(controlVars.defaultTempLapse))
     tempDefaultLapse = ncread(controlVars.defaultTempLapse,'tmaxLapse');
+    %override user specified choice for the recomputeDefaultTempSlope option
+    parameters.recomputeDefaultTempSlope = 'false';
 elseif(strcmpi(controlVars.variableEstimated,'tmin') && ~isempty(controlVars.defaultTempLapse))
     tempDefaultLapse = ncread(controlVars.defaultTempLapse,'tminLapse');
+    %override user specified choice for the recomputeDefaultTempSlope option
+    parameters.recomputeDefaultTempSlope = 'false';
 else %else set the temp default lapse rate to spatially constant parameter value
     tempDefaultLapse = ones(grid.nr,grid.nc)*parameters.defaultSlope;
 end
+
 %check to see if there are any invalid slopes in the default temperature
 %slope if used
 if(~isempty(controlVars.defaultTempLapse))
@@ -171,8 +176,9 @@ if(strcmpi(controlVars.variableEstimated,'precip'))
 
 elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.variableEstimated,'tmin'))
     %re-compute slope estimate
-    metGrid.finalSlope = updateTempSlope(grid.nr,grid.nc,grid.mask,grid.layerMask,metGrid.slope,metGrid.defaultSlope,metGrid.validRegress,parameters.minSlope,...
-                                 parameters.maxSlopeLower,parameters.maxSlopeUpper,parameters.filterSize,parameters.filterSpread);
+    metGrid.finalSlope = updateTempSlope(grid.nr,grid.nc,grid.mask,grid.layerMask,metGrid.slope,metGrid.defaultSlope,parameters.recomputeDefaultTempSlope,...
+                                 metGrid.validRegress,parameters.minSlope,parameters.maxSlopeLower,parameters.maxSlopeUpper,parameters.filterSize,...
+                                 parameters.filterSpread);
 
     %compute final field estimate
     metGrid.finalField = calcFinalTemp(grid.dem,grid.mask,metGrid.baseInterpElev,metGrid.baseInterpField,metGrid.finalSlope);

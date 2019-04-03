@@ -56,6 +56,7 @@ function parameters = initParameters(varEstimated)
     parameters.filterSpread = 40;                      % -
     parameters.covWindow = 10;                         % grid cells
     parameters.recomputeDefaultPrecipSlope = 'false';  %logical
+    parameters.recomputeDefaultTempSlope   = 'false';  %logical
 
     %initialize variables based on meteorological variable being regressed
     if(strcmpi(varEstimated,'precip'))

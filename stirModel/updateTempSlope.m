@@ -1,4 +1,4 @@
-function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,defaultSlope,validSlope,minSlope,maxSlopeLower,maxSlopeUpper,filterSize,filterSpread)
+function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,recomputeDefault,defaultSlope,validSlope,minSlope,maxSlopeLower,maxSlopeUpper,filterSize,filterSpread)
 %
 %% updateTempSlope updates the estimated slope (elevation lapse rate)
 %                  of temperature variables across the grid from the
@@ -11,8 +11,10 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,defaultSlope,va
 %   nr, integer,   number of rows in grid
 %   nc, integer,   number of columns in grid
 %   mask, integer, mask of valid grid points
-%   slope, float, intiial slope estimate across grid
-%   defaultSlope, float, default estimate of slope uncertainty across grid
+%   slope, float, intial slope estimate across grid
+%   defaultSlope, float, default estimate of slope across grid
+%   recomputeDefault,string, string indicating true/false to recompute the
+%                        default normalized precipitation slope
 %   validSlope, integer, mask of valid regression estimated slopes
 %   minSlope     , float, minimum valid slope (STIR parameter)
 %   maxSlopeLower, float, maximum lower layer valid slope (STIR parameter)
@@ -46,6 +48,21 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,defaultSlope,va
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <https://www.gnu.org/licenses/>.
 %
+
+
+    %if user specifies to recompute the default slope and there is
+    %no user specified spatially variable lapse rate file (this check is performed in the driver)
+    %use only points that had valid regression based slopes
+    %ideally this is an improvement over a specified default slope
+    if(strcmpi(recomputeDefault,'true') )
+        baseSlope = normSlope;
+        baseSlope(validSlope~=1) = -999;
+        domainMeanSlope = mean(mean(baseSlope(baseSlope ~= -999)));
+        baseSlope(baseSlope == -999) = domainMeanSlope;
+    else
+        baseSlope = normSlope;
+        baseSlope(validSlope~=1) = defaultSlope;
+    end
 
     %use only points that had valid regression based slopes
     %filter and interpolate to entire domain 

@@ -132,14 +132,14 @@ for y = 1:grid.nr
             end
             
             %set metGrid values for current grid point
-            metGrid.rawField(y,x)        = metPoint.rawField;
-            metGrid.intercept(y,x)       = metPoint.intercept;
-            metGrid.slope(y,x)           = metPoint.slope;
-            metGrid.symapField(y,x)      = metPoint.symapField;
-            metGrid.symapElev(y,x)       = metPoint.symapElev;
-            metGrid.symapUncert(y,x)     = metPoint.symapUncert;
-            metGrid.slopeUncert(y,x)     = metPoint.slopeUncert;
-            metGrid.validRegress(y,x)    = metPoint.validRegress;
+            metGrid.rawField(y,x)             = metPoint.rawField;
+            metGrid.intercept(y,x)            = metPoint.intercept;
+            metGrid.slope(y,x)                = metPoint.slope;
+            metGrid.baseInterpField(y,x)      = metPoint.baseInterpField;
+            metGrid.baseInterpElev(y,x)       = metPoint.baseInterpElev;
+            metGrid.baseInterpUncert(y,x)     = metPoint.baseInterpUncert;
+            metGrid.slopeUncert(y,x)          = metPoint.slopeUncert;
+            metGrid.validRegress(y,x)         = metPoint.validRegress;
             
         end %valid mask check
     end %end x-loop
@@ -154,18 +154,18 @@ if(strcmpi(controlVars.variableEstimated,'precip'))
     
     %compute final field value
     %feather precipitation generally following Daly et al. (1994)
-    metGrid.finalField = featherPrecip(parameters,grid.nr,grid.nc,grid.dx,grid.dem,grid.mask,finalNormSlope,metGrid.symapField,metGrid.symapElev);
+    metGrid.finalField = featherPrecip(parameters,grid.nr,grid.nc,grid.dx,grid.dem,grid.mask,finalNormSlope,metGrid.baseInterpField,metGrid.baseInterpElev);
     
     %compute final uncertainty estimate
-%    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,metGrid.symapUncert,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
-    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,grid.dem,metGrid.symapUncert,metGrid.symapElev,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
+%    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,metGrid.baseInterpUncert,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
+    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,grid.dem,metGrid.baseInterpUncert,metGrid.baseInterpElev,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
     
     %set metGrid variables
     metGrid.finalSlope = finalNormSlope.*metGrid.finalField;
     metGrid.finalSlope(grid.mask<0) = -999; %set final slope value to missing where mask is ocean
     metGrid.totalUncert = finalUncert.totalUncert;
     metGrid.relUncert = finalUncert.relativeUncert;
-    metGrid.symapUncert = finalUncert.finalSymapUncert;
+    metGrid.baseInterpUncert = finalUncert.finalBaseInterpUncert;
     metGrid.slopeUncert = finalUncert.finalSlopeUncert;
     metGrid.defaultSlope = ones(grid.nr,grid.nc)*parameters.defaultSlope;
 
@@ -175,15 +175,15 @@ elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.vari
                                  parameters.maxSlopeLower,parameters.maxSlopeUpper,parameters.filterSize,parameters.filterSpread);
 
     %compute final field estimate
-    metGrid.finalField = calcFinalTemp(grid.dem,grid.mask,metGrid.symapElev,metGrid.symapField,metGrid.finalSlope);
+    metGrid.finalField = calcFinalTemp(grid.dem,grid.mask,metGrid.baseInterpElev,metGrid.baseInterpField,metGrid.finalSlope);
     
     %compute final uncertainty estimate
-    finalUncert = calcFinalTempUncert(grid.nr,grid.nc,grid.mask,grid.dem,metGrid.symapUncert,metGrid.symapElev,metGrid.slopeUncert,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
+    finalUncert = calcFinalTempUncert(grid.nr,grid.nc,grid.mask,grid.dem,metGrid.baseInterpUncert,metGrid.baseInterpElev,metGrid.slopeUncert,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
 
     %set metGrid variables
     metGrid.totalUncert = finalUncert.totalUncert;
     metGrid.relUncert = finalUncert.relativeUncert;
-    metGrid.symapUncert = finalUncert.finalSymapUncert;
+    metGrid.baseInterpUncert = finalUncert.finalBaseInterpUncert;
     metGrid.slopeUncert = finalUncert.finalSlopeUncert;
     metGrid.defaultSlope = tempDefaultLapse;
 end

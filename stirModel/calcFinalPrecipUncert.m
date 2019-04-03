@@ -1,4 +1,4 @@
-function finalUncert = calcFinalPrecipUncert(nr,nc,mask,elev,symapUncert,symapElev,slopeUncert,finalVar,filterSize,filterSpread,covWindow)
+function finalUncert = calcFinalPrecipUncert(nr,nc,mask,elev,baseInterpUncert,baseInterpElev,slopeUncert,finalVar,filterSize,filterSpread,covWindow)
 %
 %% calcFinalPrecipUncert produces the final component uncertainty estimates
 %             as well as the final total and relative uncertainty accounting
@@ -11,7 +11,7 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,elev,symapUncert,symapEl
 %   nr, integer,   number of rows in grid
 %   nc, integer,   number of columns in grid
 %   mask, integer, mask of valid grid points
-%   symapUncert, float, symap precipitation uncertainty estimate (mm timestep-1)
+%   baseInterpUncert, float, baseInterp precipitation uncertainty estimate (mm timestep-1)
 %   slopeUncert, float,    estimated uncertainty of slope (elev lapse rate)
 %                          in normalized space
 %   finalVar, float,      final variable estimate (precip here)
@@ -48,7 +48,7 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,elev,symapUncert,symapEl
 %
 
     %use only points that had valid uncertainty estimates from the base
-    %SYMAP interpolation or the weighted regression, then
+    %baseInterp interpolation or the weighted regression, then
     %filter and interpolate to entire domain 
     %this estimates uncertainty at each grid point from points where we
     %actually have initial estimates
@@ -60,12 +60,12 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,elev,symapUncert,symapEl
     x = 1:nc;
     [y2d,x2d] = meshgrid(x,y);
 
-    %find valid symapUncert points
-    [i,j] = find(symapUncert >= 0);
+    %find valid baseInterpUncert points
+    [i,j] = find(baseInterpUncert >= 0);
     %scattered interpolation using griddata
-    interpSymap = griddata(i,j,symapUncert(symapUncert >= 0),x2d,y2d,'linear');       
+    interpBaseInterp = griddata(i,j,baseInterpUncert(baseInterpUncert >= 0),x2d,y2d,'linear');       
     %fill missing values with nearest neighbor
-    interpSymap = fillNaN(interpSymap,x2d,y2d);
+    interpBaseInterp = fillNaN(interpBaseInterp,x2d,y2d);
 
     %find valid slopeUncert points
     [i,j] = find(slopeUncert >= 0);
@@ -78,21 +78,21 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,elev,symapUncert,symapEl
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);
     
     %filter uncertainty estimates
-    finalSymapUncert = imfilter(interpSymap,gFilter);
+    finalBaseInterpUncert = imfilter(interpBaseInterp,gFilter);
     finalSlopeUncert = imfilter(interpSlope,gFilter);
 
     %estimate the total and relative uncertainty in physical units 
     %(mm timestep-1)
     %compute slope in physical space
-    baseSlopeUncert = (finalSlopeUncert.*finalVar).*abs(symapElev-elev);
+    baseSlopeUncert = (finalSlopeUncert.*finalVar).*abs(baseInterpElev-elev);
     baseSlopeUncert = fillNaN(baseSlopeUncert,x2d,y2d);
 
     %replace nonvalid mask points with NaN
     baseSlopeUncert(mask<0) = NaN;
-    finalSymapUncert(mask<0) = NaN;
+    finalBaseInterpUncert(mask<0) = NaN;
     
     %define a local covariance vector
-    localCov = zeros(size(finalSymapUncert))*NaN;
+    localCov = zeros(size(finalBaseInterpUncert))*NaN;
 
     %step through each grid point and estimate the local covariance between
     %the two uncertainty components using covWindow to define the size of the local covariance estimate
@@ -105,27 +105,27 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,elev,symapUncert,symapEl
 
             %compute local covariance using selection of valid points
             %get windowed area
-            subSymap = finalSymapUncert(iInds(1):iInds(2),jInds(1):jInds(2));
+            subBaseInterp = finalBaseInterpUncert(iInds(1):iInds(2),jInds(1):jInds(2));
             subSlope = baseSlopeUncert(iInds(1):iInds(2),jInds(1):jInds(2));
             %compute covariance for only valid points in window
-            c = cov(subSymap(~isnan(subSymap)),subSlope(~isnan(subSlope)),0);
+            c = cov(subBaseInterp(~isnan(subBaseInterp)),subSlope(~isnan(subSlope)),0);
             %pull relevant value from covariance matrix
             localCov(i,j) = c(1,length(c(1,:)));
         end
     end
 
     %compute the total estimates 
-    finalUncert.totalUncert = baseSlopeUncert+finalSymapUncert+2*sqrt(abs(localCov));
+    finalUncert.totalUncert = baseSlopeUncert+finalBaseInterpUncert+2*sqrt(abs(localCov));
     finalUncert.relativeUncert = finalUncert.totalUncert./finalVar;
 
     %set novalid gridpoints to missing 
-    finalSymapUncert(mask<0) = -999;
+    finalBaseInterpUncert(mask<0) = -999;
     finalSlopeUncert(mask<0) = -999;
     finalUncert.totalUncert(mask<0) = -999;
     finalUncert.relativeUncert(mask<0) = -999;
 
     %define components in output structure
-    finalUncert.finalSymapUncert = finalSymapUncert;
+    finalUncert.finalBaseInterpUncert = finalBaseInterpUncert;
     finalUncert.finalSlopeUncert = baseSlopeUncert;
    
 end

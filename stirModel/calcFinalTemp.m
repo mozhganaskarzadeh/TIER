@@ -1,4 +1,4 @@
-function finalTemp = calcFinalTemp(dem,mask,symapElev,symapTemp,finalSlope)
+function finalTemp = calcFinalTemp(dem,mask,baseInterpElev,baseInterpTemp,finalSlope)
 %
 %% calFinalTemp computes the final temperature grid after all adjustments
 %
@@ -9,9 +9,9 @@ function finalTemp = calcFinalTemp(dem,mask,symapElev,symapTemp,finalSlope)
 %   dem,  float  , grid dem
 %   mask, integer, mask of valid grid points
 %
-%   symapElev, float, elevation of symap weighted stations for symap
+%   baseInterpElev, float, elevation of baseInterp weighted stations for baseInterp
 %                     estimate
-%   symapTemp, float, symap estimated temperature
+%   baseInterpTemp, float, baseInterp estimated temperature
 %   finaSlope, float, grid of final slope estimates after any previous 
 %                     adjustments 
 %
@@ -43,7 +43,7 @@ function finalTemp = calcFinalTemp(dem,mask,symapElev,symapTemp,finalSlope)
 %
 
     %compute final temp using all finalized estimates
-    finalTemp = finalSlope.*(dem-symapElev) + symapTemp;
+    finalTemp = finalSlope.*(dem-baseInterpElev) + baseInterpTemp;
     %set unused grid points to missing
     finalTemp(mask<0) = -999;
 

@@ -1,4 +1,4 @@
-function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope,symapPrecip,symapElev)
+function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope,baseInterpPrecip,baseInterpElev)
 %
 %% featherPrecip updates the estimated precipitation field to remove sharp,
 %                potentially unrealistic gradients due primarily do to
@@ -14,8 +14,8 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
 %   dem, float, grid dem
 %   mask, integer, mask of valid grid points
 %   finalNormslope, float, final normalized slope estimate across grid
-%   symapPrecip, float,    symap weighted estimated precipitation 
-%   symapElev, float,      elevation of symap weighted stations for symap
+%   baseInterpPrecip, float,    baseInterp weighted estimated precipitation 
+%   baseInterpElev, float,      elevation of baseInterp weighted stations for baseInterp
 %                          estimate
 %
 %  Outputs:
@@ -47,8 +47,8 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
     %compute precipitation again, using spatially interpolated valid slopes,
     %rather than a mishmash of valid and default values from grid point to
     %grid point
-    finalPrecip = finalNormSlope.*symapPrecip.*(dem-symapElev) + symapPrecip;
-    finalSlope = finalNormSlope.*symapPrecip;
+    finalPrecip = finalNormSlope.*baseInterpPrecip.*(dem-baseInterpElev) + baseInterpPrecip;
+    finalSlope = finalNormSlope.*baseInterpPrecip;
 
     %Now check to see if any feathering is needed to relax potentially large grid cell to grid-cell gradients
     %that may be non-physical.  generally follows Daly et al. (1994)
@@ -69,23 +69,23 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
     %first, set negative and zero pcp to mean value
     negInds = find(finalPrecip<=0);
     if(~isempty(negInds))
-        finalPrecip(negInds) = symapPrecip(negInds);
+        finalPrecip(negInds) = baseInterpPrecip(negInds);
     end
 
     %second need to make sure all the precipitation slopes are within 
     %reasonable bounds
     inds = find(finalNormSlope>maxFinalSlope);
     %reset values to valid final maximum slope
-    finalSlope(inds) = maxFinalSlope*symapPrecip(inds);
+    finalSlope(inds) = maxFinalSlope*baseInterpPrecip(inds);
 
     %recompute precipitation field using updated slopes
     for i = 1:length(inds)
-        finalPrecip(inds(i)) = polyval([finalSlope(inds(i)) symapPrecip(inds(i))],dem(inds(i))-symapElev(inds(i)));
+        finalPrecip(inds(i)) = polyval([finalSlope(inds(i)) baseInterpPrecip(inds(i))],dem(inds(i))-baseInterpElev(inds(i)));
     end
 
     %now check spatial gradients for exceedance
     %recompute normalized slopes in a temporary variable
-    tmpNormSlope = finalSlope./symapPrecip;
+    tmpNormSlope = finalSlope./baseInterpPrecip;
     %temporary precipitation variable
     tmpPrecip = finalPrecip;
     tmpNormSlope(mask<0)=NaN;
@@ -114,8 +114,8 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
                 %then feather grid point
                 if(abs(ewGrad) > demMaxGrad && (abs(dem(y,x)- dem(y-1,x))>minElevDiff || dem(y,x)>minElev))
                     %define static fields
-                    tmpIntercept = [symapPrecip(y,x), symapPrecip(y-1,x)];
-                    tmpElev = [symapElev(y,x), symapElev(y-1,x)];
+                    tmpIntercept = [baseInterpPrecip(y,x), baseInterpPrecip(y-1,x)];
+                    tmpElev = [baseInterpElev(y,x), baseInterpElev(y-1,x)];
                     tmpDem = [dem(y,x), dem(y-1,x)];
 
                     %define fields that will be updated
@@ -176,8 +176,8 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
                 %then feather grid point
                 if(abs(nsGrad) > demMaxGrad && (abs(dem(y,x)- dem(y,x-1))>minElevDiff || dem(y,x) > minElev))
                     %set static fields
-                    tmpIntercept = [symapPrecip(y,x), symapPrecip(y,x-1)];
-                    tmpElev      = [symapElev(y,x), symapElev(y,x-1)];
+                    tmpIntercept = [baseInterpPrecip(y,x), baseInterpPrecip(y,x-1)];
+                    tmpElev      = [baseInterpElev(y,x), baseInterpElev(y,x-1)];
                     tmpDem       = [dem(y,x), dem(y,x-1)];
 
                     %set updated fields
@@ -228,7 +228,7 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
     %finally recheck any negative and zero pcp to mean value
     negInds = find(tmpPrecip<=0);
     if(~isempty(negInds))
-        tmpPrecip(negInds) = symapPrecip(negInds);
+        tmpPrecip(negInds) = baseInterpPrecip(negInds);
     end
     %set final precipitation
     finalPrecip = tmpPrecip;

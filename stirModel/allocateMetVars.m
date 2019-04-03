@@ -38,20 +38,20 @@ function metGrid = allocateMetVars(nr,nc)
 %
 
     %allocate space for grids
-    metGrid.rawField        = zeros(nr,nc)*NaN;
-    metGrid.intercept       = zeros(nr,nc)*NaN;
-    metGrid.slope           = zeros(nr,nc)*NaN;
-    metGrid.normSlope       = zeros(nr,nc)*NaN;
-    metGrid.symapField      = zeros(nr,nc)*NaN;
-    metGrid.symapElev       = zeros(nr,nc)*NaN;
-    metGrid.symapUncert     = zeros(nr,nc)*NaN;
-    metGrid.slopeUncert     = zeros(nr,nc)*NaN;
-    metGrid.normSlopeUncert = zeros(nr,nc)*NaN;
-    metGrid.defaultSlope    = zeros(nr,nc)*NaN;
-    metGrid.finalSlope      = zeros(nr,nc)*NaN;
-    metGrid.finalField      = zeros(nr,nc)*NaN;
-    metGrid.totalUncert     = zeros(nr,nc)*NaN;
-    metGrid.relUncert       = zeros(nr,nc)*NaN;
-    metGrid.validRegress    = zeros(nr,nc)*NaN;
+    metGrid.rawField         = zeros(nr,nc)*NaN;
+    metGrid.intercept        = zeros(nr,nc)*NaN;
+    metGrid.slope            = zeros(nr,nc)*NaN;
+    metGrid.normSlope        = zeros(nr,nc)*NaN;
+    metGrid.baseInterpField  = zeros(nr,nc)*NaN;
+    metGrid.baseInterpElev   = zeros(nr,nc)*NaN;
+    metGrid.baseInterpUncert = zeros(nr,nc)*NaN;
+    metGrid.slopeUncert      = zeros(nr,nc)*NaN;
+    metGrid.normSlopeUncert  = zeros(nr,nc)*NaN;
+    metGrid.defaultSlope     = zeros(nr,nc)*NaN;
+    metGrid.finalSlope       = zeros(nr,nc)*NaN;
+    metGrid.finalField       = zeros(nr,nc)*NaN;
+    metGrid.totalUncert      = zeros(nr,nc)*NaN;
+    metGrid.relUncert        = zeros(nr,nc)*NaN;
+    metGrid.validRegress     = zeros(nr,nc)*NaN;
 
 end            

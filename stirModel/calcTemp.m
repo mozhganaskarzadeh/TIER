@@ -5,12 +5,12 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
 % Summary: This algorithm generally follows Daly et al. (1994,2002,2007,2008) and
 % others.  However, here the regression estimated parameters
 % and the grid point elevation to compute the precipitation is not done.
-% Instead, the SYMAP estimate is used at all grid points as the intercept
-% and the weighted linear regression slope is used to adjust the SYMAP
+% Instead, the baseInterp estimate is used at all grid points as the intercept
+% and the weighted linear regression slope is used to adjust the baseInterp
 % estimate up or down based on the elevation difference between the grid
-% and the SYMAP weighted station elevation.  This approach gives similar
-% results and is effectively an elevation adjustment to a SYMAP estimate
-% where the SYMAP weights here are computed using all knowledge based
+% and the baseInterp weighted station elevation.  This approach gives similar
+% results and is effectively an elevation adjustment to a baseInterp estimate
+% where the baseInterp weights here are computed using all knowledge based
 % terms in addition to the SYMAP distance & angular isolation weights
 % Other modifications from the above cited papers are present and
 % summarized below.
@@ -109,37 +109,37 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
 
     
     %initalize metPoint structure
-    metPoint.rawField        = NaN;
-    metPoint.intercept       = NaN;
-    metPoint.slope           = NaN;
-    metPoint.symapField      = NaN;
-    metPoint.symapElev       = NaN;
-    metPoint.symapUncert     = NaN;
-    metPoint.slopeUncert     = NaN;
-    metPoint.intercept       = NaN;
-    metPoint.validRegress    = NaN;
+    metPoint.rawField             = NaN;
+    metPoint.intercept            = NaN;
+    metPoint.slope                = NaN;
+    metPoint.baseInterpField      = NaN;
+    metPoint.baseInterpElev       = NaN;
+    metPoint.baseInterpUncert     = NaN;
+    metPoint.slopeUncert          = NaN;
+    metPoint.intercept            = NaN;
+    metPoint.validRegress         = NaN;
     
-    %first estimate the 'SYMAP' value at grid point, but use full knowledge
+    %first estimate the 'baseInterp' value at grid point, but use full knowledge
     %based weights if possible. this serves as the base estimate with no 
     %weighted linear elevation regression
 
     %if the final weight vector is invalid, default to symap weights only
     if(isnan(finalWeights(1)))
-        %compute SYMAP precipitaiton
-        metPoint.symapField = sum(symapWeights.*stationVarNear)/sum(symapWeights);
-        %compute mean elevation of SYMAP stations
-        metPoint.symapElev = sum(symapWeights.*stationElevNear)/sum(symapWeights);
+        %compute baseInterp precipitaiton
+        metPoint.baseInterpField = sum(symapWeights.*stationVarNear)/sum(symapWeights);
+        %compute mean elevation of baseInterp stations
+        metPoint.baseInterpElev = sum(symapWeights.*stationElevNear)/sum(symapWeights);
         %uncertainty
         nsta = length(symapWeights);
         combs = nchoosek(1:nsta,nsta-1);
-        metPoint.symapUncert = std(sum(symapWeights(combs).*stationVarNear(combs),2)./sum(symapWeights(combs),2));
+        metPoint.baseInterpUncert = std(sum(symapWeights(combs).*stationVarNear(combs),2)./sum(symapWeights(combs),2));
     else %estimate simple average using final weights
-        metPoint.symapField = sum(finalWeights.*stationVarNear)/sum(finalWeights);
-        metPoint.symapElev = sum(finalWeights.*stationElevNear)/sum(finalWeights);
+        metPoint.baseInterpField = sum(finalWeights.*stationVarNear)/sum(finalWeights);
+        metPoint.baseInterpElev = sum(finalWeights.*stationElevNear)/sum(finalWeights);
         %uncertainty
-        nsta = length(symapWeights);
+        nsta = length(baseInterpWeights);
         combs = nchoosek(1:nsta,nsta-1);
-        metPoint.symapUncert = std(sum(finalWeights(combs).*stationVarNear(combs),2)./sum(finalWeights(combs),2));
+        metPoint.baseInterpUncert = std(sum(finalWeights(combs).*stationVarNear(combs),2)./sum(finalWeights(combs),2));
     end
 
 
@@ -213,13 +213,13 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
                 linFit = calcWeightedRegression(stationElevAspect(removeOutlierInds),stationVarAspect(removeOutlierInds),...
                                                 finalWeightsAspect(removeOutlierInds));
                                             
-                linFit(2) = metPoint.symapField;
+                linFit(2) = metPoint.baseInterpField;
                 
                 if(isnan(linFit(1)))
                     linFit(1) = defaultSlope;
-                    tmpField = polyval(linFit,gridElev-metPoint.symapElev);
+                    tmpField = polyval(linFit,gridElev-metPoint.baseInterpElev);
                 else
-                    tmpField = polyval(linFit,gridElev-metPoint.symapElev);
+                    tmpField = polyval(linFit,gridElev-metPoint.baseInterpElev);
                 end
                 metPoint.rawField = tmpField;
                 metPoint.slope = linFit(1);
@@ -228,25 +228,25 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
                 
             else
                 linFit(1) = defaultSlope;
-                linFit(2) = metPoint.symapField;
+                linFit(2) = metPoint.baseInterpField;
                 
-                metPoint.rawField = polyval(linFit,gridElev-metPoint.symapElev);
+                metPoint.rawField = polyval(linFit,gridElev-metPoint.baseInterpElev);
                 metPoint.slope      = linFit(1);
                 metPoint.intercept  = linFit(2);
             end
 
         elseif(isnan(linFit(1)))
             linFit(1) = defaultSlope;
-            linFit(2) = metPoint.symapField;
+            linFit(2) = metPoint.baseInterpField;
             
-            metPoint.rawField  = polyval(linFit,gridElev-metPoint.symapElev);
+            metPoint.rawField  = polyval(linFit,gridElev-metPoint.baseInterpElev);
             metPoint.slope     = linFit(1);
             metPoint.intercept = linFit(2);
         else            
             
-            linFit(2) = metPoint.symapField;
+            linFit(2) = metPoint.baseInterpField;
             
-            metPoint.rawField = polyval(linFit,gridElev-metPoint.symapElev);
+            metPoint.rawField = polyval(linFit,gridElev-metPoint.baseInterpElev);
             metPoint.slope     = linFit(1);
             metPoint.intercept = linFit(2);
             metPoint.validRegress = 1;
@@ -295,9 +295,9 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
     else %not enough stations within range on aspect - revert to nearest with default slope
         
         linFit(1) = defaultSlope;
-        linFit(2) = metPoint.symapField;
+        linFit(2) = metPoint.baseInterpField;
         
-        metPoint.rawField = polyval(linFit,gridElev-metPoint.symapElev);
+        metPoint.rawField = polyval(linFit,gridElev-metPoint.baseInterpElev);
         metPoint.slope     = linFit(1);
         metPoint.intercept = linFit(2);
 

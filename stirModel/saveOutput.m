@@ -115,26 +115,26 @@ function saveOutput(outputName,outputVar,grid,metGrid,parameters)
     ncwriteatt(outputName,'normSlope','long_name','normalized variable elevation slope before slope adjustments(valid for precipitation only)');
     ncwriteatt(outputName,'normSlope','units',normSlopeUnits);
     
-    %symapField
-    nccreate(outputName,'symapField','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');
-    ncwrite(outputName,'symapField',metGrid.symapField);
-    ncwriteatt(outputName,'symapField','name','SYMAP estimate');
-    ncwriteatt(outputName,'symapField','long_name','SYMAP estimated variable values on grid');
-    ncwriteatt(outputName,'symapField','units',physicalUnits);
+    %baseInterpField
+    nccreate(outputName,'baseInterpField','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');
+    ncwrite(outputName,'baseInterpField',metGrid.baseInterpField);
+    ncwriteatt(outputName,'baseInterpField','name','baseInterp estimate');
+    ncwriteatt(outputName,'baseInterpField','long_name','baseInterp estimated variable values on grid');
+    ncwriteatt(outputName,'baseInterpField','units',physicalUnits);
     
-    %symapElev
-    nccreate(outputName,'symapElev','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');
-    ncwrite(outputName,'symapElev',metGrid.symapElev);
-    ncwriteatt(outputName,'symapElev','name','SYMAP weighted elevation');
-    ncwriteatt(outputName,'symapElev','long_name','Grid point elevation estimate using station elevations and SYMAP weights');
-    ncwriteatt(outputName,'symapElev','units','m');
+    %baseInterpElev
+    nccreate(outputName,'baseInterpElev','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');
+    ncwrite(outputName,'baseInterpElev',metGrid.baseInterpElev);
+    ncwriteatt(outputName,'baseInterpElev','name','Weighted elevation');
+    ncwriteatt(outputName,'baseInterpElev','long_name','Grid point elevation estimate using station elevations and final weights');
+    ncwriteatt(outputName,'baseInterpElev','units','m');
     
-    %symapUncert
-    nccreate(outputName,'symapUncert','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');
-    ncwrite(outputName,'symapUncert',metGrid.symapUncert);
-    ncwriteatt(outputName,'symapUncert','name','SYMAP uncertainty');
-    ncwriteatt(outputName,'symapUncert','long_name','Uncertainty estimate from the SYMAP variable estimate');
-    ncwriteatt(outputName,'symapUncert','units',physicalUnits);
+    %baseInterpUncert
+    nccreate(outputName,'baseInterpUncert','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');
+    ncwrite(outputName,'baseInterpUncert',metGrid.baseInterpUncert);
+    ncwriteatt(outputName,'baseInterpUncert','name','baseInterp uncertainty');
+    ncwriteatt(outputName,'baseInterpUncert','long_name','Uncertainty estimate from the baseInterp variable estimate');
+    ncwriteatt(outputName,'baseInterpUncert','units',physicalUnits);
     
     %slopeUncert
     nccreate(outputName,'slopeUncert','Dimensions',{'latitude',nr,'longitude',nc},'FillValue',-999.0,'Format','netcdf4');

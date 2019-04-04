@@ -28,7 +28,6 @@ Here is an overview of the varibles in the STIR preprocessing parameter file:
 * **smallFacet**, area of smallest sloped facet allowed (km^2): Smallest facet area allowed.  Smaller areas are merged with neighboring facets.
 * **smallFlat**, area of smallest flat facet allowed (km^2):  Smallest flat facet area allowed.  Smaller areas are merged with neighboring facets.
 * **narrowFlatRatio**, ratio of major/minor axes to merge flat regions (i.e. ridges):  If the flat facet is very narrow (elongated) with a large major/minor axis ratio, treat it as a ridge and merge with neighboring sloped facets.
-* **coastSearchLength**, search length (km) to compute distance to coast for a pixel (if pixel is more than coastSearchLen pixels from coast - set distance to coastSearchLength)
 * **layerSearchLength**, search length (grid cells) to determine local minima in elevation:  This is used in determining the topographic position.  The search length defines the number of grid points (width of a square) to search to find the local minima to set the local topographic position.  See Daly et al. (2002) for more detals.
 * **inversionHeight**, depth of layer 1 (inversion layer) in m:  Depth of the lower layer in an idealized 2-layer atmosphere.  The lower layer identifies areas susceptible to temperature inversions and allows for different temperature lapse rates in those areas. See Daly et al. (2002) for more details.
 

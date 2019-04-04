@@ -69,7 +69,7 @@ outGrid = grid;
 outGrid.aspects = calcTopoAspects(grid,parameters);
 
 %calculate distance to coastline (km) (e.g. Daly et al. 2002,2008)
-outGrid.distToCoast = calcDistToCoast(grid,parameters.coastSearchLength);
+outGrid.distToCoast = calcDistToCoast(grid);
 
 %calculate two-layer atmospheric position (layer 1 or 2) and the
 % topographic position (m) (e.g. Daly et al. 2002,2008)

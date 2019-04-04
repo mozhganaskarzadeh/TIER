@@ -68,9 +68,6 @@ function parameters = readPreprocessParameters(parameterFile,parameters)
             case('narrowFlatRatio')
                 %ratio of major/minor axes to merge flat regions (i.e. ridges)
                 parameters.narrowFlatRatio = str2double(strtrim(data{2}(i)));
-            case('coastSearchLength')
-                %search length (km) to compute distance to coast for a pixel (if pixel is more than coastSearchLen pixels from coast, set distance to coastSearchLength)
-                parameters.coastSearchLength = str2double(strtrim(data{2}(i)));
             case('layerSearchLength')
                 %search length (grid cells) to determine local minima in elevation
                 parameters.layerSearchLength = str2double(strtrim(data{2}(i)));

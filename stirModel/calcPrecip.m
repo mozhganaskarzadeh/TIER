@@ -129,7 +129,7 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
         metPoint.baseInterpElev = sum(finalWeights.*stationElevNear)/sum(finalWeights);
         %estimate uncertainty using standard deviation of leave-one-out
         %estimates
-        nsta = length(baseInterpWeights);
+        nsta = length(finalWeights);
         combs = nchoosek(1:nsta,nsta-1);
         metPoint.baseInterpUncert = std(sum(finalWeights(combs).*stationVarNear(combs),2)./sum(finalWeights(combs),2));
     end
@@ -311,7 +311,7 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
         metPoint.intercept = linFit(2);
         metPoint.normSlope = linFit(1)/metPoint.baseInterpField;
 
-    elseif(length(stationVarFacet) < nMinNear)  %less than nMinNear stations within range - attempt regression anyway
+    elseif(length(stationVarFacet) < nMinNear && ~isempty(stationVarFacet))  %less than nMinNear stations within range - attempt regression anyway
 
         linFit = calcWeightedRegression(stationElevFacet,stationVarFacet,finalWeightsFacet);
 

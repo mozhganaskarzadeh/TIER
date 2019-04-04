@@ -137,7 +137,7 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
         metPoint.baseInterpField = sum(finalWeights.*stationVarNear)/sum(finalWeights);
         metPoint.baseInterpElev = sum(finalWeights.*stationElevNear)/sum(finalWeights);
         %uncertainty
-        nsta = length(baseInterpWeights);
+        nsta = length(finalWeights);
         combs = nchoosek(1:nsta,nsta-1);
         metPoint.baseInterpUncert = std(sum(finalWeights(combs).*stationVarNear(combs),2)./sum(finalWeights(combs),2));
     end

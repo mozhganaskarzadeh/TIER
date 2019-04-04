@@ -78,8 +78,8 @@ function finalUncert = calcFinalPrecipUncert(nr,nc,mask,elev,baseInterpUncert,ba
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);
     
     %filter uncertainty estimates
-    finalBaseInterpUncert = imfilter(interpBaseInterp,gFilter);
-    finalSlopeUncert = imfilter(interpSlope,gFilter);
+    finalBaseInterpUncert = imfilter(interpBaseInterp,gFilter,'circular');
+    finalSlopeUncert = imfilter(interpSlope,gFilter,'circular');
 
     %estimate the total and relative uncertainty in physical units 
     %(mm timestep-1)

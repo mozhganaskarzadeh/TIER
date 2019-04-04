@@ -67,7 +67,7 @@ function aspects = calcTopoAspects(grid,parameters)
 
     %filter DEM using demFilterPasses
     for i = 1:parameters.demFilterPasses
-        smoothElev = imfilter(smoothElev,demFilter,'replicate');
+        smoothElev = imfilter(smoothElev,demFilter,'circular');
     end
 
     %compute the gradients, slope, aspect from the DEM

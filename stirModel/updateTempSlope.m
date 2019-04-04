@@ -95,7 +95,7 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,recomputeDefaul
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);
 
     %filter layer 1
-    filterSlopeLayer1 = imfilter(interpSlopeLayer1,gFilter);
+    filterSlopeLayer1 = imfilter(interpSlopeLayer1,gFilter,'circular');
 
     %check for invalid slopes
     filterSlopeLayer1(filterSlopeLayer1 > maxSlopeLower) = maxSlopeLower;
@@ -104,7 +104,7 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,recomputeDefaul
     filterSlopeLayer1(mask<0) = -999;
     
     %filter layer 2
-    filterSlopeLayer2 = imfilter(interpSlopeLayer2,gFilter);
+    filterSlopeLayer2 = imfilter(interpSlopeLayer2,gFilter,'circular');
 
     %check for invalid slopes
     filterSlopeLayer2(filterSlopeLayer2 > maxSlopeUpper) = maxSlopeUpper;

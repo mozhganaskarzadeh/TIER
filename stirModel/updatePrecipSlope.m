@@ -83,7 +83,7 @@ function finalNormSlope = updatePrecipSlope(nr,nc,mask,normSlope,validSlope,defa
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);
 
     %filter slope estimate
-    filterSlope = imfilter(interpBaseSlope,gFilter);
+    filterSlope = imfilter(interpBaseSlope,gFilter,'circular');
     %set unused grid points to missing
     filterSlope(mask<0) = -999;
 

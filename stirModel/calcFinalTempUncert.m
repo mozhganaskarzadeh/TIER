@@ -67,23 +67,33 @@ function finalUncert = calcFinalTempUncert(nr,nc,mask,elev,baseInterpUncert,base
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);
     
     %filter uncertainty estimates
-    finalBaseInterpUncert = imfilter(interpBaseInterp,gFilter);
-    finalSlopeUncert = imfilter(interpSlope,gFilter);
+    finalBaseInterpUncert = imfilter(interpBaseInterp,gFilter,'circular');
+    finalSlopeUncert = imfilter(interpSlope,gFilter,'circular');
     
     %replace nonvalid mask points with NaN
     finalBaseInterpUncert(mask<0) = NaN;
     finalSlopeUncert(mask<0) = NaN;
-%     
-%     figure(33);
-%     imagesc(interpSlope');
-%     set(gca,'ydir','normal');
-%     colorbar;
-%     
-%     figure(34);
-%     imagesc(finalSlopeUncert');
-%     set(gca,'ydir','normal');
-%     colorbar;
-%     
+    
+    figure(11);
+    imagesc(baseInterpUncert');
+    set(gca,'ydir','normal');
+    colorbar;
+    
+    figure(12);
+    imagesc(slopeUncert');
+    set(gca,'ydir','normal');
+    colorbar;
+    
+    figure(33);
+    imagesc(interpSlope');
+    set(gca,'ydir','normal');
+    colorbar;
+    
+    figure(34);
+    imagesc(finalSlopeUncert');
+    set(gca,'ydir','normal');
+    colorbar;
+    
     %estimate the total and relative uncertainty in physical units 
 
     %define a local covariance vector

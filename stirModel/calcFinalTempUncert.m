@@ -74,28 +74,7 @@ function finalUncert = calcFinalTempUncert(nr,nc,mask,elev,baseInterpUncert,base
     finalBaseInterpUncert(mask<0) = NaN;
     finalSlopeUncert(mask<0) = NaN;
     
-    figure(11);
-    imagesc(baseInterpUncert');
-    set(gca,'ydir','normal');
-    colorbar;
-    
-    figure(12);
-    imagesc(slopeUncert');
-    set(gca,'ydir','normal');
-    colorbar;
-    
-    figure(33);
-    imagesc(interpSlope');
-    set(gca,'ydir','normal');
-    colorbar;
-    
-    figure(34);
-    imagesc(finalSlopeUncert');
-    set(gca,'ydir','normal');
-    colorbar;
-    
     %estimate the total and relative uncertainty in physical units 
-
     %define a local covariance vector
     localCov = zeros(size(finalBaseInterpUncert))*NaN;
 

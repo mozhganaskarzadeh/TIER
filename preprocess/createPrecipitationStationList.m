@@ -78,18 +78,17 @@ function createPrecipitationStationList(controlVars,grid)
     %attributes
     for i = 1:nSta
         stationId = strtok(fileList(i).name(),'.');
-    %for i = 150
         %compute distances and indices of nearest grid points
         [~,ix] = sort(sqrt((lat1d-station.lat(i)).^2 + (lon1d-station.lon(i)).^2));
 
         %if nearest grid point is valid
-        if(~isnan(facet1d(ix(1))))
+        if(facet1d(ix(1)) > -999)
             %output geophysical attributes to station file
             fprintf(sidOut,'%s, %9.5f, %11.5f, %7.2f, %d, %8.3f, %d, %8.3f, %s\n',char(stationId),station.lat(i),station.lon(i),...
                              dem1d(ix(1)),facet1d(ix(1)),distToCoast1d(ix(1)),layerMask1d(ix(1)),topoPosition1d(ix(1)),char(stationId));
         else %if not valid
             %find the nearest valid point for all attributes
-            nearestValid = find(~isnan(facet1d(ix)) == 1);
+            nearestValid = find((facet1d(ix) > -999) == 1);
 
             %output geophysical attributes to station file
             fprintf(sidOut,'%s, %9.5f, %11.5f, %7.2f, %d, %8.3f, %d, %8.3f, %s\n',char(stationId),station.lat(i),station.lon(i),...

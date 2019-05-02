@@ -24,7 +24,7 @@ function symapWeights = calcSymapWeights(staDist,staAngles,distanceWeightScale,d
 %     P.O. Box 3000
 %     Boulder,CO 80307
 % 
-% Copyright (C) 2019 Andrew Newman
+% Copyright (C) 2019 University Corporation for Atmospheric Research
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

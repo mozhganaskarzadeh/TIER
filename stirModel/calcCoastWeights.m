@@ -40,7 +40,7 @@ function coastWeights = calcCoastWeights(gridDistanceToCoast,stationDistanceToCo
     tiny = 1e-5;
 
     %distance to coast weighting (e.g. Daly et al. 2002)
-    coastWeights = 1.0./(abs(gridDistanceToCoast-stationDistanceToCoast)+tiny).^(coastalExp);
+    coastWeights = 1.0./((abs(gridDistanceToCoast-stationDistanceToCoast)+tiny).^(coastalExp));
     %check for values > 1
     coastWeights(coastWeights>1) = 1.0;
     %normalize weights

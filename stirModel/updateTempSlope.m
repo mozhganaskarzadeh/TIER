@@ -82,35 +82,51 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,recomputeDefaul
     %scattered interpolation using griddata
     interpSlopeLayer1 = griddata(i,j,baseSlope(baseSlope>= minSlope & gridLayer == 1),x2d,y2d,'linear');
     %fill missing values with nearest neighbor
-    interpSlopeLayer1 = fillNaN(interpSlopeLayer1,x2d,y2d);
+    %compatible with octave
+%    interpSlopeLayer1 = fillNaN(interpSlopeLayer1,x2d,y2d);
+    %for Matlab only
+    interpSlopeLayer1 = fillmissing(interpSlopeLayer1,'nearest',1);
+    interpSlopeLayer1 = fillmissing(interpSlopeLayer1,'nearest',2);
     
     %find valid points for layer 2
     [i,j] = find(baseSlope >= minSlope & gridLayer == 2);
     %scattered interpolation using griddata
     interpSlopeLayer2 = griddata(i,j,baseSlope(baseSlope>= minSlope & gridLayer == 2),x2d,y2d,'linear');
     %fill missing values with nearest neighbor
-    interpSlopeLayer2 = fillNaN(interpSlopeLayer2,x2d,y2d);
+    %compatable with octave
+%    interpSlopeLayer2 = fillNaN(interpSlopeLayer2,x2d,y2d);
+    %for Matlab only
+    interpSlopeLayer2 = fillmissing(interpSlopeLayer2,'nearest',1);
+    interpSlopeLayer2 = fillmissing(interpSlopeLayer2,'nearest',2);
     
     %define gaussian low-pass filter
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);
 
-    %filter layer 1
-    filterSlopeLayer1 = imfilter(interpSlopeLayer1,gFilter,'circular');
+%    %filter layer 1
+%    filterSlopeLayer1 = imfilter(interpSlopeLayer1,gFilter,'circular');
+    
+    %filter the combined field
+    filterSlope = interpSlopeLayer1;
+    filterSlope(gridLayer == 2) = interpSlopeLayer2(gridLayer == 2);
+
+    filterSlope = imfilter(filterSlope,gFilter,'circular');
 
     %check for invalid slopes
+    filterSlopeLayer1 = filterSlope;
     filterSlopeLayer1(filterSlopeLayer1 > maxSlopeLower) = maxSlopeLower;
     filterSlopeLayer1(filterSlopeLayer1 < minSlope) = minSlope;
     %set unused points to missing
-    filterSlopeLayer1(mask<0) = -999;
+    filterSlopeLayer1(mask<=0) = -999;
     
-    %filter layer 2
-    filterSlopeLayer2 = imfilter(interpSlopeLayer2,gFilter,'circular');
+%    %filter layer 2
+%    filterSlopeLayer2 = imfilter(interpSlopeLayer2,gFilter,'circular');
 
     %check for invalid slopes
+    filterSlopeLayer2 = filterSlope;
     filterSlopeLayer2(filterSlopeLayer2 > maxSlopeUpper) = maxSlopeUpper;
     filterSlopeLayer2(filterSlopeLayer2 < minSlope) = minSlope;
     %set unused points to missing
-    filterSlopeLayer2(mask<0) = -999;
+    filterSlopeLayer2(mask<=0) = -999;
     
     %combine the two layer estimates into one complete grid
     finalSlope = filterSlopeLayer1;

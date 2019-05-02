@@ -53,8 +53,6 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
 %   defaultSlope, float    , default slope for current grid point
 %   gridLayer   , float    , grid point layer in conceptual two-layer
 %                            atmosphere (Daly et al. 2002)
-%   defaultSlope, float    , default normalized precipitation slope at
-%                            current grid point as current grid point
 %   finalWeights,       float, station weights for nearby stations
 %   finalWeightsFacet, float, station weights for nearby stations on same
 %                              slope Facet

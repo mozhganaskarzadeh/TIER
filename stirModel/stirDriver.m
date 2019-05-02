@@ -48,7 +48,8 @@ parameters = readParameters(controlVars.parameterFile,parameters);
 
 %read grid file
 grid = readGrid(controlVars.gridName);
-    
+grid.smoothDemKM = grid.smoothDem/1000;
+
 %allocate space for output variables
 metGrid = allocateMetVars(grid.nr,grid.nc);
 
@@ -74,6 +75,9 @@ if(~isempty(controlVars.defaultTempLapse))
     tempDefaultLapse(tempDefaultLapse < parameters.minSlope) = parameters.minSlope;
     tempDefaultLapse(tempDefaultLapse > parameters.maxSlopeLower & grid.layerMask == 1) = parameters.maxSlopeLower;
     tempDefaultLapse(tempDefaultLapse > parameters.maxSlopeUpper & grid.layerMask == 2) = parameters.maxSlopeUpper;
+
+    %set metGrid default slope to QC'ed spatial lapse 
+    metGrid.defaultSlope = tempDefaultLapse;
 end
 
 
@@ -120,7 +124,7 @@ for y = 1:grid.nr
             %compute first pass met field on grid
             if(strcmpi(controlVars.variableEstimated,'precip'))
                 %compute met fields at current grid point for precipitation
-                metPoint = calcPrecip(parameters,grid.dem(y,x),parameters.defaultSlope,finalWeights.near,finalWeights.facet,...
+                metPoint = calcPrecip(parameters,grid.smoothDemKM(y,x),parameters.defaultSlope,finalWeights.near,finalWeights.facet,...
                                       symapWeights.near,inputStations.meta.elev(nearStations.nearStationInds),inputStations.meta.elev(nearStations.facetStationInds),...
                                       inputStations.avgVar(nearStations.nearStationInds),inputStations.avgVar(nearStations.facetStationInds));
                                   
@@ -131,7 +135,7 @@ for y = 1:grid.nr
                 
             elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.variableEstimated,'tmin'))
                 %compute met fields at current grid point for temperature
-                metPoint = calcTemp(parameters,grid.dem(y,x),tempDefaultLapse(y,x),grid.layerMask(y,x),finalWeights.near,finalWeights.facet,...
+                metPoint = calcTemp(parameters,grid.smoothDemKM(y,x),tempDefaultLapse(y,x),grid.layerMask(y,x),finalWeights.near,finalWeights.facet,...
                                       symapWeights.near,inputStations.meta.elev(nearStations.nearStationInds),inputStations.meta.elev(nearStations.facetStationInds),...
                                       inputStations.avgVar(nearStations.nearStationInds),inputStations.avgVar(nearStations.facetStationInds));
             end
@@ -159,11 +163,18 @@ if(strcmpi(controlVars.variableEstimated,'precip'))
     
     %compute final field value
     %feather precipitation generally following Daly et al. (1994)
-    metGrid.finalField = featherPrecip(parameters,grid.nr,grid.nc,grid.dx,grid.dem,grid.mask,finalNormSlope,metGrid.baseInterpField,metGrid.baseInterpElev);
+%    metGrid.finalField = featherPrecip(parameters,grid.nr,grid.nc,grid.dx,grid.dem,grid.mask,finalNormSlope,...
+%                                       metGrid.baseInterpField,metGrid.baseInterpElev);
+    metGrid.finalField = featherPrecip(parameters,grid.nr,grid.nc,grid.dx,grid.smoothDemKM,grid.mask,finalNormSlope,...
+                                       metGrid.baseInterpField,metGrid.baseInterpElev);
     
     %compute final uncertainty estimate
-%    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,metGrid.baseInterpUncert,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
-    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,grid.dem,metGrid.baseInterpUncert,metGrid.baseInterpElev,metGrid.normSlopeUncert,metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
+%    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,metGrid.baseInterpUncert,metGrid.normSlopeUncert,...
+%                                metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
+%    finalUncert = calcFinalPrecipUncert(grid,metGrid.baseInterpUncert,metGrid.baseInterpElev,metGrid.normSlopeUncert,...
+%                                metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
+    finalUncert = calcFinalPrecipUncert(grid,metGrid.baseInterpUncert,metGrid.baseInterpElev,metGrid.normSlopeUncert,...
+                                metGrid.baseInterpField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
     
     %set metGrid variables
     metGrid.finalSlope = finalNormSlope.*metGrid.finalField;
@@ -181,10 +192,10 @@ elseif(strcmpi(controlVars.variableEstimated,'tmax') || strcmpi(controlVars.vari
                                  parameters.filterSpread);
 
     %compute final field estimate
-    metGrid.finalField = calcFinalTemp(grid.dem,grid.mask,metGrid.baseInterpElev,metGrid.baseInterpField,metGrid.finalSlope);
+    metGrid.finalField = calcFinalTemp(grid.smoothDemKM,grid.mask,metGrid.baseInterpElev,metGrid.baseInterpField,metGrid.finalSlope);
     
     %compute final uncertainty estimate
-    finalUncert = calcFinalTempUncert(grid.nr,grid.nc,grid.mask,grid.dem,metGrid.baseInterpUncert,metGrid.baseInterpElev,metGrid.slopeUncert,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
+    finalUncert = calcFinalTempUncert(grid,metGrid.baseInterpUncert,metGrid.baseInterpElev,metGrid.slopeUncert,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
 
     %set metGrid variables
     metGrid.totalUncert = finalUncert.totalUncert;

@@ -27,28 +27,28 @@ function finalWeights = calcFinalWeights(varEstimated,symapWeights,coastWeights,
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This program is free software: you can redistribute it and/or modify
+% This file is part of STIR.
+%
+% STIR is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% This program is distributed in the hope that it will be useful,
+% STIR is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <https://www.gnu.org/licenses/>.
+% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
 %
 
     %inversion layer and topographic position weighting (layerWeights 
     %and topoPosition) not used for precipitation
     if(strcmpi(varEstimated,'precip'))
-%        finalWeights = symapWeights.*coastWeights;
-        finalWeights = symapWeights+coastWeights;
+        finalWeights = symapWeights.*coastWeights;
     elseif(strcmpi(varEstimated,'tmax') || strcmpi(varEstimated,'tmin'))
-        finalWeights = symapWeights+coastWeights+topoPositionWeights+layerWeights;
-%        finalWeights = symapWeights.*coastWeights.*topoPositionWeights.*layerWeights;
+        finalWeights = symapWeights.*coastWeights.*topoPositionWeights.*layerWeights;
     else
         error('Unrecognized variable: %s',varEstimated);
     end

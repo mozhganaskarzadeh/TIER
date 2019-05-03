@@ -35,18 +35,20 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,recomputeDefaul
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This program is free software: you can redistribute it and/or modify
+% This file is part of STIR.
+%
+% STIR is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% This program is distributed in the hope that it will be useful,
+% STIR is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <https://www.gnu.org/licenses/>.
+% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
 %
 
 
@@ -101,9 +103,6 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,recomputeDefaul
     
     %define gaussian low-pass filter
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);
-
-%    %filter layer 1
-%    filterSlopeLayer1 = imfilter(interpSlopeLayer1,gFilter,'circular');
     
     %filter the combined field
     filterSlope = interpSlopeLayer1;
@@ -118,9 +117,6 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,recomputeDefaul
     %set unused points to missing
     filterSlopeLayer1(mask<=0) = -999;
     
-%    %filter layer 2
-%    filterSlopeLayer2 = imfilter(interpSlopeLayer2,gFilter,'circular');
-
     %check for invalid slopes
     filterSlopeLayer2 = filterSlope;
     filterSlopeLayer2(filterSlopeLayer2 > maxSlopeUpper) = maxSlopeUpper;

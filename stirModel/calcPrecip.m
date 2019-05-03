@@ -71,18 +71,20 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This program is free software: you can redistribute it and/or modify
+% This file is part of STIR.
+%
+% STIR is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% This program is distributed in the hope that it will be useful,
+% STIR is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <https://www.gnu.org/licenses/>.
+% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
 %
     %define tiny
     tiny = 1e-15;
@@ -300,8 +302,8 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
                 metPoint.normSlopeUncert = std(combSlp);
             end
         end
-
-    elseif(length(stationVarFacet) == 1)  %only one station within range on Facet - revert to nearest with default slope
+    %only one station within range on Facet - revert to nearest with default slope
+    elseif(length(stationVarFacet) == 1)  
 
         linFit(1) = defaultSlope*metPoint.baseInterpField;
         linFit(2) = metPoint.baseInterpField;
@@ -310,8 +312,8 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
         metPoint.slope     = linFit(1);
         metPoint.intercept = linFit(2);
         metPoint.normSlope = linFit(1)/metPoint.baseInterpField;
-
-    elseif(length(stationVarFacet) < nMinNear && ~isempty(stationVarFacet))  %less than nMinNear stations within range - attempt regression anyway
+    %less than nMinNear stations within range - attempt regression anyway
+    elseif(length(stationVarFacet) < nMinNear && ~isempty(stationVarFacet))  
 
         linFit = calcWeightedRegression(stationElevFacet,stationVarFacet,finalWeightsFacet);
 

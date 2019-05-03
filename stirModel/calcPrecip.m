@@ -300,8 +300,8 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
                 metPoint.normSlopeUncert = std(combSlp);
             end
         end
-
-    elseif(length(stationVarFacet) == 1)  %only one station within range on Facet - revert to nearest with default slope
+    %only one station within range on Facet - revert to nearest with default slope
+    elseif(length(stationVarFacet) == 1)  
 
         linFit(1) = defaultSlope*metPoint.baseInterpField;
         linFit(2) = metPoint.baseInterpField;
@@ -310,8 +310,8 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
         metPoint.slope     = linFit(1);
         metPoint.intercept = linFit(2);
         metPoint.normSlope = linFit(1)/metPoint.baseInterpField;
-
-    elseif(length(stationVarFacet) < nMinNear && ~isempty(stationVarFacet))  %less than nMinNear stations within range - attempt regression anyway
+    %less than nMinNear stations within range - attempt regression anyway
+    elseif(length(stationVarFacet) < nMinNear && ~isempty(stationVarFacet))  
 
         linFit = calcWeightedRegression(stationElevFacet,stationVarFacet,finalWeightsFacet);
 

@@ -146,7 +146,6 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
     if(length(stationElevFacet) >= nMinNear)
         %create weighted linear regression relationship
         linFit = calcWeightedRegression(stationElevFacet,stationVarFacet,finalWeightsFacet);
-  
 
         %Run through station combinations and find outliers to see if we
         %can get a valid met var - elevation slope

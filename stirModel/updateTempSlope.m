@@ -101,9 +101,6 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,recomputeDefaul
     
     %define gaussian low-pass filter
     gFilter = fspecial('gaussian',[filterSize filterSize],filterSpread);
-
-%    %filter layer 1
-%    filterSlopeLayer1 = imfilter(interpSlopeLayer1,gFilter,'circular');
     
     %filter the combined field
     filterSlope = interpSlopeLayer1;
@@ -118,9 +115,6 @@ function finalSlope = updateTempSlope(nr,nc,mask,gridLayer,slope,recomputeDefaul
     %set unused points to missing
     filterSlopeLayer1(mask<=0) = -999;
     
-%    %filter layer 2
-%    filterSlopeLayer2 = imfilter(interpSlopeLayer2,gFilter,'circular');
-
     %check for invalid slopes
     filterSlopeLayer2 = filterSlope;
     filterSlopeLayer2(filterSlopeLayer2 > maxSlopeUpper) = maxSlopeUpper;

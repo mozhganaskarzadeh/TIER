@@ -44,11 +44,9 @@ function finalWeights = calcFinalWeights(varEstimated,symapWeights,coastWeights,
     %inversion layer and topographic position weighting (layerWeights 
     %and topoPosition) not used for precipitation
     if(strcmpi(varEstimated,'precip'))
-%        finalWeights = symapWeights.*coastWeights;
-        finalWeights = symapWeights+coastWeights;
+        finalWeights = symapWeights.*coastWeights;
     elseif(strcmpi(varEstimated,'tmax') || strcmpi(varEstimated,'tmin'))
-        finalWeights = symapWeights+coastWeights+topoPositionWeights+layerWeights;
-%        finalWeights = symapWeights.*coastWeights.*topoPositionWeights.*layerWeights;
+        finalWeights = symapWeights.*coastWeights.*topoPositionWeights.*layerWeights;
     else
         error('Unrecognized variable: %s',varEstimated);
     end

@@ -152,17 +152,12 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
                         %update precipitation and slope values
                         tmpPrecip(y-lowInd+1,x) = tmpPtPrecip;
                         tmpNormSlope(y-lowInd+1,x) = tmpPtSlope;
-                  %      final_slp_act(y-low_ind+1,x)
-                    end      
-                   %  if(y==623 && x==652)
-                   %     [1 ew_grad final_pcp(y-low_ind+1,x) final_slp_act(y-low_ind+1,x) ]
-                   % end
+                    end %end temporary slope check if statement 
+                    
                     %increment counter tracking number of point
                     %modifications
                     numgridModified = numgridModified + 1;
-                %    final_pcp(y,x)
-
-                end
+                end %end precipitation gradient check
                 
                 %North-South second using updated precipitation and slope 
                 %if the East-West gradient feathering changed things

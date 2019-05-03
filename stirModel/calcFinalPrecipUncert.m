@@ -130,7 +130,6 @@ function finalUncert = calcFinalPrecipUncert(grid,baseInterpUncert,baseInterpEle
 
     %set novalid gridpoints to missing 
     finalBaseInterpUncert(grid.mask<=0) = -999;
-    finalSlopeUncert(grid.mask<=0) = -999;
     finalUncert.totalUncert(grid.mask<=0) = -999;
     finalUncert.relativeUncert(grid.mask<=0) = -999;
 

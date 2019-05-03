@@ -86,8 +86,6 @@ end
 for y = 1:grid.nr
     fprintf(1,'Row: %d of %d\n',y,grid.nr);
     for x = 1:grid.nc
-%for y = 55
-%    for x = 66
         if(grid.mask(y,x) > 0)
             %find nearby stations to current grid point
             nearStations = getNearStations(inputStations.meta.lat,inputStations.meta.lon,inputStations.meta.facet,grid.lat(y,x),...
@@ -163,16 +161,10 @@ if(strcmpi(controlVars.variableEstimated,'precip'))
     
     %compute final field value
     %feather precipitation generally following Daly et al. (1994)
-%    metGrid.finalField = featherPrecip(parameters,grid.nr,grid.nc,grid.dx,grid.dem,grid.mask,finalNormSlope,...
-%                                       metGrid.baseInterpField,metGrid.baseInterpElev);
     metGrid.finalField = featherPrecip(parameters,grid.nr,grid.nc,grid.dx,grid.smoothDemKM,grid.mask,finalNormSlope,...
                                        metGrid.baseInterpField,metGrid.baseInterpElev);
     
     %compute final uncertainty estimate
-%    finalUncert = calcFinalPrecipUncert(grid.nr,grid.nc,grid.mask,metGrid.baseInterpUncert,metGrid.normSlopeUncert,...
-%                                metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
-%    finalUncert = calcFinalPrecipUncert(grid,metGrid.baseInterpUncert,metGrid.baseInterpElev,metGrid.normSlopeUncert,...
-%                                metGrid.finalField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
     finalUncert = calcFinalPrecipUncert(grid,metGrid.baseInterpUncert,metGrid.baseInterpElev,metGrid.normSlopeUncert,...
                                 metGrid.baseInterpField,parameters.filterSize,parameters.filterSpread,parameters.covWindow);
     

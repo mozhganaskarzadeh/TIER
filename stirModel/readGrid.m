@@ -1,6 +1,6 @@
-function grid = readRawGrid(gridName)
+function grid = readGrid(gridName)
 % 
-%% readRawGrid reads a netcdf grid file for the STIR preprocessing code
+%% readGrid reads a netcdf grid file for the STIR code
 % STIR - Simple Topographically Informed Regression
 %
 % Arguments:
@@ -11,7 +11,8 @@ function grid = readRawGrid(gridName)
 %
 % Output:
 %
-%  grid, structure, structure holding DEM and related variables
+%  grid, structure, structure holding DEM, geophysical attributes
+%                   and related variables
 %
 % Author: Andrew Newman, NCAR/RAL
 % Email : anewman@ucar.edu
@@ -36,7 +37,7 @@ function grid = readRawGrid(gridName)
 % You should have received a copy of the GNU General Public License
 % along with STIR.  If not, see <https://www.gnu.org/licenses/>.
 %
-
+ 
     %read latitude and longitude
     grid.lat = ncread(gridName,'latitude');
     grid.lon = ncread(gridName,'longitude');
@@ -68,7 +69,22 @@ function grid = readRawGrid(gridName)
     grid.mask = ncread(gridName,'mask');
     %read DEM
     grid.dem = ncread(gridName,'elev');
+    %read smoothed DEM
+    grid.smoothDem = ncread(gridName,'smooth_elev');
+    %read distance to coast
+    grid.distToCoast = ncread(gridName,'dist_to_coast');
+    %read inversion layer
+    grid.layerMask = ncread(gridName,'inversion_layer');
+    %read topographic position
+    grid.topoPosition = ncread(gridName,'topo_position');
 
+    %convert DEM to km
+    grid.dem = grid.dem/1000.0;
+
+    %read slope facet
+    grid.facet = ncread(gridName,'facet');
+    %double check missing data points, reset very low DEM values to missing
+    grid.facet(grid.dem < -100) = -999;
 
     %set grid size variables
     [grid.nr,grid.nc] = size(grid.lat);

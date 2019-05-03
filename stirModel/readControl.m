@@ -1,6 +1,6 @@
-function controlVars = readPreprocessControl(controlName)
+function controlVars = readControl(controlName)
 %
-%% readPreprocessControl reads a text control file for STIR preprocessing
+%% readControl reads a text control file for STIR
 % STIR - Simple Topographically Informed Regression
 %
 % Arguments:
@@ -11,8 +11,8 @@ function controlVars = readPreprocessControl(controlName)
 %
 % Output:
 % 
-%  controlVars, structure, stucture holding all preprocessing control variables
-%
+%  controlVars, structure, stucture holding all control variables
+%                           
 % Author: Andrew Newman, NCAR/RAL
 % Email : anewman@ucar.edu
 % Postal address:
@@ -48,20 +48,20 @@ function controlVars = readPreprocessControl(controlName)
     for i = 1:length(data{1})
         %test string name and place in appropriate named variable
         switch(strtrim(char(data{1}(i))))
-            case 'rawGridName'
+            case 'gridName'
                 controlVars.gridName = strtrim(char(data{2}(i)));
-            case 'outputGridName'
+            case 'stationFileList'
+                controlVars.stationFileList = strtrim(char(data{2}(i)));
+            case 'stationDataPath'
+                controlVars.stationDataPath = strtrim(char(data{2}(i)));
+            case 'outputName'
                 controlVars.outputName = strtrim(char(data{2}(i)));
-            case 'preprocessParameterFile'
+            case 'parameterFile'
                 controlVars.parameterFile = strtrim(char(data{2}(i)));
-            case 'stationPrecipPath'
-                controlVars.stationPrecipPath = strtrim(char(data{2}(i)));
-            case 'stationTempPath'
-                controlVars.stationTempPath = strtrim(char(data{2}(i)));
-            case 'stationPrecipListName'
-                controlVars.stationPrecipListName = strtrim(char(data{2}(i)));
-            case 'stationTempListName'
-                controlVars.stationTempListName = strtrim(char(data{2}(i)));
+            case 'variableEstimated'
+                controlVars.variableEstimated = strtrim(char(data{2}(i)));
+            case 'defaultTempLapse'
+                controlVars.defaultTempLapse = strtrim(char(data{2}(i)));
             otherwise
                 %throw error if unknown string
                 error('Unknown control file option: %s',char(data{1}(i)));

@@ -6,10 +6,6 @@ function parameters = readPreprocessParameters(parameterFile,parameters)
 %
 % STIR - Simple Topographically Informed Regression
 %
-%
-% Author:  Andrew Newman, NCAR/RAL
-% Email:   anewman@ucar.edu
-%
 % Arguments:
 %
 % Input:
@@ -20,6 +16,29 @@ function parameters = readPreprocessParameters(parameterFile,parameters)
 % Output:
 %
 %  parameters, structure, structure holding all STIR preprocessing parameters
+%
+% Author: Andrew Newman, NCAR/RAL
+% Email : anewman@ucar.edu
+% Postal address:
+%     P.O. Box 3000
+%     Boulder,CO 80307
+% 
+% Copyright (C) 2019 University Corporation for Atmospheric Research
+%
+% This file is part of STIR.
+%
+% STIR is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% STIR is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
 %
 
     %open parameter file
@@ -51,9 +70,6 @@ function parameters = readPreprocessParameters(parameterFile,parameters)
             case('narrowFlatRatio')
                 %ratio of major/minor axes to merge flat regions (i.e. ridges)
                 parameters.narrowFlatRatio = str2double(strtrim(data{2}(i)));
-            case('coastSearchLength')
-                %search length (km) to compute distance to coast for a pixel (if pixel is more than coastSearchLen pixels from coast, set distance to coastSearchLength)
-                parameters.coastSearchLength = str2double(strtrim(data{2}(i)));
             case('layerSearchLength')
                 %search length (grid cells) to determine local minima in elevation
                 parameters.layerSearchLength = str2double(strtrim(data{2}(i)));

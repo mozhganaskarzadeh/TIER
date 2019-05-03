@@ -1,14 +1,18 @@
-function parameters = initPreprocessParameters()
+function coastWeights = calcCoastWeights(gridDistanceToCoast,stationDistanceToCoast,coastalExp)
 %
-%% initPreprocessParameters initalizes STIR parameters to defaults
-% STIR - Simple Topographically Informed Regression
+%% calcCoastWeights computes weights for stations as compared to the 
+%  current grid point based on the differences in coastal distance
 %
 % Arguments:
 %
+%  Input:
+%
+%   gridDistanceToCoast, float, distance to coast of current grid point
+%   stationDistanceToCoast, float, distance to coast for nearby stations
+%
 %  Output:
 %   
-%   parameters, structure, structure holding all STIR preprocessing 
-%   parameters
+%   coastWeights, float, vector holding coastal weights for nearby stations
 %
 % Author: Andrew Newman, NCAR/RAL
 % Email : anewman@ucar.edu
@@ -33,17 +37,15 @@ function parameters = initPreprocessParameters()
 % You should have received a copy of the GNU General Public License
 % along with STIR.  If not, see <https://www.gnu.org/licenses/>.
 %
-%
 
-    %initialize all parameters to initial default value
-    parameters.demFilterName = 'Daly';          %string
-    parameters.demFilterPasses = 80;            %number
-    parameters.minGradient = 0.003;             %km/km
-    parameters.smallFacet = 500;                %km^2
-    parameters.smallFlat = 1000;                %km^2
-    parameters.narrowFlatRatio = 3.1;           %ratio
-    parameters.coastSearchLength = 200;         %km
-    parameters.layerSearchLength = 10;          %grid cells
-    parameters.inversionHeight = 250;           %m
+    %define a tiny float
+    tiny = 1e-5;
 
-end            
+    %distance to coast weighting (e.g. Daly et al. 2002)
+    coastWeights = 1.0./((abs(gridDistanceToCoast-stationDistanceToCoast)+tiny).^(coastalExp));
+    %check for values > 1
+    coastWeights(coastWeights>1) = 1.0;
+    %normalize weights
+    coastWeights = coastWeights./sum(coastWeights);
+
+end

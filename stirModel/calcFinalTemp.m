@@ -1,14 +1,24 @@
-function parameters = initPreprocessParameters()
+function finalTemp = calcFinalTemp(dem,mask,baseInterpElev,baseInterpTemp,finalSlope)
 %
-%% initPreprocessParameters initalizes STIR parameters to defaults
-% STIR - Simple Topographically Informed Regression
+%% calFinalTemp computes the final temperature grid after all adjustments
 %
 % Arguments:
 %
-%  Output:
-%   
-%   parameters, structure, structure holding all STIR preprocessing 
-%   parameters
+%  Inputs:
+%
+%   dem,  float  , grid dem
+%   mask, integer, mask of valid grid points
+%
+%   baseInterpElev, float, elevation of baseInterp weighted stations for baseInterp
+%                     estimate
+%   baseInterpTemp, float, baseInterp estimated temperature
+%   finaSlope, float, grid of final slope estimates after any previous 
+%                     adjustments 
+%
+%  Outputs:
+%
+%   finalTemp, structure, structure containing the final temperature
+%                         estimate across the grid
 %
 % Author: Andrew Newman, NCAR/RAL
 % Email : anewman@ucar.edu
@@ -33,17 +43,10 @@ function parameters = initPreprocessParameters()
 % You should have received a copy of the GNU General Public License
 % along with STIR.  If not, see <https://www.gnu.org/licenses/>.
 %
-%
 
-    %initialize all parameters to initial default value
-    parameters.demFilterName = 'Daly';          %string
-    parameters.demFilterPasses = 80;            %number
-    parameters.minGradient = 0.003;             %km/km
-    parameters.smallFacet = 500;                %km^2
-    parameters.smallFlat = 1000;                %km^2
-    parameters.narrowFlatRatio = 3.1;           %ratio
-    parameters.coastSearchLength = 200;         %km
-    parameters.layerSearchLength = 10;          %grid cells
-    parameters.inversionHeight = 250;           %m
+    %compute final temp using all finalized estimates
+    finalTemp = finalSlope.*(dem-baseInterpElev) + baseInterpTemp;
+    %set unused grid points to missing
+    finalTemp(mask<0) = -999;
 
-end            
+end

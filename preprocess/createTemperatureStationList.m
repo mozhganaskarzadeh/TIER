@@ -1,6 +1,6 @@
-function createPrecipitationStationList(controlVars,grid)
+function createTemperatureStationList(controlVars,grid)
 %
-%% createPrecipitationStationList creates the precipitation station list 
+%% createTemperatureStationList creates the temperature station list 
 % used in STIR processing
 % STIR - Simple Topographically Informed Regression
 %
@@ -40,8 +40,9 @@ function createPrecipitationStationList(controlVars,grid)
 %
 %
  
+
     %print status
-    fprintf(1,'Compiling precipitation station list\n');
+    fprintf(1,'Compiling temperature station list\n');
     
     %define local variables
     nr = grid.nr;
@@ -51,26 +52,26 @@ function createPrecipitationStationList(controlVars,grid)
     %transform grid to 1-d arrays for computational convenience
     lon1d = reshape(grid.lon,[nr*nc 1]);
     lat1d = reshape(grid.lat,[nr*nc 1]);
-    dem1d = reshape(grid.aspects.smoothDEM,[nr*nc 1]);
     facet1d = reshape(grid.aspects.facets,[nr*nc 1]);
     distToCoast1d = reshape(grid.distToCoast,[nr*nc 1]);
     layerMask1d = reshape(grid.positions.layerMask,[nr*nc 1]);
     topoPosition1d = reshape(grid.positions.topoPosition,[nr*nc 1]);
 
     %create list of stations in directory
-    listString = sprintf('%s/*.nc',controlVars.stationPrecipPath);
+    listString = sprintf('%s/*.nc',controlVars.stationTempPath);
     fileList = dir(listString);
     %number of stations
     nSta = length(fileList);
-    %read lat,lon from station timeseries file
+    %read lat,lon,elevation from station timeseries file
     for f = 1:nSta
-        stationName = sprintf('%s/%s',controlVars.stationPrecipPath,fileList(f).name);
+        stationName = sprintf('%s/%s',controlVars.stationTempPath,fileList(f).name);
         station.lat(f) = ncread(stationName,'latitude');
         station.lon(f) = ncread(stationName,'longitude');
+        station.elev(f) = ncread(stationName,'elevation');
     end
 
     %open output station list file
-    sidOut = fopen(controlVars.stationPrecipListName,'w');
+    sidOut = fopen(controlVars.stationTempListName,'w');
 
     %print header to output file
     fprintf(sidOut,'NSITES %d\n',nSta);
@@ -80,21 +81,22 @@ function createPrecipitationStationList(controlVars,grid)
     %attributes
     for i = 1:nSta
         stationId = strtok(fileList(i).name(),'.');
+    %for i = 150
         %compute distances and indices of nearest grid points
         [~,ix] = sort(sqrt((lat1d-station.lat(i)).^2 + (lon1d-station.lon(i)).^2));
 
         %if nearest grid point is valid
-        if(facet1d(ix(1)) > -999)
+        if(~isnan(facet1d(ix(1))))
             %output geophysical attributes to station file
             fprintf(sidOut,'%s, %9.5f, %11.5f, %7.2f, %d, %8.3f, %d, %8.3f, %s\n',char(stationId),station.lat(i),station.lon(i),...
-                             dem1d(ix(1)),facet1d(ix(1)),distToCoast1d(ix(1)),layerMask1d(ix(1)),topoPosition1d(ix(1)),char(stationId));
+                             station.elev(i),facet1d(ix(1)),distToCoast1d(ix(1)),layerMask1d(ix(1)),topoPosition1d(ix(1)),char(stationId));
         else %if not valid
             %find the nearest valid point for all attributes
-            nearestValid = find((facet1d(ix) > -999) == 1);
+            nearestValid = find(~isnan(facet1d(ix)) == 1);
 
             %output geophysical attributes to station file
             fprintf(sidOut,'%s, %9.5f, %11.5f, %7.2f, %d, %8.3f, %d, %8.3f, %s\n',char(stationId),station.lat(i),station.lon(i),...
-                            dem1d(ix(nearestValid(1))),facet1d(ix(nearestValid(1))),distToCoast1d(ix(nearestValid(1))),...
+                            station.elev(i),facet1d(ix(nearestValid(1))),distToCoast1d(ix(nearestValid(1))),...
                             layerMask1d(ix(nearestValid(1))),topoPosition1d(ix(nearestValid(1))),char(stationId));     
         end
     end

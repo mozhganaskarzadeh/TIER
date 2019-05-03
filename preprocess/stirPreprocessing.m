@@ -23,11 +23,30 @@
 
 % 3) If the user desires a spatailly variable default lapse rate (right now
 %    for temperature only) that needs to be provided as well in a netcdf 
-%    file. The user can again follow provided the example data set.
+%    file. The user can again follow the provided example data set.
 %
-% Author: Andrew Newman NCAR/RAL
+% Author: Andrew Newman, NCAR/RAL
 % Email : anewman@ucar.edu
+% Postal address:
+%     P.O. Box 3000
+%     Boulder,CO 80307
+% 
+% Copyright (C) 2019 University Corporation for Atmospheric Research
 %
+% This file is part of STIR.
+%
+% STIR is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% STIR is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
 %
 
 %User determines the controlName
@@ -37,7 +56,7 @@ controlName = input('Enter the name of your control file: ', 's');
 controlVars = readPreprocessControl(controlName);
 
 %initialize parameter structure to default values
-parameters = initParameters(controlVars.parameterFile);
+parameters = initPreprocessParameters();
 
 %read preprocessing parameters file
 parameters = readPreprocessParameters(controlVars.parameterFile,parameters);
@@ -48,24 +67,32 @@ grid = readRawGrid(controlVars.gridName);
 %set output grid
 outGrid = grid;
 
-%create topographic aspects (integer numbers) (e.g. Daly et al. 1994)
+%create topographic gradients and facets(integer numbers) (e.g. Daly et al. 1994)
 outGrid.aspects = calcTopoAspects(grid,parameters);
 
-%calculate distance to coastline (km) (e.g. Daly et al. 2002)
-outGrid.distToCoast = calcDistToCoast(grid,parameters.coastSearchLength);
+%calculate distance to coastline (km) (e.g. Daly et al. 2002,2008)
+outGrid.distToCoast = calcDistToCoast(grid);
 
 %calculate two-layer atmospheric position (layer 1 or 2) and the
-% topographic position (m) (e.g. Daly et al. 2002)
+% topographic position (m) (e.g. Daly et al. 2002,2008)
 outGrid.positions = calcPositions(grid,parameters.layerSearchLength,parameters.inversionHeight);
 
 %output to processed grid file
 outputGrid(controlVars,outGrid);
 
-
 %create station list files for input to main STIR program
 %precipitation
-
+createPrecipitationStationList(controlVars,outGrid);
 
 %temperature
+createTemperatureStationList(controlVars,outGrid);
+
+%required preprocessing steps complete
+
+%Optional
+%  Users could add preprocessing for spatially distributed lapse rates. The
+%  STIR release contains an example temperature lapse rate grid, but leaves
+%  the generation as an excercise for the user.
+
 
 

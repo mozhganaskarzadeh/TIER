@@ -13,7 +13,7 @@ function layerWeights = calcLayerWeights(gridLayer,gridElev,stationLayer,station
 %   gridElev, float, grid elevation for current grid point
 %   stationLayer, integer, layer of nearby stations
 %   stationElev, float, elevation of nearby stations
-%   layerExp, float, STIR parameter; exponent in weighting function
+%   layerExp, float, TIER parameter; exponent in weighting function
 %
 %  Output:
 %   
@@ -27,20 +27,20 @@ function layerWeights = calcLayerWeights(gridLayer,gridElev,stationLayer,station
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This file is part of STIR.
+% This file is part of TIER.
 %
-% STIR is free software: you can redistribute it and/or modify
+% TIER is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% STIR is distributed in the hope that it will be useful,
+% TIER is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
+% along with TIER.  If not, see <https://www.gnu.org/licenses/>.
 %
 
     %define a tiny float

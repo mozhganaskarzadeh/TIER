@@ -1,17 +1,17 @@
-# STIR output netcdf file
+# TIER output netcdf file
 
-The STIR model will create a netcdf-4 output file.  This file contains the final distributed metorological field along with uncertainty estimates, and many intermediate variables that may (or may not) be of interest to the user.
+The TIER model will create a netcdf-4 output file.  This file contains the final distributed metorological field along with uncertainty estimates, and many intermediate variables that may (or may not) be of interest to the user.
 
 The key output variables are:
 
 * **finalField**: This is the final spatially distributed meteorological field
-* **totalUncert**:  This is the total estimated uncertainty from the STIR model in physical units (mm or K).  The total uncertainty is a combination of the base SYMAP interpolation and the elevation-slope uncertainty with an accounting for spatial covariance between the two components.
+* **totalUncert**:  This is the total estimated uncertainty from the TIER model in physical units (mm or K).  The total uncertainty is a combination of the base SYMAP interpolation and the elevation-slope uncertainty with an accounting for spatial covariance between the two components.
 * **relUncert**:  This is the relative uncertainty.
 * **symapUncert**:  This is the estimated uncertainty from the base SYMAP spatial interpolation in physical units (mm or K).
-* **slopeUncert**:  This is the estimated uncertainty from the STIR elevation-slope weighted regression in physical units (mm or K).
+* **slopeUncert**:  This is the estimated uncertainty from the TIER elevation-slope weighted regression in physical units (mm or K).
 
 
-The other fields are intermediate variables that are generated through the various STIR model steps and are briefly described in the following summary of the output file.  Their meaning can also be found throughout the STIR code and in the STIR paper (Newman 2019)
+The other fields are intermediate variables that are generated through the various TIER model steps and are briefly described in the following summary of the output file.  Their meaning can also be found throughout the TIER code and in the TIER paper (Newman 2019)
 
 ```
 netcdf exampleOutput {

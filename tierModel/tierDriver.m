@@ -1,4 +1,4 @@
-%% driver for the Simple Topographically Informed Regression (STIR) tool
+%% driver for the Topographically InformEd Regression (TIER) tool
 
 % this tool is built on the concept that geophyiscal attributes contain
 % information useful to predict the spatial distribution of meteorological
@@ -6,7 +6,7 @@
 % Clark and Slater 2006; Carrera-Hernandez and Gaskin 2007; Tobin et al.
 % 2011; Bardossy and Pegram 2013; Newman et al. 2015).
 
-% A pre-processed DEM file (see stirPreprocessing.m) and input station data
+% A pre-processed DEM file (see tierPreprocessing.m) and input station data
 % are used to create monthly climatological meteorological fields over a
 % domain.  
 %
@@ -18,20 +18,20 @@
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This file is part of STIR.
+% This file is part of TIER.
 %
-% STIR is free software: you can redistribute it and/or modify
+% TIER is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% STIR is distributed in the hope that it will be useful,
+% TIER is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
+% along with TIER.  If not, see <https://www.gnu.org/licenses/>.
 %
 
 
@@ -45,7 +45,7 @@ controlVars = readControl(controlName);
 %initalize parameters to default values
 parameters = initParameters(controlVars.variableEstimated);
 
-%read user defined STIR parameter file
+%read user defined TIER parameter file
 parameters = readParameters(controlVars.parameterFile,parameters);
 
 %read grid file

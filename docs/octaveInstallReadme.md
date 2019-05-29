@@ -1,4 +1,4 @@
-# To run STIR with Octave
+# To run TIER with Octave
 
 ## Install Octave on your local machine
 
@@ -9,7 +9,7 @@
  * Windows: Binaries are available at :https://ftp.gnu.org/gnu/octave/windows/ See: https://wiki.octave.org/Octave_for_Microsoft_Windows for more details
 
 ## Install Packages
-Once Octave is installed properly there are three packages required to run STIR.  These are the mapping, image, and netcdf packages.  These can be installed in Octave using:
+Once Octave is installed properly there are three packages required to run TIER.  These are the mapping, image, and netcdf packages.  These can be installed in Octave using:
 
         pkg install -forge package_name
 
@@ -17,14 +17,14 @@ Once Octave is installed properly there are three packages required to run STIR.
  * Available packages for Octave can be found at: https://octave.sourceforge.io/packages.php
 
 ## Configure Octave
-For each startup the user needs to load the packages and add STIR to your path using addpath before running STIR, or modify ~/.octaverc to contain:
+For each startup the user needs to load the packages and add TIER to your path using addpath before running TIER, or modify ~/.octaverc to contain:
 
         pkg load netcdf
         pkg load mapping
         pkg load image
-        addpath(genpath("path/To/STIR"))
+        addpath(genpath("path/To/TIER"))
 
-## 4) Run STIR
+## 4) Run TIER
 
 
 # Compatibility testing:

@@ -1,7 +1,7 @@
-% STIR preprocessing driver
+% TIER preprocessing driver
 %
-% This is the main preprocessing script to generate the grid and STIR specific 
-% input station list files for input to STIR
+% This is the main preprocessing script to generate the grid and TIER specific 
+% input station list files for input to TIER
 %
 % Three input data requirements not covered in this preprocessing suite:
 %
@@ -33,20 +33,20 @@
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This file is part of STIR.
+% This file is part of TIER.
 %
-% STIR is free software: you can redistribute it and/or modify
+% TIER is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% STIR is distributed in the hope that it will be useful,
+% TIER is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
+% along with TIER.  If not, see <https://www.gnu.org/licenses/>.
 %
 
 %User determines the controlName
@@ -80,7 +80,7 @@ outGrid.positions = calcPositions(grid,parameters.layerSearchLength,parameters.i
 %output to processed grid file
 outputGrid(controlVars,outGrid);
 
-%create station list files for input to main STIR program
+%create station list files for input to main TIER program
 %precipitation
 createPrecipitationStationList(controlVars,outGrid);
 
@@ -91,7 +91,7 @@ createTemperatureStationList(controlVars,outGrid);
 
 %Optional
 %  Users could add preprocessing for spatially distributed lapse rates. The
-%  STIR release contains an example temperature lapse rate grid, but leaves
+%  TIER release contains an example temperature lapse rate grid, but leaves
 %  the generation as an excercise for the user.
 
 

@@ -1,21 +1,21 @@
 function parameters = readParameters(parameterFile,parameters)
 %
-%% readParameters reads a text parameter file for STIR
+%% readParameters reads a text parameter file for TIER
 %  and overrides the default values if parameters are present
 %  in parameter file
 %
-% STIR - Simple Topographically Informed Regression
+% TIER - Topographically InformEd Regression
 %
 % Arguments:
 %
 % Input:
 %
-%  parameterFile, string, the name of the STIR parameter file
-%  parameters, structure, structure holding all STIR parameters
+%  parameterFile, string, the name of the TIER parameter file
+%  parameters, structure, structure holding all TIER parameters
 %
 % Output:
 %
-%  parameters, structure, structure holding all STIR parameters
+%  parameters, structure, structure holding all TIER parameters
 %
 % Author: Andrew Newman, NCAR/RAL
 % Email : anewman@ucar.edu
@@ -25,20 +25,20 @@ function parameters = readParameters(parameterFile,parameters)
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This file is part of STIR.
+% This file is part of TIER.
 %
-% STIR is free software: you can redistribute it and/or modify
+% TIER is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% STIR is distributed in the hope that it will be useful,
+% TIER is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
+% along with TIER.  If not, see <https://www.gnu.org/licenses/>.
 %
 
 

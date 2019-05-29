@@ -14,20 +14,20 @@
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This file is part of STIR.
+% This file is part of TIER.
 %
-% STIR is free software: you can redistribute it and/or modify
+% TIER is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% STIR is distributed in the hope that it will be useful,
+% TIER is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
+% along with TIER.  If not, see <https://www.gnu.org/licenses/>.
 %
 %
 
@@ -58,7 +58,7 @@ tmin = ncread(fname,'TMP_221_SPDY_S113');
 sfcPresTmin = ncread(fname,'PRES_221_HYBL_S113');
 
 %get target domain lat/lon
-fname = sprintf('%s/grid/exampleSTIRGrid.nc',dpath);
+fname = sprintf('%s/grid/exampleTIERGrid.nc',dpath);
 gridLat = ncread(fname,'latitude');
 gridLon = ncread(fname,'longitude');
 %get target domain 2-layer attribute

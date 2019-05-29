@@ -1,7 +1,7 @@
 function controlVars = readPreprocessControl(controlName)
 %
-%% readPreprocessControl reads a text control file for STIR preprocessing
-% STIR - Simple Topographically Informed Regression
+%% readPreprocessControl reads a text control file for TIER preprocessing
+% TIER - Topographically InformEd Regression
 %
 % Arguments:
 %
@@ -21,20 +21,20 @@ function controlVars = readPreprocessControl(controlName)
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This file is part of STIR.
+% This file is part of TIER.
 %
-% STIR is free software: you can redistribute it and/or modify
+% TIER is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% STIR is distributed in the hope that it will be useful,
+% TIER is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
+% along with TIER.  If not, see <https://www.gnu.org/licenses/>.
 %
 
     %open control file

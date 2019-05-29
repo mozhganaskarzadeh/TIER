@@ -2,3 +2,6 @@
 
 #temporary save files
 *~
+
+#sed backup files
+*.bak

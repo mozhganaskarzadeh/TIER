@@ -5,4 +5,4 @@ stationPrecipPath,       /path/to/precipitation/station/data/directory , path to
 stationPrecipListName,   /path/to/precipitation/metadata/output/file   , name of precipitation station list file preprocessing script will create
 stationTempPath,         /path/to/temperature/station/data/directory   , path to temperature station data
 stationTempListName,     /path/to/temperature/metadata/output/file     , name of temperature station list file preprocessing script will create
-preprocessParameterFile, /path/to/stir/preprocessing/parameter/file    , name of STIR preprocessing parameter file
+preprocessParameterFile, /path/to/tier/preprocessing/parameter/file    , name of TIER preprocessing parameter file

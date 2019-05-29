@@ -5,7 +5,7 @@ The TIER tool was motivated by the desire to explore methodological choices in '
 
 The user is encouraged to modify model parameters using the input parameter files for the DEM preprocessing and the statistical mapping algorithm.  The modular design also allows for additional functionality to be added, hopefully with minimal effort.  It is hoped this code base allows for a fuller understanding of the impacts sometimes seemingly small methodological choices have on our final gridded estimates.
 
-It is **_highly_** recommended to read the TIER description paper in GMD (citation to follow).  Also the example tarball at () contains an example input grid, example station data, configuration and parameter files used in the example cases.  These should also then be used as example formats for your own data.
+It is **_highly_** recommended to read the TIER description paper in GMD (Newman and Clark 2019).  Also the example tarball at (https://ral.ucar.edu/solutions/products/the-topographically-informed-regression-tier-model) contains an example input grid, example station data, configuration and parameter files used in the example cases.  These should also then be used as example formats for your own data.
 
 ## Installing the code:
 
@@ -32,5 +32,5 @@ An example case has been developed with example parameter perturbations and outp
 * Daly, C., W. P. Gibson, G. H. Taylor, G. L. Johnson, and P. Pasteris, 2002: A knowledge-based approach to the statistical mapping of climate. Clim. Res. 22: 99–113, doi: 10.3354/cr022099.
 * Daly, C., J. W. Smith, J. I. Smith, and R. B. McKane, 2007: High-resolution spatial modeling of daily weather elements for a catchment in the Oregon Cascade Mountains, United States. J. Appl. Meteorol. Climatol., 46, 1565-1586.
 * Daly, C., M. Halbleib, J. I. Smith, W. P. Gibson, M. K. Doggett, G. H. Taylor, J. Curtis, and P. A. Pasteris, 2008: Physiographically-sensitive mapping of temperature and precipitation across the conterminous United States. Int. J. Climatol. 28: 2031–2064, doi: 10.1002/joc.1688.
-
+* Newman, A. J., and M. P. Clark, 2019: TIER Version 1.0: An open-source Topographically InformEd Regression (TIER) model to estimate spatial meteorological fields. Submitted to Geoscientific Model Development
 

@@ -1,6 +1,6 @@
 function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWeights,finalWeightsFacet,symapWeights,stationElevNear,stationElevFacet,stationVarNear,stationVarFacet)
 %
-%% calcTemp computes the first pass STIR estimate of varEstimated
+%% calcTemp computes the first pass TIER estimate of varEstimated
 %
 % Summary: This algorithm generally follows Daly et al. (1994,2002,2007,2008) and
 % others.  However, here the regression estimated parameters
@@ -18,7 +18,7 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
 
 % Specific modifications/notes for initial temperature implementation 
 % (eq. 2, Daly et al. 2002):
-% 1) Here there are only 4-directional facets and flat (see stirPreprocessing.m for details)
+% 1) Here there are only 4-directional facets and flat (see tierPreprocessing.m for details)
 %    1 = N
 %    2 = E
 %    3 = S
@@ -38,7 +38,7 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
 % 6) default lapse rates can be determined from available sounding data that
 % has been interpolated to the DEM
 % 7) used a search radius of 20-km for layer-1 or 2 determination for temp
-% inversions (see stirPreprocessing.m for details)
+% inversions (see tierPreprocessing.m for details)
 % 8) The coastal proximity weighting of Daly et al. (2003) is not
 % implemented
 % 9) default lapse rates are updated after first pass to remove the
@@ -48,7 +48,7 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
 %
 %  Input:
 %
-%   parameters  , structure, structure holding all STIR parameters
+%   parameters  , structure, structure holding all TIER parameters
 %   gridElev    , float    , elevation of current grid point
 %   defaultSlope, float    , default slope for current grid point
 %   gridLayer   , float    , grid point layer in conceptual two-layer
@@ -78,20 +78,20 @@ function metPoint = calcTemp(parameters,gridElev,defaultSlope,gridLayer,finalWei
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This file is part of STIR.
+% This file is part of TIER.
 %
-% STIR is free software: you can redistribute it and/or modify
+% TIER is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% STIR is distributed in the hope that it will be useful,
+% TIER is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
+% along with TIER.  If not, see <https://www.gnu.org/licenses/>.
 %
 
     %define tiny

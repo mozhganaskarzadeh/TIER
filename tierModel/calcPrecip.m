@@ -1,6 +1,6 @@
 function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,finalWeightsFacet,symapWeights,stationElevNear,stationElevFacet,stationVarNear,stationVarFacet)
 %
-%% calcPrcp computes the first pass STIR estimate of precipitation
+%% calcPrcp computes the first pass TIER estimate of precipitation
 %
 % Summary: This algorithm generally follows Daly et al. (1994,2002,2007,2008) and
 % others.  However, here the regression estimated parameters
@@ -18,7 +18,7 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
 
 % Specific modifications/notes for initial precipitation implementation 
 % (eq. 2, Daly et al. 2002):
-% 1) Here there are only 4-directional facets and flat (see stirPreprocessing.m for details)
+% 1) Here there are only 4-directional facets and flat (see tierPreprocessing.m for details)
 %    1 = N
 %    2 = E
 %    3 = S
@@ -42,7 +42,7 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
 %
 %  Input:
 %
-%   parameters  , structure, structure holding all STIR parameters
+%   parameters  , structure, structure holding all TIER parameters
 %   gridElev    , float    , elevation of current grid point
 %   defaultSlope, float    , default normalized precipitation slope at
 %                            current grid point as current grid point
@@ -71,20 +71,20 @@ function metPoint = calcPrecip(parameters,gridElev,defaultSlope,finalWeights,fin
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This file is part of STIR.
+% This file is part of TIER.
 %
-% STIR is free software: you can redistribute it and/or modify
+% TIER is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% STIR is distributed in the hope that it will be useful,
+% TIER is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
+% along with TIER.  If not, see <https://www.gnu.org/licenses/>.
 %
     %define tiny
     tiny = 1e-15;

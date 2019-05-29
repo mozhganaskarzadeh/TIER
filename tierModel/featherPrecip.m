@@ -9,7 +9,7 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
 %
 %  Inputs:
 %
-%   parameters, structure, stir parameter structure
+%   parameters, structure, tier parameter structure
 %   dxy, float, grid spacing (km) of grid
 %   dem, float, grid dem
 %   mask, integer, mask of valid grid points
@@ -30,20 +30,20 @@ function finalPrecip = featherPrecip(parameters,nr,nc,dx,dem,mask,finalNormSlope
 % 
 % Copyright (C) 2019 University Corporation for Atmospheric Research
 %
-% This file is part of STIR.
+% This file is part of TIER.
 %
-% STIR is free software: you can redistribute it and/or modify
+% TIER is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 %
-% STIR is distributed in the hope that it will be useful,
+% TIER is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
 %
 % You should have received a copy of the GNU General Public License
-% along with STIR.  If not, see <https://www.gnu.org/licenses/>.
+% along with TIER.  If not, see <https://www.gnu.org/licenses/>.
 %
 
     %compute precipitation again, using spatially interpolated valid slopes,
